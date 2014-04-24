@@ -6,4 +6,5 @@ module Cellect
   require 'cellect/stateful'
   require 'cellect/project'
   require 'cellect/grouped_project'
+  require 'cellect/user'
 end
