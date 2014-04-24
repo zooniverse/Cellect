@@ -23,6 +23,20 @@ module Cellect
       end
     end
     
+    def user(name)
+      self.users[name] ||= User.new name
+    end
+    
+    def unseen_for(user_name, limit: 5)
+      subjects.subtract user(user_name).seen, limit
+    end
+    
+    def add_seen_for(user_name, *subject_ids)
+      [subject_ids].flatten.compact.each do |subject_id|
+        user(user_name).seen.add subject_id
+      end
+    end
+    
     protected
     
     def load_json(path)

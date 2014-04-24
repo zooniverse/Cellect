@@ -17,5 +17,13 @@ module Cellect
         end
       end
     end
+    
+    def group(group_id = nil)
+      groups[group_id] || groups.values.sample
+    end
+    
+    def unseen_for(user_name, group_id: nil, limit: 5)
+      group(group_id).subtract user(user_name).seen, limit
+    end
   end
 end
