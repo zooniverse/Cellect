@@ -6,6 +6,9 @@ Dir["./spec/support/**/*.rb"].sort.each{ |f| require f }
 
 require 'pry'
 require 'cellect'
+require 'celluloid/rspec'
+Celluloid.shutdown_timeout = 1
+Celluloid.logger = nil
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
@@ -13,8 +16,9 @@ RSpec.configure do |config|
   config.filter_run :focus
   config.order = 'random'
   
-  config.before(:each) do
-    Celluloid::Actor.clear_registry
-    Celluloid.start
+  config.around(:each) do |example|
+    Celluloid.boot
+    example.run
+    Celluloid.shutdown
   end
 end
