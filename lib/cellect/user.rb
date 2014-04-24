@@ -10,7 +10,6 @@ module Cellect
     def initialize(name)
       self.name = name
       self.seen = DiffSet::RandomSet.new
-      transition :ready
     end
   end
 end
