@@ -18,7 +18,9 @@ void Init_diff_set() {
       .define_method("add", &RandomSet::add)
       .define_method("remove", &RandomSet::remove)
       .define_method("subtract", &RandomSet::subtract)
-      .define_method("to_a", &RandomSet::to_a);
+      .define_method("include?", &RandomSet::includes)
+      .define_method("to_a", &RandomSet::to_a)
+      .define_method("size", &RandomSet::size);
   }
   RUBY_CATCH
 }

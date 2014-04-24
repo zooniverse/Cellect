@@ -53,7 +53,7 @@ Array RandomSet::subtract(RandomSet &other, size_t limit) {
   boost::random::uniform_int_distribution<> dist;
   
   for(int i = 0; i < (int)this->elements.size(); i++) {
-    dist = boost::random::uniform_int_distribution<>(i, upper_bound);
+    dist = boost::random::uniform_int_distribution<>(std::min(i + 1, upper_bound), upper_bound);
     swapIndex = dist(rng);
     tmp = this->elements[i];
     this->elements[i] = this->elements[swapIndex];

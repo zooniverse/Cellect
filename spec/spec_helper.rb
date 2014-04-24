@@ -3,6 +3,7 @@
   $LOAD_PATH.unshift dir unless $LOAD_PATH.include? dir
 end
 
+require 'pry'
 require 'cellect'
 
 RSpec.configure do |config|
