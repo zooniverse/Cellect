@@ -8,17 +8,23 @@ using namespace Rice;
 
 #include <boost/random.hpp>
 #include <boost/heap/fibonacci_heap.hpp>
+#include <boost/unordered_set.hpp>
+#include <boost/unordered_map.hpp>
 
 #include <sys/time.h>
+#include <limits>
 
+// It might be better to replace the heap structure with a sorted linked list
 class PrioritySet {
 public:
   struct element {
     int id;
     double priority;
     double random;
+    bool enabled;
     
     element(int id, double priority, double random) {
+      enabled = true;
       this->id = id;
       this->priority = priority;
       this->random = random;
@@ -27,7 +33,7 @@ public:
   
   struct comparator {
     bool operator()(const element &a, const element &b) const {
-      return (a.priority < b.priority) || (a.random < b.random);
+      return (a.priority < b.priority) || (a.priority == b.priority && a.random < b.random);
     }
   };
   
@@ -41,7 +47,10 @@ public:
   size_t size();
 protected:
   typedef boost::heap::fibonacci_heap<element, boost::heap::compare<comparator> > fibonacci_heap;
+  typedef fibonacci_heap::handle_type element_handle;
   fibonacci_heap heap;
+  boost::unordered_map<int, element_handle > element_handles;
+  boost::unordered_set<int> element_set;
   boost::random::mt19937 rng;
 };
 

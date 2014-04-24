@@ -49,7 +49,7 @@ Array RandomSet::subtract(RandomSet &other, size_t limit) {
   int tmp;
   int upper_bound = (int)this->elements.size() - 1;
   
-  boost::unordered_set<int>::const_iterator inOther;
+  boost::unordered_set<int>::const_iterator in_other;
   boost::random::uniform_int_distribution<> dist;
   
   for(int i = 0; i < (int)this->elements.size(); i++) {
@@ -60,9 +60,9 @@ Array RandomSet::subtract(RandomSet &other, size_t limit) {
     this->elements[swapIndex] = tmp;
     
     element = this->elements[i];
-    inOther = other.element_set.find(element);
+    in_other = other.element_set.find(element);
     
-    if(inOther == other.element_set.end()) {
+    if(in_other == other.element_set.end()) {
       diff.push(element);
       if(diff.size() >= limit) {
         break;

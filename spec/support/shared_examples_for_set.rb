@@ -27,4 +27,9 @@ shared_examples_for 'set' do
     set.subtract(other_set, 5).should =~ [4, 5]
     [4, 5].should include set.subtract(other_set, 1).first
   end
+  
+  it 'should not include removed elements in subtractions' do
+    set.remove 5
+    set.subtract(other_set, 5).should == [4]
+  end
 end
