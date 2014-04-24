@@ -3,8 +3,11 @@ require 'spec_helper'
 module DiffSet
   describe PrioritySet do
     def create_set(elements)
-      PrioritySet.new.tap do |random_set|
-        1.upto(elements).each{ |i| random_set.add i }
+      ids = (1..elements).to_a
+      priorities = ids.reverse
+      
+      PrioritySet.new.tap do |priority_set|
+        ids.zip(priorities).each{ |id, priority| priority_set.add id, priority }
       end
     end
     

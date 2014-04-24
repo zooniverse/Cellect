@@ -25,11 +25,12 @@ void Init_diff_set() {
     
     Data_Type<PrioritySet> rb_cPrioritySet = define_class_under<PrioritySet>(rb_mDiffSet, "PrioritySet")
       .define_constructor(Constructor<PrioritySet>())
-      .define_method("add", &PrioritySet::add)
+      .define_method("add", &PrioritySet::add, (Arg("id"), Arg("priority") = 0.0))
       .define_method("remove", &PrioritySet::remove)
       .define_method("subtract", &PrioritySet::subtract)
       .define_method("include?", &PrioritySet::includes)
       .define_method("to_a", &PrioritySet::to_a)
+      .define_method("to_h", &PrioritySet::to_h)
       .define_method("size", &PrioritySet::size);
   }
   RUBY_CATCH
