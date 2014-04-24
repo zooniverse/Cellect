@@ -39,7 +39,7 @@ bool PrioritySet::includes(int id) {
   return it != this->element_set.end();
 }
 
-Array PrioritySet::subtract(PrioritySet &other, size_t limit) {
+Array PrioritySet::subtract(RandomSet &other, size_t limit) {
   Array diff;
   fibonacci_heap::ordered_iterator it;
   boost::unordered_set<int>::const_iterator in_other;

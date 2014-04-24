@@ -21,9 +21,9 @@ public:
   Array subtract(RandomSet &other, size_t limit);
   Array to_a();
   size_t size();
+  boost::unordered_set<int> element_set;
 protected:
   std::vector<int> elements;
-  boost::unordered_set<int> element_set;
   boost::random::mt19937 rng;
   
   std::vector<int>::iterator iterator_to(int element);

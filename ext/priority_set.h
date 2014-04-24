@@ -14,6 +14,8 @@ using namespace Rice;
 #include <sys/time.h>
 #include <limits>
 
+#include "random_set.h"
+
 // It might be better to replace the heap structure with a sorted linked list
 class PrioritySet {
 public:
@@ -41,7 +43,7 @@ public:
   void add(int id, double priority = 0.0);
   void remove(int id);
   bool includes(int id);
-  Array subtract(PrioritySet &other, size_t limit);
+  Array subtract(RandomSet &other, size_t limit);
   Array to_a();
   Hash to_h();
   size_t size();

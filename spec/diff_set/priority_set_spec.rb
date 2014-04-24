@@ -2,8 +2,10 @@ require 'spec_helper'
 
 module DiffSet
   describe PrioritySet do
-    def create_set(elements)
-      ids = (1..elements).to_a
+    it_behaves_like 'set'
+    
+    let(:set) do
+      ids = (1..5).to_a
       priorities = ids.reverse
       
       PrioritySet.new.tap do |priority_set|
@@ -11,9 +13,11 @@ module DiffSet
       end
     end
     
-    it_behaves_like 'set'
-    let(:set){ create_set(5) }
-    let(:other_set){ create_set(3) }
+    let(:other_set) do
+      RandomSet.new.tap do |random_set|
+        1.upto(3).each{ |i| random_set.add i }
+      end
+    end
     
     it 'should update the priority' do
       set.to_a.first.should == 1
