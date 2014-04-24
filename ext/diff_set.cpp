@@ -6,6 +6,7 @@
 using namespace Rice;
 
 #include "random_set.h"
+#include "priority_set.h"
 
 extern "C"
 void Init_diff_set() {
@@ -21,6 +22,15 @@ void Init_diff_set() {
       .define_method("include?", &RandomSet::includes)
       .define_method("to_a", &RandomSet::to_a)
       .define_method("size", &RandomSet::size);
+    
+    Data_Type<PrioritySet> rb_cPrioritySet = define_class_under<PrioritySet>(rb_mDiffSet, "PrioritySet")
+      .define_constructor(Constructor<PrioritySet>())
+      .define_method("add", &PrioritySet::add)
+      .define_method("remove", &PrioritySet::remove)
+      .define_method("subtract", &PrioritySet::subtract)
+      .define_method("include?", &PrioritySet::includes)
+      .define_method("to_a", &PrioritySet::to_a)
+      .define_method("size", &PrioritySet::size);
   }
   RUBY_CATCH
 }
