@@ -1,0 +1,9 @@
+/.bundle
+.DS_Store
+.rvmrc
+.ruby-version
+/data
+/ext/*.o
+/ext/Makefile
+/ext/*.bundle
+/scratch
