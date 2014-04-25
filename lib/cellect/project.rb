@@ -24,7 +24,7 @@ module Cellect
     end
     
     def user(name)
-      self.users[name] ||= User.new name
+      self.users[name] ||= User.new_link name, project_name: self.name
     end
     
     def unseen_for(user_name, limit: 5)
@@ -35,6 +35,13 @@ module Cellect
       [subject_ids].flatten.compact.each do |subject_id|
         user(user_name).seen.add subject_id
       end
+    end
+    
+    def remove_user(name)
+      removed = self.users.delete name
+      return unless removed
+      unlink removed
+      removed.terminate
     end
     
     protected

@@ -33,5 +33,10 @@ module Cellect
       user.bare_object.should_receive :restart_ttl_timer
       user.seen
     end
+    
+    it 'should terminate on ttl expiry' do
+      user.bare_object.should_receive :terminate
+      user.ttl_expired!
+    end
   end
 end
