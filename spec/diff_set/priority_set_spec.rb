@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module DiffSet
   describe PrioritySet do
-    it_behaves_like 'set'
+    it_behaves_like 'a set'
     
     let(:set) do
       ids = (1..5).to_a
@@ -17,6 +17,16 @@ module DiffSet
       RandomSet.new.tap do |random_set|
         1.upto(3).each{ |i| random_set.add i }
       end
+    end
+    
+    it 'should subtract another set' do
+      set.subtract(other_set, 5).should == [4, 5]
+      set.subtract(other_set, 1).first.should == 4
+    end
+    
+    it 'should not include removed elements in subtractions' do
+      set.remove 5
+      set.subtract(other_set, 5).should == [4]
     end
     
     it 'should update the priority' do

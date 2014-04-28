@@ -1,4 +1,4 @@
-shared_examples_for 'set' do
+shared_examples_for 'a set' do
   it 'should convert to an Array' do
     set.to_a.should =~ (1..5).to_a
   end
@@ -21,15 +21,5 @@ shared_examples_for 'set' do
     set.should_not include 100
     set.add 100
     set.should include 100
-  end
-  
-  it 'should subtract another set' do
-    set.subtract(other_set, 5).should =~ [4, 5]
-    [4, 5].should include set.subtract(other_set, 1).first
-  end
-  
-  it 'should not include removed elements in subtractions' do
-    set.remove 5
-    set.subtract(other_set, 5).should == [4]
   end
 end
