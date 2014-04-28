@@ -1,0 +1,48 @@
+{
+  "id": 2,
+  "prioritized": true,
+  "pairwise": false,
+  "grouped": false,
+  "entries": [
+    {
+      "id": 7,
+      "priority": 3
+    },
+    {
+      "id": 6,
+      "priority": 4
+    },
+    {
+      "id": 1,
+      "priority": 9
+    },
+    {
+      "id": 3,
+      "priority": 7
+    },
+    {
+      "id": 10,
+      "priority": 0
+    },
+    {
+      "id": 8,
+      "priority": 2
+    },
+    {
+      "id": 2,
+      "priority": 8
+    },
+    {
+      "id": 5,
+      "priority": 5
+    },
+    {
+      "id": 4,
+      "priority": 6
+    },
+    {
+      "id": 9,
+      "priority": 1
+    }
+  ]
+}

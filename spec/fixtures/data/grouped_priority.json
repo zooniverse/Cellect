@@ -1,0 +1,58 @@
+{
+  "id": 4,
+  "prioritized": true,
+  "pairwise": false,
+  "grouped": true,
+  "entries": [
+    {
+      "id": 8,
+      "priority": 2,
+      "group_id": 2
+    },
+    {
+      "id": 7,
+      "priority": 3,
+      "group_id": 1
+    },
+    {
+      "id": 10,
+      "priority": 0,
+      "group_id": 1
+    },
+    {
+      "id": 5,
+      "priority": 5,
+      "group_id": 2
+    },
+    {
+      "id": 6,
+      "priority": 4,
+      "group_id": 3
+    },
+    {
+      "id": 2,
+      "priority": 8,
+      "group_id": 2
+    },
+    {
+      "id": 3,
+      "priority": 7,
+      "group_id": 3
+    },
+    {
+      "id": 1,
+      "priority": 9,
+      "group_id": 1
+    },
+    {
+      "id": 9,
+      "priority": 1,
+      "group_id": 3
+    },
+    {
+      "id": 4,
+      "priority": 6,
+      "group_id": 1
+    }
+  ]
+}
