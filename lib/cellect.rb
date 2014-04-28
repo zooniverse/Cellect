@@ -12,4 +12,5 @@ module Cellect
   require 'cellect/project'
   require 'cellect/grouped_project'
   require 'cellect/user'
+  require 'cellect/api'
 end
