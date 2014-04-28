@@ -8,3 +8,4 @@
 /ext/*.bundle
 /scratch
 /tmp/*
+*.so
