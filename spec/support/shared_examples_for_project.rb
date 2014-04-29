@@ -1,20 +1,26 @@
 shared_examples_for 'project' do |name|
   let(:obj){ send name }
   
+  before(:each) do
+    Cellect.adapter.load_project obj.name
+  end
+  
   it 'should add singleton instances to the registry' do
     obj.class[:foo].should be_a_kind_of Cellect::Project
     obj.class[:foo].object_id.should == obj.class[:foo].object_id
   end
   
   it 'should initialize empty' do
-    project.name.should == 'test'
-    project.users.should be_a Hash
-    project.subjects.should be_a DiffSet::RandomSet
+    obj.name.should be_a String
+    obj.users.should be_a Hash
+    
+    set_klass = obj.prioritized? ? DiffSet::PrioritySet : DiffSet::RandomSet
+    obj.subjects.should be_a set_klass
   end
   
   it 'should provide a user lookup' do
-    project.user('foo').should be_a Cellect::User
-    project.user('foo').object_id.should == project.user('foo').object_id
-    project.users.keys.should include 'foo'
+    obj.user('foo').should be_a Cellect::User
+    obj.user('foo').object_id.should == obj.user('foo').object_id
+    obj.users.keys.should include 'foo'
   end
 end

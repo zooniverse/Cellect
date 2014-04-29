@@ -2,11 +2,11 @@ require 'oj'
 
 class SpecAdapter < Cellect::Adapters::Default
   def project_list
-    _fixtures.keys
+    fixtures.keys
   end
   
   def load_project(name)
-    data = _fixtures[name]
+    data = fixtures[name]
     project_for(name, data).load_data data.fetch('entries', [])
   end
   
@@ -14,17 +14,7 @@ class SpecAdapter < Cellect::Adapters::Default
   #   # TO-DO
   # end
   
-  protected
-  
-  def _path_of(project_name)
-    File.join(_fixture_path, "#{ project_name }.json")
-  end
-  
-  def _fixture_path
-    File.expand_path File.join(__FILE__, '../../fixtures/project_data')
-  end
-  
-  def _fixtures
+  def fixtures
     return @fixtures if @fixtures
     @fixtures = { }
     
@@ -35,5 +25,15 @@ class SpecAdapter < Cellect::Adapters::Default
     end
     
     @fixtures
+  end
+  
+  protected
+  
+  def _path_of(project_name)
+    File.join(_fixture_path, "#{ project_name }.json")
+  end
+  
+  def _fixture_path
+    File.expand_path File.join(__FILE__, '../../fixtures/project_data')
   end
 end

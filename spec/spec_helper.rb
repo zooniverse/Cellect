@@ -12,6 +12,7 @@ Celluloid.logger = nil
 Dir["./spec/support/**/*.rb"].sort.each{ |f| require f }
 
 Cellect.adapter = SpecAdapter.new
+PROJECT_TYPES = Cellect.adapter.fixtures.keys
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true

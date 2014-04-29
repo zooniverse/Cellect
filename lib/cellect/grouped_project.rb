@@ -15,8 +15,8 @@ module Cellect
       klass = set_klass
       
       data.each do |hash|
-        group ||= klass.new
-        group(hash['group_id']).add hash['id'], hash['priority']
+        self.groups[hash['grouped_id']] ||= klass.new
+        self.groups[hash['grouped_id']].add hash['id'], hash['priority']
       end
       
       transition :ready
