@@ -33,6 +33,22 @@ void PrioritySet::remove(int id) {
   }
 }
 
+Array PrioritySet::sample(int limit) {
+  Array sampled;
+  fibonacci_heap::ordered_iterator it;
+  
+  for(it = this->heap.ordered_begin(); it != this->heap.ordered_end(); it++) {
+    if(it->enabled) {
+      sampled.push(it->id);
+      if(sampled.size() >= (size_t)limit) {
+        break;
+      }
+    }
+  }
+  
+  return sampled;
+}
+
 bool PrioritySet::includes(int id) {
   boost::unordered_set<int>::const_iterator it;
   it = this->element_set.find(id);

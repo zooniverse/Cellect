@@ -19,6 +19,10 @@ module DiffSet
       end
     end
     
+    it 'should sample elements in order' do
+      set.sample(5).should == (1..5).to_a
+    end
+    
     it 'should subtract another set' do
       set.subtract(other_set, 5).should == [4, 5]
       set.subtract(other_set, 1).first.should == 4

@@ -19,6 +19,11 @@ module DiffSet
       end
     end
     
+    it 'should sample elements in order' do
+      set.sample(2).should == [[1, 2], [3, 4]]
+      set.sample(3).length.should == 2
+    end
+    
     it 'should not include removed elements in subtractions' do
       set.add 6, 0
       set.subtract(other_set, 5).flatten.should == [4, 5]

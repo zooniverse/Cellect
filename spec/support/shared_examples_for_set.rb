@@ -13,6 +13,15 @@ shared_examples_for 'a set' do
     set.to_a.should_not include 1
   end
   
+  it 'should sample elements' do
+    set.sample(2).length.should == 2
+  end
+  
+  it 'should not include removed elements in samples' do
+    set.remove 5
+    set.sample(5).should_not include 5
+  end
+  
   it 'should know how many elements it contains' do
     expect{ set.add 100 }.to change{ set.size }.from(5).to 6
   end

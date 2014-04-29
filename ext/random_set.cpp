@@ -25,6 +25,25 @@ void RandomSet::remove(int element) {
   }
 }
 
+Array RandomSet::sample(int limit) {
+  Array sampled;
+  int swapIndex;
+  int tmp;
+  int upper_bound = (int)this->elements.size() - 1;
+  boost::random::uniform_int_distribution<> dist;
+  
+  for(int i = 0; i < limit && i < (int)this->elements.size(); i++) {
+    dist = boost::random::uniform_int_distribution<>(std::min(i + 1, upper_bound), upper_bound);
+    swapIndex = dist(rng);
+    tmp = this->elements[i];
+    this->elements[i] = this->elements[swapIndex];
+    this->elements[swapIndex] = tmp;
+    sampled.push(this->elements[i]);
+  }
+  
+  return sampled;
+}
+
 bool RandomSet::includes(int element) {
   boost::unordered_set<int>::const_iterator it;
   it = this->element_set.find(element);

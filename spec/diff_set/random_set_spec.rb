@@ -23,6 +23,13 @@ module DiffSet
       set.subtract(other_set, 5).should == [4]
     end
     
+    it 'should mutate the order of the elements when sampling' do
+      set_before = set.to_a
+      set.sample 5
+      set_before.should =~ set.to_a
+      set_before.should_not == set.to_a
+    end
+    
     it 'should mutate the order of the elements on a subtraction' do
       set_before = set.to_a
       set.subtract other_set, 5

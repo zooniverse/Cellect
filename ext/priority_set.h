@@ -42,6 +42,7 @@ public:
   PrioritySet();
   void add(int id, double priority = 0.0);
   void remove(int id);
+  Array sample(int limit);
   bool includes(int id);
   Array subtract(RandomSet &other, size_t limit);
   Array to_a();
