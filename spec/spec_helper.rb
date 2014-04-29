@@ -2,13 +2,16 @@
   dir = File.expand_path name, File.join(File.dirname(__FILE__), '../')
   $LOAD_PATH.unshift dir unless $LOAD_PATH.include? dir
 end
-Dir["./spec/support/**/*.rb"].sort.each{ |f| require f }
 
 require 'pry'
 require 'cellect'
 require 'celluloid/rspec'
 Celluloid.shutdown_timeout = 1
 Celluloid.logger = nil
+
+Dir["./spec/support/**/*.rb"].sort.each{ |f| require f }
+
+Cellect.adapter = SpecAdapter.new
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true

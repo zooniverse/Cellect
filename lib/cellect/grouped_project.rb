@@ -9,6 +9,19 @@ module Cellect
       self.groups = { }
     end
     
+    def load_data(data)
+      transition :initializing
+      self.subjects = set_klass.new
+      klass = set_klass
+      
+      data.each do |hash|
+        group ||= klass.new
+        group(hash['group_id']).add hash['id'], hash['priority']
+      end
+      
+      transition :ready
+    end
+    
     def load_data_from(path)
       load_json(path) do |json|
         json['entries'].each do |entry|

@@ -1,11 +1,10 @@
-require 'oj'
-
 module Cellect
   class Project
     include Celluloid
     include Stateful
     
     attr_accessor :name, :users, :subjects
+    attr_accessor :pairwise, :prioritized
     
     def self.[](name)
       Actor["project_#{ name }".to_sym] ||= new name
@@ -17,10 +16,11 @@ module Cellect
       self.subjects = DiffSet::RandomSet.new
     end
     
-    def load_data_from(path)
-      load_json(path) do |json|
-        json['entries'].each{ |id| subjects.add id }
-      end
+    def load_data(data)
+      transition :initializing
+      self.subjects = set_klass.new
+      data.each{ |hash| subjects.add hash['id'], hash['priority'] }
+      transition :ready
     end
     
     def user(name)
@@ -44,12 +44,24 @@ module Cellect
       removed.terminate
     end
     
-    protected
+    def pairwise?
+      !!pairwise
+    end
     
-    def load_json(path)
-      transition :initializing
-      yield Oj.strict_load File.read path
-      transition :ready
+    def prioritized?
+      !!prioritized
+    end
+    
+    SET_KLASS = {
+      # priority, pairwise
+      [    false, false  ] => DiffSet::RandomSet,
+      [    false, true   ] => DiffSet::PairwiseRandomSet,
+      [     true, false  ] => DiffSet::PrioritySet,
+      [     true, true   ] => DiffSet::PairwisePrioritySet
+    }
+    
+    def set_klass
+      SET_KLASS[[prioritized, pairwise]]
     end
   end
 end
