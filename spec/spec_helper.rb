@@ -6,6 +6,7 @@ end
 require 'pry'
 require 'cellect'
 require 'celluloid/rspec'
+require 'rack/test'
 Celluloid.shutdown_timeout = 1
 Celluloid.logger = nil
 

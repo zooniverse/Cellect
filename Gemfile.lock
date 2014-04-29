@@ -50,6 +50,8 @@ GEM
       rack (>= 0.4)
     rack-mount (0.8.3)
       rack (>= 1.0.0)
+    rack-test (0.6.2)
+      rack (>= 1.0)
     rake (10.1.0)
     rice (1.6.0)
     rspec (2.14.1)
@@ -80,6 +82,7 @@ DEPENDENCIES
   grape
   oj
   pry
+  rack-test
   rake
   rice
   rspec

@@ -15,16 +15,13 @@ class SpecAdapter < Cellect::Adapters::Default
   # end
   
   def fixtures
-    return @fixtures if @fixtures
-    @fixtures = { }
-    
-    Dir["#{ _fixture_path }/*.json"].collect do |f|
-      name = File.basename(f).sub /\.json$/, ''
-      data = Oj.strict_load File.read f
-      @fixtures[name] = data
+    @fixtures ||= { }.tap do |fixtures|
+      Dir["#{ _fixture_path }/*.json"].collect do |f|
+        name = File.basename(f).sub /\.json$/, ''
+        data = Oj.strict_load File.read f
+        fixtures[name] = data
+      end
     end
-    
-    @fixtures
   end
   
   protected
