@@ -7,7 +7,7 @@ RandomSet::RandomSet() {
   this->rng.seed((uint)millis);
 }
 
-void RandomSet::add(int element) {
+void RandomSet::add(int element, double priority) {
   this->element_set.insert(element);
   this->elements.push_back(element);
 }

@@ -15,7 +15,7 @@ using namespace Rice;
 class RandomSet {
 public:
   RandomSet();
-  void add(int element);
+  void add(int element, double priority = 0.0);
   void remove(int element);
   bool includes(int element);
   Array subtract(RandomSet &other, size_t limit);

@@ -16,7 +16,7 @@ void Init_diff_set() {
     
     Data_Type<RandomSet> rb_cRandomSet = define_class_under<RandomSet>(rb_mDiffSet, "RandomSet")
       .define_constructor(Constructor<RandomSet>())
-      .define_method("add", &RandomSet::add)
+      .define_method("add", &RandomSet::add, (Arg("id"), Arg("priority") = 0.0))
       .define_method("remove", &RandomSet::remove)
       .define_method("subtract", &RandomSet::subtract)
       .define_method("include?", &RandomSet::includes)
