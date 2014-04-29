@@ -15,8 +15,8 @@ module Cellect
       klass = set_klass
       
       data.each do |hash|
-        self.groups[hash['grouped_id']] ||= klass.new
-        self.groups[hash['grouped_id']].add hash['id'], hash['priority']
+        self.groups[hash['group_id']] ||= klass.new
+        self.groups[hash['group_id']].add hash['id'], hash['priority']
       end
       
       transition :ready
@@ -28,6 +28,10 @@ module Cellect
     
     def unseen_for(user_name, group_id: nil, limit: 5)
       group(group_id).subtract user(user_name).seen, limit
+    end
+    
+    def sample(opts = { })
+      group(opts[:group_id]).sample opts[:limit]
     end
   end
 end

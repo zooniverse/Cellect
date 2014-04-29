@@ -44,6 +44,10 @@ module Cellect
       removed.terminate
     end
     
+    def sample(opts = { })
+      subjects.sample opts[:limit]
+    end
+    
     def pairwise?
       !!pairwise
     end

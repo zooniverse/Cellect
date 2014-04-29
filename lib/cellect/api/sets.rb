@@ -2,7 +2,7 @@ module Cellect
   class API
     class Sets < Grape::API
       get do
-        { route: 'index' }
+        project.sample selector_params
       end
     end
   end
