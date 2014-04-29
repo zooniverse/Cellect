@@ -19,6 +19,10 @@ module Cellect
         post :reload do
           Cellect.adapter.load_project project.name
         end
+        
+        delete do
+          # delete a project (maybe?)
+        end
       end
     end
   end
