@@ -1,7 +1,6 @@
 module Cellect
   module Adapters
     class Default
-      include Celluloid
       # Return a list of projects to load in the form:
       #   [{
       #     id: 123,
@@ -32,7 +31,7 @@ module Cellect
       end
       
       def load_projects
-        project_list.each{ |name| async.load_project name }
+        project_list.each{ |name| load_project name }
       end
       
       def project_for(name, opts = { })

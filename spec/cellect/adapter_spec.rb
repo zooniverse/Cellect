@@ -6,8 +6,8 @@ module Cellect
       let(:default){ Cellect::Adapters::Default.new }
       
       it 'should raise a NotImplementedError when using the default adapter' do
-        expect{ default.bare_object.load_project 'foo' }.to raise_error NotImplementedError
-        expect{ default.bare_object.load_user 123 }.to raise_error NotImplementedError
+        expect{ default.load_project 'foo' }.to raise_error NotImplementedError
+        expect{ default.load_user 123 }.to raise_error NotImplementedError
       end
       
       it 'should return a project given a set of options' do
