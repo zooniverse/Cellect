@@ -13,7 +13,7 @@ module Cellect
         mount Sets
         
         get :status do
-          { state: project.state }
+          project.status
         end
         
         post :reload do

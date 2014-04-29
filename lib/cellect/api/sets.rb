@@ -5,10 +5,6 @@ module Cellect
         project.sample selector_params
       end
       
-      get :status do
-        # information like size, ops/second, etc
-      end
-      
       get :subtract do
         # user diff
       end

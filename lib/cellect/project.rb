@@ -67,5 +67,15 @@ module Cellect
     def set_klass
       SET_KLASS[[prioritized, pairwise]]
     end
+    
+    def status
+      {
+        state: state,
+        grouped: false,
+        prioritized: prioritized,
+        pairwise: pairwise,
+        subjects: subjects.size
+      }
+    end
   end
 end

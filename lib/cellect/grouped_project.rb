@@ -33,5 +33,15 @@ module Cellect
     def sample(opts = { })
       group(opts[:group_id]).sample opts[:limit]
     end
+    
+    def status
+      group_counts = Hash[*groups.collect{ |id, set| [id, set.size] }.flatten]
+      
+      super.merge({
+        grouped: true,
+        subjects: group_counts.values.inject(:+),
+        groups: group_counts
+      })
+    end
   end
 end
