@@ -5,5 +5,7 @@ end
 
 require 'pry'
 require 'cellect'
-
+require_relative 'spec/support/spec_adapter'
+Cellect.adapter = SpecAdapter.new
+Cellect.adapter.load_projects
 run Cellect::API
