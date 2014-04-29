@@ -22,15 +22,6 @@ module Cellect
       transition :ready
     end
     
-    def load_data_from(path)
-      load_json(path) do |json|
-        json['entries'].each do |entry|
-          self.groups[entry['group_id']] ||= DiffSet::RandomSet.new
-          groups[entry['group_id']].add entry['id']
-        end
-      end
-    end
-    
     def group(group_id = nil)
       groups[group_id] || groups.values.sample
     end
