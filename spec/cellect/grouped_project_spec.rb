@@ -17,7 +17,7 @@ module Cellect
         end
         
         it 'should provide unseen from a specific group for users' do
-          3.times{ |i| project.groups[i] = DiffSet::RandomSet.new }
+          3.times{ |i| project.groups[i] = set_klass.new }
           project.group(1).should_receive(:subtract).with user.seen, 3
           project.unseen_for 123, group_id: 1, limit: 3
         end
@@ -29,7 +29,7 @@ module Cellect
         end
         
         it 'should sample subjects from a specific group without a user' do
-          3.times{ |i| project.groups[i] = DiffSet::RandomSet.new }
+          3.times{ |i| project.groups[i] = set_klass.new }
           project.group(1).should_receive(:sample).with 3
           project.sample group_id: 1, limit: 3
         end
@@ -41,9 +41,21 @@ module Cellect
         end
         
         it 'should sample subjects from a specific group for a user' do
-          3.times{ |i| project.groups[i] = DiffSet::RandomSet.new }
+          3.times{ |i| project.groups[i] = set_klass.new }
           project.group(1).should_receive(:subtract).with user.seen, 3
           project.sample user_id: 123, group_id: 1, limit: 3
+        end
+        
+        it 'should add subjects' do
+          project.groups[1] = set_klass.new
+          
+          if project.prioritized?
+            project.groups[1].should_receive(:add).with 123, 456
+            project.add subject_id: 123, group_id: 1, priority: 456
+          else
+            project.groups[1].should_receive(:add).with 123
+            project.add subject_id: 123, group_id: 1
+          end
         end
         
         it 'should be grouped' do

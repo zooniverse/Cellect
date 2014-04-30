@@ -56,6 +56,14 @@ module Cellect
       end
     end
     
+    def add(opts = { })
+      if prioritized?
+        subjects.add opts[:subject_id], opts[:priority]
+      else
+        subjects.add opts[:subject_id]
+      end
+    end
+    
     def pairwise?
       !!pairwise
     end

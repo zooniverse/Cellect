@@ -35,6 +35,14 @@ module Cellect
       end
     end
     
+    def add(opts = { })
+      if prioritized?
+        group(opts[:group_id]).add opts[:subject_id], opts[:priority]
+      else
+        group(opts[:group_id]).add opts[:subject_id]
+      end
+    end
+    
     def status
       group_counts = Hash[*groups.collect{ |id, set| [id, set.size] }.flatten]
       

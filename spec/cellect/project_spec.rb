@@ -24,6 +24,16 @@ module Cellect
           project.sample user_id: 123, limit: 3
         end
         
+        it 'should add subjects' do
+          if project.prioritized?
+            project.subjects.should_receive(:add).with 123, 456
+            project.add subject_id: 123, priority: 456
+          else
+            project.subjects.should_receive(:add).with 123
+            project.add subject_id: 123
+          end
+        end
+        
         it 'should be notified of a user ttl expiry' do
           project.bare_object.should_receive(:remove_user).with user.name
           user.ttl_expired!
