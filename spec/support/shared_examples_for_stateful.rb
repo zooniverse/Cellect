@@ -2,7 +2,8 @@ shared_examples_for 'stateful' do |name|
   let(:obj){ send name }
   
   it 'should not have a default state' do
-    obj.class.new('test').state.should be_nil
+    obj.class.any_instance.stub :load_data
+    obj.class.new('new').state.should be_nil
   end
   
   it 'should have states' do

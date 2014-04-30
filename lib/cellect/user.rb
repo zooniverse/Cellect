@@ -8,24 +8,25 @@ module Cellect
     attr_accessor :id, :project_name, :seen
     attr_accessor :ttl, :ttl_timer
     
-    def initialize(name, project_name: nil, ttl: nil)
-      self.name = name
     def initialize(id, project_name: nil, ttl: nil)
       self.id = id
       self.project_name = project_name
       self.seen = DiffSet::RandomSet.new
       @ttl = ttl
       subscribe 'User::state_change', :state_changed
-      after(1){ fake_ready } # fake it until data loading is in place
+      async.load_data
+    end
+    
+    def load_data
+      Cellect.adapter.load_user(project_name, id).each do |subject_id|
+        @seen.add subject_id
+      end
+      transition :ready
     end
     
     def seen
       restart_ttl_timer
       @seen
-    end
-    
-    def fake_ready
-      transition :ready
     end
     
     def state_changed(topic, state)
@@ -38,11 +39,8 @@ module Cellect
     end
     
     def ttl_expired!
-      if project_name
-        Project[project_name].remove_user id
-      else
-        terminate
-      end
+      Project[project_name].remove_user(id) if project_name
+      terminate
     end
     
     def ttl

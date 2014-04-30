@@ -25,7 +25,7 @@ module Cellect
         raise NotImplementedError
       end
       
-      def load_user(id)
+      def load_user(project_name, id)
         raise NotImplementedError
       end
       

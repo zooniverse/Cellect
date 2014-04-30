@@ -19,8 +19,8 @@ shared_examples_for 'project' do |name|
   end
   
   it 'should provide a user lookup' do
-    obj.user('foo').should be_a Cellect::User
-    obj.user('foo').object_id.should == obj.user('foo').object_id
-    obj.users.keys.should include 'foo'
+    obj.user(1).should be_a Cellect::User
+    obj.user(1).object_id.should == obj.user(1).object_id
+    obj.users.keys.should include 1
   end
 end

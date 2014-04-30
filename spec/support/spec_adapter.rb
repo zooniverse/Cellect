@@ -15,10 +15,21 @@ class SpecAdapter < Cellect::Adapters::Default
   
   def fixtures
     @fixtures ||= { }.tap do |fixtures|
-      Dir["#{ _fixture_path }/*.json"].collect do |f|
+      Dir["#{ _fixture_path }/project_data/*.json"].collect do |f|
         name = File.basename(f).sub /\.json$/, ''
         data = Oj.strict_load File.read f
         fixtures[name] = data
+      end
+    end
+  end
+  
+  def user_fixtures
+    @user_fixtures ||= { }.tap do |user_fixtures|
+      Dir["#{ _fixture_path }/user_data/*.json"].sort.collect.with_index do |f, i|
+        name = File.basename(f).sub /\.json$/, ''
+        data = Oj.strict_load File.read f
+        user_fixtures[name] = data
+        user_fixtures[i + 1] = data
       end
     end
   end
@@ -27,13 +38,14 @@ class SpecAdapter < Cellect::Adapters::Default
     super args, async: false
   end
   
-  protected
-  
-  def _path_of(project_name)
-    File.join(_fixture_path, "#{ project_name }.json")
+  def load_user(project_name, id)
+    user = user_fixtures[id]
+    user ? user[project_name] : user_fixtures['new_user'][project_name]
   end
   
+  protected
+  
   def _fixture_path
-    File.expand_path File.join(__FILE__, '../../fixtures/project_data')
+    File.expand_path File.join(__FILE__, '../../fixtures')
   end
 end

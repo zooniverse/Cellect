@@ -27,22 +27,22 @@ module Cellect
       transition :ready
     end
     
-    def user(name)
-      self.users[name] ||= User.new_link name, project_name: self.name
+    def user(id)
+      self.users[id] ||= User.new_link id, project_name: name
     end
     
-    def unseen_for(user_name, limit: 5)
-      subjects.subtract user(user_name).seen, limit
+    def unseen_for(user_id, limit: 5)
+      subjects.subtract user(user_id).seen, limit
     end
     
-    def add_seen_for(user_name, *subject_ids)
+    def add_seen_for(user_id, *subject_ids)
       [subject_ids].flatten.compact.each do |subject_id|
-        user(user_name).seen.add subject_id
+        user(user_id).seen.add subject_id
       end
     end
     
-    def remove_user(name)
-      removed = self.users.delete name
+    def remove_user(user_id)
+      removed = self.users.delete user_id
       return unless removed
       unlink removed
       removed.terminate
