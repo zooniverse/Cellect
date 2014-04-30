@@ -64,6 +64,10 @@ module Cellect
       end
     end
     
+    def remove(opts = { })
+      subjects.remove opts[:subject_id]
+    end
+    
     def pairwise?
       !!pairwise
     end

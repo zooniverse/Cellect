@@ -34,6 +34,11 @@ module Cellect
           end
         end
         
+        it 'should remove subjects' do
+          project.subjects.should_receive(:add).with 123
+          project.add subject_id: 123
+        end
+        
         it 'should be notified of a user ttl expiry' do
           project.bare_object.should_receive(:remove_user).with user.name
           user.ttl_expired!

@@ -37,10 +37,14 @@ module Cellect
     
     def add(opts = { })
       if prioritized?
-        group(opts[:group_id]).add opts[:subject_id], opts[:priority]
+        groups[opts[:group_id]].add opts[:subject_id], opts[:priority]
       else
-        group(opts[:group_id]).add opts[:subject_id]
+        groups[opts[:group_id]].add opts[:subject_id]
       end
+    end
+    
+    def remove(opts = { })
+      groups[opts[:group_id]].remove opts[:subject_id]
     end
     
     def status

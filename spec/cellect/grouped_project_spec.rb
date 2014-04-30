@@ -58,6 +58,12 @@ module Cellect
           end
         end
         
+        it 'should remove subjects' do
+          project.groups[1] = set_klass.new
+          project.groups[1].should_receive(:remove).with 123
+          project.remove subject_id: 123, group_id: 1
+        end
+        
         it 'should be grouped' do
           project.should be_grouped
         end
