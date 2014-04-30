@@ -2,6 +2,10 @@ module ApiHelper
   include Rack::Test::Methods
   
   def app
-    Cellect::API.new
+    @app ||= Cellect::API.new
+  end
+  
+  def json
+    @json ||= Oj.strict_load last_response.body
   end
 end

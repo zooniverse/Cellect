@@ -14,6 +14,7 @@ Dir["./spec/support/**/*.rb"].sort.each{ |f| require f }
 
 Cellect.adapter = SpecAdapter.new
 PROJECT_TYPES = Cellect.adapter.fixtures.keys
+SET_TYPES = %w(random priority pairwise_random pairwise_priority)
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
