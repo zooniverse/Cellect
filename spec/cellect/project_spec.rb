@@ -7,11 +7,21 @@ module Cellect
         it_behaves_like 'stateful', :project
         it_behaves_like 'project', :project
         let(:project){ Project[project_type] }
-        let(:user){ project.user 'foo' }
+        let(:user){ project.user 123 }
         
         it 'should provide unseen for users' do
           project.subjects.should_receive(:subtract).with user.seen, 3
-          project.unseen_for 'foo', limit: 3
+          project.unseen_for 123, limit: 3
+        end
+        
+        it 'should sample subjects without a user' do
+          project.subjects.should_receive(:sample).with 3
+          project.sample limit: 3
+        end
+        
+        it 'should sample subjects with a user' do
+          project.subjects.should_receive(:subtract).with user.seen, 3
+          project.sample user_id: 123, limit: 3
         end
         
         it 'should be notified of a user ttl expiry' do

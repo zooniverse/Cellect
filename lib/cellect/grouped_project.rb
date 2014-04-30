@@ -28,7 +28,11 @@ module Cellect
     end
     
     def sample(opts = { })
-      group(opts[:group_id]).sample opts[:limit]
+      if opts[:user_id]
+        unseen_for opts[:user_id], group_id: opts[:group_id], limit: opts[:limit]
+      else
+         group(opts[:group_id]).sample opts[:limit]
+      end
     end
     
     def status

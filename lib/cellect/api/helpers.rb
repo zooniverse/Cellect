@@ -5,16 +5,17 @@ module Cellect
         Project[params[:project_id]]
       end
       
-      def limit
-        params.fetch(:limit, 5).to_i rescue 5
-      end
-      
-      def group_id
-        params[:group_id].try(:to_i) rescue nil
-      end
-      
       def selector_params
-        { limit: limit, group_id: group_id }
+        {
+          limit: param_to_int(:limit, default: 5),
+          user_id: param_to_int(:user_id),
+          group_id: param_to_int(:group_id)
+        }
+      end
+      
+      def param_to_int(param, default: nil)
+        int = params[param].try :to_i
+        params[param] && int && int > 0 ? int : default
       end
     end
   end

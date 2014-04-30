@@ -49,7 +49,11 @@ module Cellect
     end
     
     def sample(opts = { })
-      subjects.sample opts[:limit]
+      if opts[:user_id]
+        unseen_for opts[:user_id], limit: opts[:limit]
+      else
+        subjects.sample opts[:limit]
+      end
     end
     
     def pairwise?
