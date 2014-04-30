@@ -6,7 +6,8 @@ module Cellect
       end
       
       put :add do
-        # add or update element
+        project.add update_params
+        nil
       end
       
       put :remove do
