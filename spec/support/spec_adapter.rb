@@ -2,15 +2,11 @@ require 'oj'
 
 class SpecAdapter < Cellect::Adapters::Default
   def project_list
-    fixtures.keys
+    fixtures.values
   end
   
   def load_data_for(project)
     fixtures[project.name]['entries']
-  end
-  
-  def load_project(name)
-    project_for(fixtures[name]).async.load_data
   end
   
   # def load_user(id)
