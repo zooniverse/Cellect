@@ -1,26 +1,26 @@
 {
-  "1": [
+  "random": [
 
   ],
-  "2": [
+  "priority": [
 
   ],
-  "3": [
+  "grouped_random": [
 
   ],
-  "4": [
+  "grouped_priority": [
 
   ],
-  "5": [
+  "pairwise_random": [
 
   ],
-  "6": [
+  "pairwise_priority": [
 
   ],
-  "7": [
+  "grouped_pairwise_random": [
 
   ],
-  "8": [
+  "grouped_pairwise_priority": [
 
   ]
 }
