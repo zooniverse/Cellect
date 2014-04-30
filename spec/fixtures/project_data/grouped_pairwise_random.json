@@ -1,5 +1,6 @@
 {
   "id": 7,
+  "name": "grouped_pairwise_random",
   "prioritized": false,
   "pairwise": true,
   "grouped": true,

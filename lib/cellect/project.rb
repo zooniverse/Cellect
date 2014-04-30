@@ -6,20 +6,24 @@ module Cellect
     attr_accessor :name, :users, :subjects
     attr_accessor :pairwise, :prioritized
     
-    def self.[](name)
-      Actor["project_#{ name }".to_sym] ||= new name
+    def self.[](name, pairwise: false, prioritized: false)
+      Actor["project_#{ name }".to_sym] ||= new name, pairwise: pairwise, prioritized: prioritized
     end
     
-    def initialize(name)
+    def initialize(name, pairwise: false, prioritized: false)
       self.name = name
       self.users = { }
-      self.subjects = DiffSet::RandomSet.new
+      self.pairwise = !!pairwise
+      self.prioritized = !!prioritized
+      self.subjects = set_klass.new
     end
     
-    def load_data(data)
+    def load_data
       transition :initializing
       self.subjects = set_klass.new
-      data.each{ |hash| subjects.add hash['id'], hash['priority'] }
+      Cellect.adapter.load_data_for(self).each do |hash|
+        subjects.add hash['id'], hash['priority']
+      end
       transition :ready
     end
     

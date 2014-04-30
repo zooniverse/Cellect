@@ -1,5 +1,6 @@
 {
   "id": 6,
+  "name": "pairwise_priority",
   "prioritized": true,
   "pairwise": true,
   "grouped": false,

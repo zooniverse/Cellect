@@ -5,9 +5,12 @@ class SpecAdapter < Cellect::Adapters::Default
     fixtures.keys
   end
   
+  def load_data_for(project)
+    fixtures[project.name]['entries']
+  end
+  
   def load_project(name)
-    data = fixtures[name]
-    project_for(name, data).load_data data.fetch('entries', [])
+    project_for(fixtures[name]).async.load_data
   end
   
   # def load_user(id)

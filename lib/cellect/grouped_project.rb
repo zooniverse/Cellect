@@ -4,21 +4,18 @@ module Cellect
   class GroupedProject < Project
     attr_accessor :groups
     
-    def initialize(name)
+    def initialize(name, pairwise: false, prioritized: false)
       super
       self.groups = { }
     end
     
-    def load_data(data)
+    def load_data
       transition :initializing
-      self.subjects = set_klass.new
       klass = set_klass
-      
-      data.each do |hash|
+      Cellect.adapter.load_data_for(self).each do |hash|
         self.groups[hash['group_id']] ||= klass.new
         self.groups[hash['group_id']].add hash['id'], hash['priority']
       end
-      
       transition :ready
     end
     
