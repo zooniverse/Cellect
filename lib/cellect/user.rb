@@ -18,7 +18,8 @@ module Cellect
     end
     
     def load_data
-      Cellect.adapter.load_user(project_name, id).each do |subject_id|
+      data = Cellect.adapter.load_user(project_name, id) || []
+      data.each do |subject_id|
         @seen.add subject_id
       end
       transition :ready
