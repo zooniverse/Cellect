@@ -11,7 +11,7 @@ module Cellect
       end
       
       put :remove do
-        # remove element
+        project.remove update_params
       end
     end
   end
