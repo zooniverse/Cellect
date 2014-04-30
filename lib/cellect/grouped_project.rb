@@ -40,5 +40,9 @@ module Cellect
         groups: group_counts
       })
     end
+    
+    def grouped?
+      true
+    end
   end
 end

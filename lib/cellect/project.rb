@@ -60,6 +60,10 @@ module Cellect
       !!prioritized
     end
     
+    def grouped?
+      false
+    end
+    
     SET_KLASS = {
       # priority, pairwise
       [    false, false  ] => DiffSet::RandomSet,

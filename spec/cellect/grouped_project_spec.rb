@@ -21,6 +21,10 @@ module Cellect
           project.group(1).should_receive(:subtract).with user.seen, 3
           project.unseen_for 'foo', group_id: 1, limit: 3
         end
+        
+        it 'should be grouped' do
+          project.should be_grouped
+        end
       end
     end
   end

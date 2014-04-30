@@ -25,6 +25,10 @@ module Cellect
           project.users.should_not have_key name
           expect{ user.name }.to raise_error
         end
+        
+        it 'should not be grouped' do
+          project.should_not be_grouped
+        end
       end
     end
   end
