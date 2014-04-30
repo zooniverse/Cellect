@@ -40,15 +40,15 @@ module Cellect
         end
         
         it 'should be notified of a user ttl expiry' do
-          project.bare_object.should_receive(:remove_user).with user.name
+          project.bare_object.should_receive(:remove_user).with user.id
           user.ttl_expired!
         end
         
         it 'should remove users when their ttl expires' do
-          name = user.name
-          project.remove_user name
-          project.users.should_not have_key name
-          expect{ user.name }.to raise_error
+          id = user.id
+          project.remove_user id
+          project.users.should_not have_key id
+          expect{ user.id }.to raise_error
         end
         
         it 'should not be grouped' do

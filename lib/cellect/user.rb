@@ -5,11 +5,13 @@ module Cellect
     include Celluloid
     include Stateful
     
-    attr_accessor :name, :project_name, :seen
+    attr_accessor :id, :project_name, :seen
     attr_accessor :ttl, :ttl_timer
     
     def initialize(name, project_name: nil, ttl: nil)
       self.name = name
+    def initialize(id, project_name: nil, ttl: nil)
+      self.id = id
       self.project_name = project_name
       self.seen = DiffSet::RandomSet.new
       @ttl = ttl
@@ -37,7 +39,7 @@ module Cellect
     
     def ttl_expired!
       if project_name
-        Project[project_name].remove_user name
+        Project[project_name].remove_user id
       else
         terminate
       end
