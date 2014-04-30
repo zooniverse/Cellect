@@ -23,6 +23,10 @@ class SpecAdapter < Cellect::Adapters::Default
     end
   end
   
+  def load_project(args, async: false)
+    super args, async: false
+  end
+  
   protected
   
   def _path_of(project_name)

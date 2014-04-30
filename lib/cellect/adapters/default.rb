@@ -33,14 +33,19 @@ module Cellect
         project_list.each{ |project_info| load_project project_info }
       end
       
-      def load_project(args)
-        if args.is_a?(Hash)
-          project_for(args).async.load_data
+      def load_project(args, async: true)
+        info = if args.is_a?(Hash)
+          args
         elsif args.is_a?(String)
-          project_info = project_list.select{ |h| h['name'] == args }.first
-          project_for(project_info).async.load_data
+          project_list.select{ |h| h['name'] == args }.first
         else
           raise ArgumentError
+        end
+        
+        if async
+          project_for(info).async.load_data
+        else
+          project_for(info).load_data
         end
       end
       
