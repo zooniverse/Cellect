@@ -7,5 +7,5 @@
 /ext/Makefile
 /ext/*.bundle
 /scratch
-/tmp/*
 *.so
+.vagrant
