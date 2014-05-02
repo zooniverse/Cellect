@@ -27,6 +27,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     d.run 'edpaget/zookeeper:3.4.6',
           args: '--name zk --publish-all',
           cmd: '-c localhost -i 1'
+    
+    d.build_image '/vagrant', args: '-t parrish/cellect'
+    d.run 'parrish/cellect',
+          args: '--publish 3000:3000 --link pg:pg --link mongo:mongo --link zk:zk'
   end
   
   config.vm.provider :virtualbox do |vb|
