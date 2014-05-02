@@ -32,7 +32,7 @@ module Cellect
     end
     
     it 'should reset the ttl timer on activity' do
-      user.bare_object.should_receive :restart_ttl_timer
+      user.bare_object.should_receive(:restart_ttl_timer).at_least :once
       user.seen
     end
     
