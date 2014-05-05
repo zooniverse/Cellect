@@ -14,6 +14,9 @@ GEM
     builder (3.2.2)
     celluloid (0.16.0.pre)
       timers (~> 2.0.0)
+    celluloid-io (0.15.0)
+      celluloid (>= 0.15.0)
+      nio4r (>= 0.5.0)
     coderay (1.1.0)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
@@ -33,6 +36,9 @@ GEM
       virtus (>= 1.0.0)
     hashie (2.1.1)
     hitimes (1.2.1)
+    http (0.6.0)
+      http_parser.rb (~> 0.6.0)
+    http_parser.rb (0.6.0)
     i18n (0.6.9)
     ice_nine (0.11.0)
     json (1.8.1)
@@ -44,6 +50,7 @@ GEM
     minitest (5.3.3)
     multi_json (1.9.3)
     multi_xml (0.5.5)
+    nio4r (1.0.0)
     oj (2.8.1)
     pry (0.9.12.6)
       coderay (~> 1.0)
@@ -89,7 +96,9 @@ PLATFORMS
 
 DEPENDENCIES
   celluloid
+  celluloid-io
   grape
+  http
   oj
   pry
   puma

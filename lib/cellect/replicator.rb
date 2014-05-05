@@ -1,8 +1,12 @@
 require 'socket'
+require 'celluloid/io'
+require 'http'
+require 'uri'
 
 module Cellect
   class Replicator
     include Celluloid
+    include Celluloid::IO
     
     attr_accessor :zk, :id, :instances
     
@@ -13,7 +17,18 @@ module Cellect
       setup
     end
     
+    def replicate(method, path, query = '')
+      instances.each_pair do |node_id, host|
+        async._replicate host, method, path, query
+      end
+    end
+    
     protected
+    
+    def _replicate(host, method, path, query)
+      uri = URI::HTTP.build host: host, path: path, query: query
+      HTTP.send method, uri.to_s, socket_class: Celluloid::IO::TCPSocket
+    end
     
     def zk_url
       ENV.fetch 'ZK_URL', 'localhost:2181'

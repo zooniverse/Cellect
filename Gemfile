@@ -2,6 +2,8 @@ source 'http://rubygems.org'
 
 gem 'rice'
 gem 'celluloid'
+gem 'celluloid-io'
+gem 'http'
 gem 'pry'
 gem 'oj'
 gem 'rspec'
