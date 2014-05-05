@@ -24,6 +24,7 @@ module Cellect
         end
         
         post :reload do
+          replicate
           Cellect.adapter.load_project project.name
         end
         

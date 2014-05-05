@@ -7,11 +7,14 @@ module Cellect
       
       put :add do
         project.add update_params
+        replicate update_params
         nil
       end
       
       put :remove do
         project.remove update_params
+        replicate update_params
+        nil
       end
     end
   end
