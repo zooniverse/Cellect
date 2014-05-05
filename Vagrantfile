@@ -10,6 +10,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :forwarded_port, guest: 5432, host: 5433    # postgres
   config.vm.network :forwarded_port, guest: 27017, host: 27018  # mongo
   config.vm.network :forwarded_port, guest: 28017, host: 28018  # mongo web
+  config.vm.network :forwarded_port, guest: 2181, host: 2181    # zookeeper
   
   config.vm.provision 'docker' do |d|
     d.pull_images 'ubuntu'
@@ -25,7 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           cmd: '--rest'
     
     d.run 'edpaget/zookeeper:3.4.6',
-          args: '--name zk --publish-all',
+          args: '--name zk --publish 2181:2181',
           cmd: '-c localhost -i 1'
     
     d.build_image '/vagrant', args: '-t parrish/cellect'
