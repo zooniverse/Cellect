@@ -1,3 +1,5 @@
+require 'socket'
+
 module Cellect
   class Replicator
     include Celluloid
@@ -5,13 +7,17 @@ module Cellect
     attr_accessor :zk, :id, :instances
     
     def initialize
-      self.zk = ZK.new chroot: '/cellect'
+      self.zk = ZK.new zk_url, chroot: '/cellect'
       self.instances = { }
       watch_instances
       setup
     end
     
     protected
+    
+    def zk_url
+      ENV.fetch 'ZK_URL', 'localhost:2181'
+    end
     
     def instances_changed(nodes)
       self.instances = { }
@@ -34,7 +40,8 @@ module Cellect
     end
     
     def register_instance
-      path = zk.create '/nodes/node', data: "Process #{ Process.pid }", mode: :ephemeral_sequential
+      ip = Socket.ip_address_list.find{ |address| address.ipv4? && !address.ipv4_loopback? }.ip_address
+      path = zk.create '/nodes/node', data: ip, mode: :ephemeral_sequential
       self.id = path.sub /^\/nodes\//, ''
     end
   end

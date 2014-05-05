@@ -57,7 +57,7 @@
 #
 # The default is “false”.
 #
-quiet
+# quiet
 
 # Configure “min” to be the minimum number of threads to use to answer
 # requests and “max” the maximum.
@@ -71,7 +71,7 @@ threads 8, 64
 #
 # The default is “tcp://0.0.0.0:9292”.
 #
-bind 'tcp://0.0.0.0:3000'
+bind 'tcp://0.0.0.0:80'
 # bind 'unix:///var/run/puma.sock'
 # bind 'unix:///var/run/puma.sock?umask=0777'
 # bind 'ssl://127.0.0.1:9292?key=path_to_key&cert=path_to_cert'

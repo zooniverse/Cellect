@@ -7,6 +7,13 @@ module Cellect
     require 'cellect/api/helpers'
     require 'cellect/api/sets'
     
+    get '/replication_status' do
+      {
+        node_id: Cellect.replicator.id,
+        other_nodes: Cellect.replicator.instances
+      }
+    end
+    
     resources :projects do
       segment '/:project_id' do
         helpers Helpers

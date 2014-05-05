@@ -30,20 +30,16 @@ patch -p0 < fix-readlines && \
 make && make install && rm -rf /tmp/ruby*
 
 # Install Cellect
-WORKDIR /cellect
-ADD Gemfile /cellect/Gemfile
-ADD Gemfile.lock /cellect/Gemfile.lock
+WORKDIR /
+ADD Gemfile /Gemfile
+ADD Gemfile.lock /Gemfile.lock
 RUN gem install bundler && bundle install
 
-ADD ./ /cellect
-WORKDIR ext
-RUN rm -f Makefile && ruby extconf.rb && make clean && make
-
-EXPOSE 3000
+EXPOSE 80
 WORKDIR /cellect
 
 ADD script/start_puma /opt/start_puma
 ADD config/supervisor.conf /etc/supervisor/conf.d/cellect.conf
 CMD ["/usr/bin/supervisord"]
 
-# docker run -i --publish 3000:3000 --link pg:pg --link mongo:mongo --link zk:zk -t parrish/cellect /bin/bash
+# docker run -i --link pg:pg --link mongo:mongo --link zk:zk -v /vagrant:/cellect -t parrish/cellect /bin/bash
