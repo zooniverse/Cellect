@@ -22,7 +22,7 @@ module Cellect
   require 'cellect/user'
   require 'cellect/api'
   
-  Cellect.replicator = Replicator.new
+  Cellect.replicator = Replicator.pool size: 50
   
   def self.ready?
     Project.all.each do |project|
