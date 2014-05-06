@@ -49,7 +49,7 @@ module Cellect
     
     def nodes_changed(nodes)
       self.class.nodes = { }
-      self.class.nodes.each do |node|
+      nodes.each do |node|
         next if node == self.class.id
         self.class.nodes[node] = zk.get("/nodes/#{ node }").first
       end
