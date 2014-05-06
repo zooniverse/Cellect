@@ -23,4 +23,14 @@ module Cellect
   require 'cellect/api'
   
   Cellect.replicator = Replicator.new
+  
+  def self.ready?
+    Project.all.each do |project|
+      return false unless project.ready?
+    end
+    
+    true
+  rescue
+    false
+  end
 end

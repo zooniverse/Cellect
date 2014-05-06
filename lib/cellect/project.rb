@@ -10,6 +10,16 @@ module Cellect
       Actor["project_#{ name }".to_sym] ||= new name, pairwise: pairwise, prioritized: prioritized
     end
     
+    def self.names
+      actor_names = Celluloid.actor_system.registry.names.collect &:to_s
+      project_actors = actor_names.select{ |key| key =~ /^project_/ }
+      project_actors.collect{ |name| name.sub(/^project_/, '').to_sym }
+    end
+    
+    def self.all
+      names.collect{ |name| Project[name] }
+    end
+    
     def initialize(name, pairwise: false, prioritized: false)
       self.name = name
       self.users = { }
@@ -78,6 +88,10 @@ module Cellect
     
     def grouped?
       false
+    end
+    
+    def ready?
+      state == :ready
     end
     
     SET_KLASS = {
