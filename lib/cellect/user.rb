@@ -5,6 +5,8 @@ module Cellect
     include Celluloid
     include Stateful
     
+    trap_exit :project_crashed
+    
     attr_accessor :id, :project_name, :seen
     attr_accessor :ttl, :ttl_timer
     
@@ -12,6 +14,7 @@ module Cellect
       self.id = id
       self.project_name = project_name
       self.seen = DiffSet::RandomSet.new
+      monitor Project[project_name]
       @ttl = ttl
       subscribe 'User::state_change', :state_changed
       async.load_data
@@ -46,6 +49,10 @@ module Cellect
     
     def ttl
       @ttl || 60 * 60 # 1 hour
+    end
+    
+    def project_crashed
+      terminate
     end
   end
 end

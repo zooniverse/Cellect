@@ -9,10 +9,6 @@ class SpecAdapter < Cellect::Adapters::Default
     fixtures[project.name]['entries']
   end
   
-  # def load_user(id)
-  #   # TO-DO
-  # end
-  
   def fixtures
     @fixtures ||= { }.tap do |fixtures|
       Dir["#{ _fixture_path }/project_data/*.json"].collect do |f|
