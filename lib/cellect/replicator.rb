@@ -11,10 +11,8 @@ module Cellect
     attr_accessor :zk, :id, :instances
     
     def initialize
-      self.zk = ZK.new zk_url, chroot: '/cellect'
       self.instances = { }
-      watch_instances
-      setup
+      async.initialize_zk
     end
     
     def replicate(method, path, query = '')
@@ -24,6 +22,12 @@ module Cellect
     end
     
     protected
+    
+    def initialize_zk
+      self.zk = ZK.new zk_url, chroot: '/cellect'
+      watch_instances
+      setup
+    end
     
     def _replicate(host, method, path, query)
       uri = URI::HTTP.build host: host, path: path, query: query
