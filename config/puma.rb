@@ -50,8 +50,7 @@
 # (“append”) specifies whether the output is appended, the default is
 # “false”.
 #
-# stdout_redirect '/u/apps/lolcat/log/stdout', '/u/apps/lolcat/log/stderr'
-# stdout_redirect '/u/apps/lolcat/log/stdout', '/u/apps/lolcat/log/stderr', true
+stdout_redirect 'log/cellect.log', 'log/cellect.log', true
 
 # Disable request logging.
 #
