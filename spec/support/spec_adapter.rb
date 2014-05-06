@@ -5,8 +5,8 @@ class SpecAdapter < Cellect::Adapters::Default
     fixtures.values
   end
   
-  def load_data_for(project)
-    fixtures[project.name]['entries']
+  def load_data_for(project_name)
+    fixtures.fetch(project_name, { }).fetch 'entries', []
   end
   
   def fixtures
@@ -28,10 +28,6 @@ class SpecAdapter < Cellect::Adapters::Default
         user_fixtures[i + 1] = data
       end
     end
-  end
-  
-  def load_project(args, async: false)
-    super args, async: false
   end
   
   def load_user(project_name, id)

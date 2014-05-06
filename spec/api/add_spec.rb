@@ -10,10 +10,7 @@ module Cellect
           let(:project_type){ [grouping, set_type].compact.join '_' }
           let(:project){ Project[project_type] }
           let(:user){ project.user 123 }
-          
-          before(:each) do
-            Cellect.adapter.load_project project_type
-          end
+          before(:each){ pass_until project, is: :ready }
           
           let(:opts) do
             { subject_id: 123 }.tap do |h|

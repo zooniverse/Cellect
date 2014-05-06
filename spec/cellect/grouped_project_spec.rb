@@ -2,15 +2,17 @@ require 'spec_helper'
 
 module Cellect
   describe GroupedProject do
-    PROJECT_TYPES.each do |project_type|
+    SET_TYPES.collect{ |type| "grouped_#{ type }" }.each do |project_type|
       context project_type do
         it_behaves_like 'stateful', :project
         it_behaves_like 'project', :project
         let(:project){ GroupedProject[project_type] }
         let(:user){ project.user 123 }
         let(:set_klass){ project.prioritized? ? DiffSet::PrioritySet : DiffSet::RandomSet }
+        before(:each){ pass_until project, is: :ready }
         
         it 'should provide unseen from a random group for users' do
+          project.groups = { }
           project.groups[1] = set_klass.new
           project.groups[1].should_receive(:subtract).with user.seen, 3
           project.unseen_for 123, limit: 3
@@ -23,6 +25,7 @@ module Cellect
         end
         
         it 'should sample subjects from a random group without a user' do
+          project.groups = { }
           project.groups[1] = set_klass.new
           project.group(1).should_receive(:sample).with 3
           project.sample limit: 3
@@ -35,6 +38,7 @@ module Cellect
         end
         
         it 'should sample subjects from a random group for a user' do
+          project.groups = { }
           project.groups[1] = set_klass.new
           project.groups[1].should_receive(:subtract).with user.seen, 3
           project.sample user_id: 123, limit: 3

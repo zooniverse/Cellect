@@ -2,12 +2,13 @@ require 'spec_helper'
 
 module Cellect
   describe Project do
-    PROJECT_TYPES.each do |project_type|
+    SET_TYPES.each do |project_type|
       context project_type do
         it_behaves_like 'stateful', :project
         it_behaves_like 'project', :project
         let(:project){ Project[project_type] }
         let(:user){ project.user 123 }
+        before(:each){ pass_until project, is: :ready }
         
         it 'should provide unseen for users' do
           project.subjects.should_receive(:subtract).with user.seen, 3

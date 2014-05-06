@@ -5,14 +5,14 @@ module Cellect
     attr_accessor :groups
     
     def initialize(name, pairwise: false, prioritized: false)
-      super
       self.groups = { }
+      super
     end
     
     def load_data
       transition :initializing
       klass = set_klass
-      Cellect.adapter.load_data_for(self).each do |hash|
+      Cellect.adapter.load_data_for(name).each do |hash|
         self.groups[hash['group_id']] ||= klass.new
         self.groups[hash['group_id']].add hash['id'], hash['priority']
       end

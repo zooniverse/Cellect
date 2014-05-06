@@ -17,7 +17,7 @@ module Cellect
       monitor Project[project_name]
       @ttl = ttl
       subscribe 'User::state_change', :state_changed
-      async.load_data
+      after(0.001){ async.load_data }
     end
     
     def load_data

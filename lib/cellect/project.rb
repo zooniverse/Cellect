@@ -7,7 +7,9 @@ module Cellect
     attr_accessor :pairwise, :prioritized
     
     def self.[](name, pairwise: false, prioritized: false)
-      Actor["project_#{ name }".to_sym] ||= new name, pairwise: pairwise, prioritized: prioritized
+      key = "project_#{ name }".to_sym
+      Actor[key] ||= supervise name, pairwise: pairwise, prioritized: prioritized
+      Actor[key].actors.first
     end
     
     def self.names
@@ -26,12 +28,13 @@ module Cellect
       self.pairwise = !!pairwise
       self.prioritized = !!prioritized
       self.subjects = set_klass.new
+      after(0.001){ async.load_data }
     end
     
     def load_data
       transition :initializing
       self.subjects = set_klass.new
-      Cellect.adapter.load_data_for(self).each do |hash|
+      Cellect.adapter.load_data_for(name).each do |hash|
         subjects.add hash['id'], hash['priority']
       end
       transition :ready

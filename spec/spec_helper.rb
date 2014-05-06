@@ -13,7 +13,6 @@ Celluloid.logger = nil
 Dir["./spec/support/**/*.rb"].sort.each{ |f| require f }
 
 Cellect.adapter = SpecAdapter.new
-PROJECT_TYPES = Cellect.adapter.fixtures.keys
 SET_TYPES = %w(random priority pairwise_random pairwise_priority)
 
 RSpec.configure do |config|
@@ -21,6 +20,7 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
   config.order = 'random'
+  config.include CellectHelper
   
   config.around(:each) do |example|
     Celluloid.boot

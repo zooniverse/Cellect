@@ -11,11 +11,13 @@ shared_examples_for 'stateful' do |name|
   end
   
   it 'should transition states' do
+    pass_until obj, is: :ready
     expect{ obj.transition :initializing }.to change{ obj.state }.to :initializing
     expect{ obj.transition :ready }.to change{ obj.state }.to :ready
   end
   
   it 'should publish state transitions' do
+    pass_until obj, is: :ready
     obj.bare_object.should_receive(:publish) do |topic, state|
       topic.should =~ /::state_change$/
       state.should be :initializing

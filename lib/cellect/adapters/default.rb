@@ -21,7 +21,7 @@ module Cellect
       #     'priority' => 0.123,
       #     'group_id' => 456
       #   }
-      def load_data_for(project)
+      def load_data_for(project_name)
         raise NotImplementedError
       end
       
@@ -33,7 +33,7 @@ module Cellect
         project_list.each{ |project_info| load_project project_info }
       end
       
-      def load_project(args, async: true)
+      def load_project(args)
         info = if args.is_a?(Hash)
           args
         elsif args.is_a?(String)
@@ -42,11 +42,7 @@ module Cellect
           raise ArgumentError
         end
         
-        if async
-          project_for(info).async.load_data
-        else
-          project_for(info).load_data
-        end
+        project_for info
       end
       
       def project_for(opts = { })
