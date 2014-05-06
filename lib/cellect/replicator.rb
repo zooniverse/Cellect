@@ -22,6 +22,14 @@ module Cellect
       NodeSet.ready?
     end
     
+    def id
+      NodeSet.id
+    end
+    
+    def nodes
+      NodeSet.nodes
+    end
+    
     protected
     
     def _replicate(host, method, path, query)

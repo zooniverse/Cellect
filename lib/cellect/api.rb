@@ -9,8 +9,9 @@ module Cellect
     
     get '/replication_status' do
       {
+        connected: Cellect.replicator.ready?,
         node_id: Cellect.replicator.id,
-        other_nodes: Cellect.replicator.instances
+        other_nodes: Cellect.replicator.nodes
       }
     end
     

@@ -1,18 +1,17 @@
 require 'socket'
+require 'timeout'
 
 module Cellect
   class NodeSet
     include Celluloid
     
     def self.new
-      self.supervised_instance ||= supervise
-      supervised_instance.actors.first.name
+      self.supervised_instance ||= supervise    # initialize singleton unless it exists
+      supervised_instance.actors.first.name     # ensure the actor isn't dead
     rescue Celluloid::DeadActorError
-      self.supervised_instance = supervise
+      self.supervised_instance = supervise      # restart the actor if it's dead
     ensure
-      node_set = supervised_instance.actors.first
-      node_set.async.initialize_zk unless node_set.zk && node_set.zk.connected?
-      return node_set
+      return supervised_instance.actors.first   # always return the instance
     end
     
     class << self
@@ -29,10 +28,14 @@ module Cellect
     def initialize
       self.class.state = :initializing
       self.class.nodes = { }
+      after(0.001){ async.initialize_zk } # don't block waiting for ZK to connect
     end
     
     def initialize_zk
-      self.zk = ZK.new zk_url, chroot: '/cellect'
+      # don't let ZK hang the thread, just retry connection on restart
+      Timeout::timeout(5) do
+        self.zk = ZK.new zk_url, chroot: '/cellect'
+      end
       watch_nodes
       setup
       self.class.state = :ready
