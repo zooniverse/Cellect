@@ -38,7 +38,8 @@ module Cellect
     end
     
     def user(id)
-      self.users[id] ||= User.new_link id, project_name: name
+      self.users[id] ||= User.supervise id, project_name: name
+      users[id].actors.first
     end
     
     def unseen_for(user_id, limit: 5)
