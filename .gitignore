@@ -10,3 +10,4 @@
 *.so
 .vagrant
 log/*
+tmp/*

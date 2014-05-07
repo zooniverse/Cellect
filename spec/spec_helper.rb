@@ -1,18 +1,14 @@
+CELLECT_ROOT = File.expand_path File.join(File.dirname(__FILE__), '../')
+
 %w(lib ext).each do |name|
-  dir = File.expand_path name, File.join(File.dirname(__FILE__), '../')
+  dir = File.join CELLECT_ROOT, name
   $LOAD_PATH.unshift dir unless $LOAD_PATH.include? dir
 end
 
 Bundler.require :test, :development
 
-zoo_config = File.expand_path File.join(File.dirname(__FILE__), 'support/zoo.cfg')
-`rm -rf /tmp/zookeeper; mkdir -p /tmp/zookeeper`
-`cp #{ zoo_config } /tmp/zookeeper/zoo.cfg`
-`zkServer stop /tmp/zookeeper/zoo.cfg > /dev/null 2>&1`
-`zkServer start /tmp/zookeeper/zoo.cfg > /dev/null 2>&1`
-ENV['ZK_URL'] = 'localhost:21811'
-
 require 'pry'
+require './spec/support/zk_setup.rb'
 require 'cellect'
 require 'celluloid/rspec'
 require 'rack/test'
@@ -38,6 +34,6 @@ RSpec.configure do |config|
   end
   
   config.after(:suite) do
-    `zkServer stop /tmp/zookeeper/zoo.cfg > /dev/null 2>&1`
+    `zkServer stop #{ CELLECT_ZK_CONFIG } > /dev/null 2>&1`
   end
 end
