@@ -4,11 +4,14 @@ gem 'rice'
 gem 'celluloid'
 gem 'celluloid-io'
 gem 'http'
-gem 'pry'
 gem 'oj'
-gem 'rspec'
 gem 'rake'
 gem 'grape'
-gem 'rack-test'
 gem 'puma'
 gem 'zk'
+
+group :test, :development do
+  gem 'rspec'
+  gem 'rack-test'
+  gem 'pry'
+end
