@@ -3,6 +3,15 @@
   $LOAD_PATH.unshift dir unless $LOAD_PATH.include? dir
 end
 
+Bundler.require :test, :development
+
+zoo_config = File.expand_path File.join(File.dirname(__FILE__), 'support/zoo.cfg')
+`rm -rf /tmp/zookeeper; mkdir -p /tmp/zookeeper`
+`cp #{ zoo_config } /tmp/zookeeper/zoo.cfg`
+`zkServer stop /tmp/zookeeper/zoo.cfg > /dev/null 2>&1`
+`zkServer start /tmp/zookeeper/zoo.cfg > /dev/null 2>&1`
+ENV['ZK_URL'] = 'localhost:21811'
+
 require 'pry'
 require 'cellect'
 require 'celluloid/rspec'
@@ -26,5 +35,9 @@ RSpec.configure do |config|
     Celluloid.boot
     example.run
     Celluloid.shutdown
+  end
+  
+  config.after(:suite) do
+    `zkServer stop /tmp/zookeeper/zoo.cfg > /dev/null 2>&1`
   end
 end
