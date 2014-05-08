@@ -28,12 +28,13 @@ curl -fsSL https://gist.github.com/mislav/a18b9d7f0dc5b9efc162.txt > fix-readlin
 patch -p0 < fix-readlines && \
 ./configure --prefix=/usr/local --disable-install-doc --enable-shared --with-opt-dir=/usr/local/lib && \
 make && make install && rm -rf /tmp/ruby*
+RUN gem install bundler
 
 # Install Cellect
 WORKDIR /
 ADD Gemfile /Gemfile
 ADD Gemfile.lock /Gemfile.lock
-RUN gem install bundler && bundle install
+RUN bundle install
 
 EXPOSE 80
 WORKDIR /cellect

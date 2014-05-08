@@ -9,6 +9,7 @@ gem 'rake'
 gem 'grape'
 gem 'puma'
 gem 'zk'
+gem 'pg'
 
 group :test, :development do
   gem 'rspec'

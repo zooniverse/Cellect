@@ -52,6 +52,7 @@ GEM
     multi_xml (0.5.5)
     nio4r (1.0.0)
     oj (2.8.1)
+    pg (0.17.1)
     pry (0.9.12.6)
       coderay (~> 1.0)
       method_source (~> 0.8)
@@ -100,6 +101,7 @@ DEPENDENCIES
   grape
   http
   oj
+  pg
   pry
   puma
   rack-test
