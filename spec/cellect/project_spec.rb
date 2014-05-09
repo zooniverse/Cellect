@@ -4,7 +4,6 @@ module Cellect
   describe Project do
     SET_TYPES.each do |project_type|
       context project_type do
-        it_behaves_like 'stateful', :project
         it_behaves_like 'project', :project
         let(:project){ Project[project_type] }
         let(:user){ project.user 123 }

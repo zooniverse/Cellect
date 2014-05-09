@@ -4,7 +4,6 @@ module Cellect
   describe GroupedProject do
     SET_TYPES.collect{ |type| "grouped_#{ type }" }.each do |project_type|
       context project_type do
-        it_behaves_like 'stateful', :project
         it_behaves_like 'project', :project
         let(:project){ GroupedProject[project_type] }
         let(:user){ project.user 123 }

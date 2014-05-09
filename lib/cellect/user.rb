@@ -3,11 +3,10 @@ require 'oj'
 module Cellect
   class User
     include Celluloid
-    include Stateful
     
     trap_exit :project_crashed
     
-    attr_accessor :id, :project_name, :seen
+    attr_accessor :id, :project_name, :seen, :state
     attr_accessor :ttl, :ttl_timer
     
     def initialize(id, project_name: nil, ttl: nil)
@@ -16,8 +15,7 @@ module Cellect
       self.seen = DiffSet::RandomSet.new
       monitor Project[project_name]
       @ttl = ttl
-      subscribe 'User::state_change', :state_changed
-      after(0.001){ async.load_data }
+      load_data
     end
     
     def load_data
@@ -25,7 +23,8 @@ module Cellect
       data.each do |subject_id|
         @seen.add subject_id
       end
-      transition :ready
+      self.state = :ready
+      restart_ttl_timer
     end
     
     def seen

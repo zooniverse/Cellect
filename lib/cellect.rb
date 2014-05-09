@@ -16,7 +16,6 @@ module Cellect
   
   require 'cellect/adapters'
   require 'cellect/replicator'
-  require 'cellect/stateful'
   require 'cellect/project'
   require 'cellect/grouped_project'
   require 'cellect/user'

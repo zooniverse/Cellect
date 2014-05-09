@@ -1,9 +1,8 @@
 module Cellect
   class Project
     include Celluloid
-    include Stateful
     
-    attr_accessor :name, :users, :subjects
+    attr_accessor :name, :users, :subjects, :state
     attr_accessor :pairwise, :prioritized
     
     def self.[](name, pairwise: false, prioritized: false)
@@ -28,16 +27,16 @@ module Cellect
       self.pairwise = !!pairwise
       self.prioritized = !!prioritized
       self.subjects = set_klass.new
-      after(0.001){ async.load_data }
+      load_data
     end
     
     def load_data
-      transition :initializing
+      self.state = :initializing
       self.subjects = set_klass.new
       Cellect.adapter.load_data_for(name).each do |hash|
         subjects.add hash['id'], hash['priority']
       end
-      transition :ready
+      self.state = :ready
     end
     
     def user(id)
@@ -116,7 +115,8 @@ module Cellect
         grouped: false,
         prioritized: prioritized,
         pairwise: pairwise,
-        subjects: subjects.size
+        subjects: subjects.size,
+        users: users.length
       }
     end
   end

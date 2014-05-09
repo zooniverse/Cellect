@@ -10,13 +10,13 @@ module Cellect
     end
     
     def load_data
-      transition :initializing
+      self.state = :initializing
       klass = set_klass
       Cellect.adapter.load_data_for(name).each do |hash|
         self.groups[hash['group_id']] ||= klass.new
         self.groups[hash['group_id']].add hash['id'], hash['priority']
       end
-      transition :ready
+      self.state = :ready
     end
     
     def group(group_id = nil)
