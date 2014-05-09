@@ -16,6 +16,10 @@ module Cellect
     end
     
     resources :projects do
+      get do
+        Cellect.adapter.project_list
+      end
+      
       segment '/:project_id' do
         helpers Helpers
         mount Sets

@@ -9,6 +9,12 @@ module Cellect
     attr_accessor :id, :project_name, :seen, :state
     attr_accessor :ttl, :ttl_timer
     
+    class << self
+      attr_accessor :expiries_since_gc
+    end
+    
+    self.expiries_since_gc = 0
+    
     def initialize(id, project_name: nil, ttl: nil)
       self.id = id
       self.project_name = project_name
@@ -42,16 +48,27 @@ module Cellect
     end
     
     def ttl_expired!
+      cleanup!
       Project[project_name].remove_user(id) if project_name
       terminate
     end
     
     def ttl
-      @ttl || 60 * 60 # 1 hour
+      @ttl || 60 * 15 # 15 minutes
     end
     
-    def project_crashed
+    def project_crashed(actor, reason)
+      cleanup!
       terminate
+    end
+    
+    def cleanup!
+      self.seen = nil
+      self.class.expiries_since_gc += 1
+      if self.class.expiries_since_gc > 50
+        GC.start
+        self.class.expiries_since_gc = 0
+      end
     end
   end
 end

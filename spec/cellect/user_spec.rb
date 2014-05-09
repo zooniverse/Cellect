@@ -8,8 +8,8 @@ module Cellect
       user.seen.should be_a DiffSet::RandomSet
     end
     
-    it 'should have a default ttl of 1 hour' do
-      user.ttl.should == 3_600 # seconds
+    it 'should have a default ttl of 15 minutes' do
+      user.ttl.should == 900 # seconds
     end
     
     it 'should allow custom ttl' do
