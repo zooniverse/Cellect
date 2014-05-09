@@ -25,6 +25,10 @@ module Cellect
         raise NotImplementedError
       end
       
+      # Load seen ids for a user, this method:
+      #   Accepts a project_name, and a user id
+      #   Returns an array in the form:
+      #   [1, 2, 3]
       def load_user(project_name, id)
         raise NotImplementedError
       end

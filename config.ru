@@ -5,7 +5,11 @@ end
 
 require 'pry'
 require 'cellect'
-require_relative 'spec/support/spec_adapter'
-Cellect.adapter = SpecAdapter.new
+# require_relative 'spec/support/spec_adapter'
+# Cellect.adapter = SpecAdapter.new
+
+require 'cellect/adapters/postgres'
+Cellect.adapter = Cellect::Adapters::Postgres.new
+
 Cellect.adapter.load_projects
 run Cellect::API

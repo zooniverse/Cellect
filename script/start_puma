@@ -5,4 +5,11 @@ cd /cellect
 bundle install
 cd /cellect/ext && rm -f Makefile && ruby extconf.rb && make clean && make
 cd /cellect
-ZK_URL="$ZK_PORT_2181_TCP_ADDR:$ZK_PORT_2181_TCP_PORT" puma
+
+ZK_URL="$ZK_PORT_2181_TCP_ADDR:$ZK_PORT_2181_TCP_PORT" \
+PG_HOST=$PG_PORT_5432_TCP_ADDR \
+PG_PORT=$PG_PORT_5432_TCP_PORT \
+PG_DB=$PG_ENV_DB \
+PG_USER=$PG_ENV_USER \
+PG_PASS=$PG_ENV_PASS \
+puma

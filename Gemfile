@@ -10,6 +10,7 @@ gem 'grape'
 gem 'puma'
 gem 'zk'
 gem 'pg'
+gem 'connection_pool'
 
 group :test, :development do
   gem 'rspec'
