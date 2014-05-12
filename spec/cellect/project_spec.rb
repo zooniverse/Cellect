@@ -40,7 +40,9 @@ module Cellect
         end
         
         it 'should be notified of a user ttl expiry' do
-          project.bare_object.should_receive(:remove_user).with user.id
+          async_project = double
+          project.should_receive(:async).and_return async_project
+          async_project.should_receive(:remove_user).with user.id
           user.ttl_expired!
         end
         

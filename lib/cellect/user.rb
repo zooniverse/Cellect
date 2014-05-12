@@ -3,17 +3,13 @@ require 'oj'
 module Cellect
   class User
     include Celluloid
+    include Celluloid::Logger
     
     trap_exit :project_crashed
+    finalizer :cancel_ttl_timer
     
     attr_accessor :id, :project_name, :seen, :state
     attr_accessor :ttl, :ttl_timer
-    
-    class << self
-      attr_accessor :expiries_since_gc
-    end
-    
-    self.expiries_since_gc = 0
     
     def initialize(id, project_name: nil, ttl: nil)
       self.id = id
@@ -47,10 +43,15 @@ module Cellect
       ttl_timer.reset
     end
     
+    def cancel_ttl_timer
+      ttl_timer.cancel if ttl_timer
+      self.ttl_timer = nil
+    end
+    
     def ttl_expired!
-      cleanup!
-      Project[project_name].remove_user(id) if project_name
-      terminate
+      debug "User #{ id } TTL expired"
+      cancel_ttl_timer
+      Project[project_name].async.remove_user(id)
     end
     
     def ttl
@@ -58,17 +59,8 @@ module Cellect
     end
     
     def project_crashed(actor, reason)
-      cleanup!
+      cancel_ttl_timer
       terminate
-    end
-    
-    def cleanup!
-      self.seen = nil
-      self.class.expiries_since_gc += 1
-      if self.class.expiries_since_gc > 50
-        GC.start
-        self.class.expiries_since_gc = 0
-      end
     end
   end
 end

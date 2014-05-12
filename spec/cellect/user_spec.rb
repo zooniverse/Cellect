@@ -22,8 +22,11 @@ module Cellect
     end
     
     it 'should terminate on ttl expiry' do
-      user.bare_object.should_receive :terminate
+      async_project = double
+      Project[user.project_name].should_receive(:async).and_return async_project
+      async_project.should_receive(:remove_user).with user.id
       user.ttl_expired!
+      user.ttl_timer.should be_nil
     end
   end
 end

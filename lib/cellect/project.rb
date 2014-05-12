@@ -56,9 +56,7 @@ module Cellect
     
     def remove_user(user_id)
       removed = self.users.delete user_id
-      return unless removed
-      unlink removed
-      removed.terminate
+      removed.terminate if removed
     end
     
     def sample(opts = { })
