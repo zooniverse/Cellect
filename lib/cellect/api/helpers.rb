@@ -21,6 +21,13 @@ module Cellect
         }
       end
       
+      def seen_params
+        {
+          user_id: param_to_int(:user_id),
+          subject_id: param_to_int(:subject_id)
+        }
+      end
+      
       def param_to_int(param, default: nil)
         _param_to param, :to_i, default
       end

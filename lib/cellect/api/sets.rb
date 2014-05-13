@@ -16,6 +16,15 @@ module Cellect
         replicate update_params
         nil
       end
+      
+      put :add_seen do
+        user_id, subject_id = seen_params.values_at :user_id, :subject_id
+        if user_id && user_id > 0 && subject_id && subject_id > 0
+          project.async.add_seen_for user_id, subject_id
+        end
+        
+        nil
+      end
     end
   end
 end
