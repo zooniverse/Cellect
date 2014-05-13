@@ -1,7 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (4.1.0)
+    activesupport (4.1.1)
       i18n (~> 0.6, >= 0.6.9)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
@@ -36,8 +36,7 @@ GEM
       rack-mount
       virtus (>= 1.0.0)
     hashie (2.1.1)
-    hitimes (1.2.1)
-    http (0.6.0)
+    http (0.6.1)
       http_parser.rb (~> 0.6.0)
     http_parser.rb (0.6.0)
     i18n (0.6.9)
@@ -49,10 +48,10 @@ GEM
       multi_json (>= 1.8.4)
     method_source (0.8.2)
     minitest (5.3.3)
-    multi_json (1.9.3)
+    multi_json (1.10.0)
     multi_xml (0.5.5)
     nio4r (1.0.0)
-    oj (2.8.1)
+    oj (2.9.0)
     pg (0.17.1)
     pry (0.9.12.6)
       coderay (~> 1.0)
@@ -67,8 +66,8 @@ GEM
       rack (>= 1.0.0)
     rack-test (0.6.2)
       rack (>= 1.0)
-    rake (10.1.0)
-    rice (1.6.0)
+    rake (10.3.1)
+    rice (1.6.2)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
@@ -79,8 +78,7 @@ GEM
     rspec-mocks (2.14.6)
     slop (3.5.0)
     thread_safe (0.3.3)
-    timers (2.0.0)
-      hitimes
+    timers (1.1.0)
     tzinfo (1.1.0)
       thread_safe (~> 0.1)
     virtus (1.0.2)
