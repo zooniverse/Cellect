@@ -13,6 +13,7 @@ module Cellect
     end
     
     def replicate(method, path, query = '')
+      return if Cellect.node_affinity
       NodeSet.nodes.each_pair do |node_id, host|
         async._replicate host, method, path, query
       end

@@ -11,7 +11,7 @@ end
 
 module Cellect
   class << self
-    attr_accessor :replicator
+    attr_accessor :replicator, :node_affinity
   end
   
   require 'cellect/adapters'
@@ -22,6 +22,7 @@ module Cellect
   require 'cellect/api'
   
   Cellect.replicator = Replicator.pool size: 50
+  Cellect.node_affinity = false
   
   def self.ready?
     Project.all.each do |project|

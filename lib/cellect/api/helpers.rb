@@ -35,7 +35,7 @@ module Cellect
       end
       
       def replicate(query = { })
-        return if params[:replicated]
+        return if Cellect.node_affinity || params[:replicated]
         query_string = to_query query.merge(replicated: true)
         Cellect.replicator.replicate request.request_method.downcase, request.path, query_string
       end
