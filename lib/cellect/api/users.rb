@@ -9,7 +9,6 @@ module Cellect
             
             if user_id && user_id > 0 && subject_id && subject_id > 0
               project.async.add_seen_for user_id, subject_id
-              replicate user_id: user_id, subject_id: subject_id
             end
             
             nil
@@ -20,7 +19,6 @@ module Cellect
             
             if user_id && user_id > 0
               project.async.user user_id
-              replicate user_id: user_id
             end
             
             nil

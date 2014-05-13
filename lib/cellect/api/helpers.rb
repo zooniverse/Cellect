@@ -34,12 +34,6 @@ module Cellect
         params[param] && val && val > 0 ? val : default
       end
       
-      def replicate(query = { })
-        return if Cellect.node_affinity || params[:replicated]
-        query_string = to_query query.merge(replicated: true)
-        Cellect.replicator.replicate request.request_method.downcase, request.path, query_string
-      end
-      
       def to_query(hash)
         hash.select{ |k, v| v }.collect{ |k, v| "#{ k }=#{ v }" }.join '&'
       end

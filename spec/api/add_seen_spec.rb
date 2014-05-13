@@ -19,13 +19,6 @@ module Cellect
             put "/projects/#{ project_type }/users/123/add_seen", subject_id: 123
             last_response.status.should == 200
           end
-          
-          it 'should replicate added seen subjects' do
-            path = "/projects/#{ project_type }/users/123/add_seen"
-            Cellect.replicator.should_receive(:replicate).with 'put', path, 'user_id=123&subject_id=123&replicated=true'
-            put path, subject_id: 123
-            last_response.status.should == 200
-          end
         end
       end
     end

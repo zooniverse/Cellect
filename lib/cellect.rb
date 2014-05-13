@@ -11,18 +11,15 @@ end
 
 module Cellect
   class << self
-    attr_accessor :replicator, :node_affinity
+    attr_accessor :node_set
   end
   
+  require 'cellect/node_set'
   require 'cellect/adapters'
-  require 'cellect/replicator'
   require 'cellect/project'
   require 'cellect/grouped_project'
   require 'cellect/user'
   require 'cellect/api'
-  
-  Cellect.replicator = Replicator.pool size: 50
-  Cellect.node_affinity = false
   
   def self.ready?
     Project.all.each do |project|
@@ -33,4 +30,6 @@ module Cellect
   rescue
     false
   end
+  
+  Cellect.node_set = NodeSet.supervise
 end

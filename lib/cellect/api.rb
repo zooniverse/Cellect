@@ -8,14 +8,6 @@ module Cellect
     require 'cellect/api/sets'
     require 'cellect/api/users'
     
-    get '/replication_status' do
-      {
-        connected: Cellect.replicator.ready?,
-        node_id: Cellect.replicator.id,
-        other_nodes: Cellect.replicator.nodes
-      }
-    end
-    
     resources :projects do
       get do
         Cellect.adapter.project_list
@@ -31,7 +23,6 @@ module Cellect
         end
         
         post :reload do
-          replicate
           Cellect.adapter.load_project project.name
         end
         

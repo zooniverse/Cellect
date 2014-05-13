@@ -5,29 +5,10 @@ module Cellect
   class NodeSet
     include Celluloid
     
-    def self.new
-      self.supervised_instance ||= supervise    # initialize singleton unless it exists
-      supervised_instance.actors.first.name     # ensure the actor isn't dead
-    rescue Celluloid::DeadActorError
-      self.supervised_instance = supervise      # restart the actor if it's dead
-    ensure
-      return supervised_instance.actors.first   # always return the instance
-    end
-    
-    class << self
-      attr_accessor :supervised_instance, :state, :id, :nodes
-      alias_method :instance, :new
-    end
-    
-    attr_accessor :zk
-    
-    def self.ready?
-      state == :ready
-    end
+    attr_accessor :zk, :state, :id
     
     def initialize
-      self.class.state = :initializing
-      self.class.nodes = { }
+      self.state = :initializing
       after(0.001){ async.initialize_zk } # don't block waiting for ZK to connect
     end
     
@@ -36,9 +17,12 @@ module Cellect
       Timeout::timeout(5) do
         self.zk = ZK.new zk_url, chroot: '/cellect'
       end
-      watch_nodes
       setup
-      self.class.state = :ready
+      self.state = :ready
+    end
+    
+    def ready?
+      state == :ready
     end
     
     protected
@@ -47,26 +31,11 @@ module Cellect
       ENV.fetch 'ZK_URL', 'localhost:2181'
     end
     
-    def nodes_changed(nodes)
-      self.class.nodes = { }
-      nodes.each do |node|
-        next if node == self.class.id
-        self.class.nodes[node] = zk.get("/nodes/#{ node }").first
-      end
-    end
-    
     def setup
       zk.mkdir_p '/nodes'
-      zk.children '/nodes', watch: true
       ip = Socket.ip_address_list.find{ |address| address.ipv4? && !address.ipv4_loopback? }.ip_address
       path = zk.create '/nodes/node', data: ip, mode: :ephemeral_sequential
-      self.class.id = path.sub /^\/nodes\//, ''
-    end
-    
-    def watch_nodes
-      zk.register('/nodes') do |event|
-        nodes_changed zk.children('/nodes', watch: true)
-      end
+      self.id = path.sub /^\/nodes\//, ''
     end
   end
 end
