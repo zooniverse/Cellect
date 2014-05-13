@@ -6,6 +6,7 @@ module Cellect
     
     require 'cellect/api/helpers'
     require 'cellect/api/sets'
+    require 'cellect/api/users'
     
     get '/replication_status' do
       {
@@ -23,6 +24,7 @@ module Cellect
       segment '/:project_id' do
         helpers Helpers
         mount Sets
+        mount Users
         
         get :status do
           project.status

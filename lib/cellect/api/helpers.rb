@@ -2,7 +2,7 @@ module Cellect
   class API
     module Helpers
       def project
-        Project[params[:project_id]]
+        @project ||= Project[params[:project_id]]
       end
       
       def selector_params
@@ -18,13 +18,6 @@ module Cellect
           subject_id: param_to_int(:subject_id),
           group_id: param_to_int(:group_id),
           priority: param_to_float(:priority)
-        }
-      end
-      
-      def seen_params
-        {
-          user_id: param_to_int(:user_id),
-          subject_id: param_to_int(:subject_id)
         }
       end
       
