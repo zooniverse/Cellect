@@ -22,7 +22,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   BASH
   
   config.vm.provision 'docker' do |d|
-    d.pull_images 'edpaget/zookeeper'
+    d.pull_images 'edpaget/zookeeper:3.4.6'
     # d.pull_images 'paintedfox/postgresql' # currently broken
     d.pull_images 'dockerfile/mongodb'
     
