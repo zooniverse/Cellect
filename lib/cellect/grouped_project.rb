@@ -11,6 +11,7 @@ module Cellect
     
     def load_data
       self.state = :initializing
+      self.groups = { }
       klass = set_klass
       Cellect.adapter.load_data_for(name).each do |hash|
         self.groups[hash['group_id']] ||= klass.new

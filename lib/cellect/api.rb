@@ -23,7 +23,7 @@ module Cellect
         end
         
         post :reload do
-          Cellect.adapter.load_project project.name
+          project.async.load_data
         end
         
         delete do
