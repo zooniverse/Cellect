@@ -3,8 +3,6 @@
 set -e
 cd /cellect
 bundle install
-cd /cellect/ext && rm -f Makefile && ruby extconf.rb && make clean && make
-cd /cellect
 
 ZK_URL="$ZK_PORT_2181_TCP_ADDR:$ZK_PORT_2181_TCP_PORT" \
 PG_HOST=$PG_PORT_5432_TCP_ADDR \

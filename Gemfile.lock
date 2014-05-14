@@ -14,9 +14,9 @@ GEM
     builder (3.2.2)
     celluloid (0.16.0.pre)
       timers (~> 2.0.0)
-    celluloid-io (0.15.0)
-      celluloid (>= 0.15.0)
-      nio4r (>= 0.5.0)
+    celluloid-io (0.16.0.pre)
+      celluloid (>= 0.16.0.pre)
+      nio4r (>= 1.0.0)
     coderay (1.1.0)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
@@ -24,6 +24,8 @@ GEM
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.2.5)
+    diff_set (0.0.2)
+      rice (~> 1.6)
     equalizer (0.0.9)
     grape (0.7.0)
       activesupport
@@ -36,6 +38,7 @@ GEM
       rack-mount
       virtus (>= 1.0.0)
     hashie (2.1.1)
+    hitimes (1.2.1)
     http (0.6.1)
       http_parser.rb (~> 0.6.0)
     http_parser.rb (0.6.0)
@@ -78,7 +81,8 @@ GEM
     rspec-mocks (2.14.6)
     slop (3.5.0)
     thread_safe (0.3.3)
-    timers (1.1.0)
+    timers (2.0.0)
+      hitimes
     tzinfo (1.1.0)
       thread_safe (~> 0.1)
     virtus (1.0.2)
@@ -95,9 +99,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  celluloid
-  celluloid-io
+  celluloid (= 0.16.0.pre)
+  celluloid-io (= 0.16.0.pre)
   connection_pool
+  diff_set
   grape
   http
   oj
@@ -106,6 +111,5 @@ DEPENDENCIES
   puma
   rack-test
   rake
-  rice
   rspec
   zk

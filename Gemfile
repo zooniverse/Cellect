@@ -1,8 +1,7 @@
 source 'http://rubygems.org'
 
-gem 'rice'
-gem 'celluloid'
-gem 'celluloid-io'
+gem 'celluloid', '0.16.0.pre'
+gem 'celluloid-io', '0.16.0.pre'
 gem 'http'
 gem 'oj'
 gem 'rake'
@@ -11,6 +10,7 @@ gem 'puma'
 gem 'zk'
 gem 'pg'
 gem 'connection_pool'
+gem 'diff_set'
 
 group :test, :development do
   gem 'rspec'
