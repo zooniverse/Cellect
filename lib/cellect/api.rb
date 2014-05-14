@@ -8,6 +8,17 @@ module Cellect
     require 'cellect/api/sets'
     require 'cellect/api/users'
     
+    get :stats do
+      usage = ->(keyword) do
+        `ps axo #{ keyword }`.chomp.split("\n")[1..-1].collect(&:to_f).inject :+
+      end
+      
+      {
+        memory: usage.call('%mem'),
+        cpu: usage.call('%cpu')
+      }
+    end
+    
     resources :projects do
       get do
         Cellect.adapter.project_list
