@@ -27,7 +27,7 @@ module Cellect
       end
       
       def add_seen(id, user_id: user_id, host: host, project_id: project_id)
-        send_http host, :put, "/projects/#{ project_id }/users/#{ id }/add_seen", querystring(subject_id: id)
+        send_http host, :put, "/projects/#{ project_id }/users/#{ user_id }/add_seen", querystring(subject_id: id)
       end
       
       protected
@@ -39,7 +39,9 @@ module Cellect
       end
       
       def send_http(host, action, path, query = '')
-        uri = URI::HTTP.build host: host, path: path, query: query
+        params = { host: host, path: path }
+        params[:query] = query if query && !query.empty?
+        uri = URI::HTTP.build params
         HTTP.send action, uri.to_s, socket_class: Celluloid::IO::TCPSocket
       end
       

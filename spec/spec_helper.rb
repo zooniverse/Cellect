@@ -7,6 +7,8 @@ end
 
 Bundler.require :test, :development
 
+ENV['CELLECT_POOL_SIZE'] = '3'
+
 require 'pry'
 require 'oj'
 require './spec/support/zk_setup.rb'
