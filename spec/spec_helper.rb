@@ -11,6 +11,7 @@ require 'pry'
 require 'oj'
 require './spec/support/zk_setup.rb'
 require 'cellect/server'
+require 'cellect/client'
 require 'celluloid/rspec'
 require 'rack/test'
 Celluloid.shutdown_timeout = 1
