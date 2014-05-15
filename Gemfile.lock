@@ -1,3 +1,22 @@
+PATH
+  remote: .
+  specs:
+    cellect (0.0.1)
+      cellect-client (= 0.0.1)
+      cellect-server (= 0.0.1)
+    cellect-client (0.0.1)
+      celluloid (= 0.16.0.pre)
+      celluloid-io (= 0.16.0.pre)
+      http (~> 0.6)
+      zk (~> 1.9)
+    cellect-server (0.0.1)
+      celluloid (= 0.16.0.pre)
+      celluloid-io (= 0.16.0.pre)
+      diff_set
+      grape (~> 0.7)
+      http (~> 0.6)
+      zk (~> 1.9)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -99,17 +118,13 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  celluloid (= 0.16.0.pre)
-  celluloid-io (= 0.16.0.pre)
-  connection_pool
-  diff_set
-  grape
-  http
+  bundler (~> 1.5)
+  cellect!
+  connection_pool (~> 2.0)
   oj
-  pg
+  pg (~> 0.17)
   pry
-  puma
+  puma (~> 2.8)
   rack-test
   rake
   rspec
-  zk

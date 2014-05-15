@@ -1,6 +1,6 @@
-require 'diff_set'
 require 'celluloid'
 require 'celluloid/io'
+require 'cellect/version'
 
 module Cellect
   

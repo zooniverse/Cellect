@@ -1,3 +1,4 @@
+require 'diff_set'
 require 'cellect'
 require 'celluloid/autostart'
 
