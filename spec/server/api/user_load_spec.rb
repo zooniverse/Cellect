@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module Cellect
+module Cellect::Server
   describe API do
     include_context 'API'
     

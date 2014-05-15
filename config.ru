@@ -4,12 +4,12 @@
 end
 
 require 'pry'
-require 'cellect'
+require 'cellect/server'
 # require_relative 'spec/support/spec_adapter'
-# Cellect.adapter = SpecAdapter.new
+# Cellect::Server.adapter = SpecAdapter.new
 
-require 'cellect/adapters/postgres'
-Cellect.adapter = Cellect::Adapters::Postgres.new
+require 'cellect/server/adapters/postgres'
+Cellect::Server.adapter = Cellect::Server::Adapters::Postgres.new
 
-Cellect.adapter.load_projects
-run Cellect::API
+Cellect::Server.adapter.load_projects
+run Cellect::Server::API

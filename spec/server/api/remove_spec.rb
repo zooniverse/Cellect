@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module Cellect
+module Cellect::Server
   describe API do
     include_context 'API'
     
@@ -12,11 +12,20 @@ module Cellect
           let(:user){ project.user 123 }
           before(:each){ pass_until project, is: :ready }
           
-          it 'should add seen subjects' do
-            async_project = double
-            project.should_receive(:async).and_return async_project
-            async_project.should_receive(:add_seen_for).with 123, 123
-            put "/projects/#{ project_type }/users/123/add_seen", subject_id: 123
+          let(:opts) do
+            { subject_id: 123 }.tap do |h|
+              h[:group_id] = 1 if project.grouped?
+            end
+          end
+          
+          it 'should remove subjects' do
+            if project.grouped?
+              project.should_receive(:remove).with subject_id: 123, group_id: 1, priority: nil
+            else
+              project.should_receive(:remove).with subject_id: 123, group_id: nil, priority: nil
+            end
+            
+            put "/projects/#{ project_type }/remove", opts
             last_response.status.should == 200
           end
         end

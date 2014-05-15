@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-module Cellect
+module Cellect::Server
   describe Cellect do
     context 'default adapter' do
-      let(:default){ Cellect::Adapters::Default.new }
+      let(:default){ Cellect::Server::Adapters::Default.new }
       
       it 'should raise a NotImplementedError when using the default adapter' do
         expect{ default.project_list }.to raise_error NotImplementedError

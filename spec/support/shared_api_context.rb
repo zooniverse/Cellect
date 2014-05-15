@@ -2,7 +2,7 @@ shared_context 'API' do
   include Rack::Test::Methods
   
   def app
-    $app ||= Cellect::API.new
+    $app ||= Cellect::Server::API.new
   end
   
   def json

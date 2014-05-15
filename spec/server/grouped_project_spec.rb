@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module Cellect
+module Cellect::Server
   describe GroupedProject do
     SET_TYPES.collect{ |type| "grouped_#{ type }" }.each do |project_type|
       context project_type do

@@ -2,11 +2,11 @@ shared_examples_for 'project' do |name|
   let(:obj){ send name }
   
   before(:each) do
-    Cellect.adapter.load_project obj.name
+    Cellect::Server.adapter.load_project obj.name
   end
   
   it 'should add singleton instances to the registry' do
-    obj.class[:foo].should be_a_kind_of Cellect::Project
+    obj.class[:foo].should be_a_kind_of Cellect::Server::Project
     obj.class[:foo].object_id.should == obj.class[:foo].object_id
   end
   
@@ -19,7 +19,7 @@ shared_examples_for 'project' do |name|
   end
   
   it 'should provide a user lookup' do
-    obj.user(1).should be_a Cellect::User
+    obj.user(1).should be_a Cellect::Server::User
     obj.user(1).object_id.should == obj.user(1).object_id
     obj.users.keys.should include 1
   end

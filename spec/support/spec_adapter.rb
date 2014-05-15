@@ -1,6 +1,6 @@
 require 'oj'
 
-class SpecAdapter < Cellect::Adapters::Default
+class SpecAdapter < Cellect::Server::Adapters::Default
   def project_list
     fixtures.values
   end

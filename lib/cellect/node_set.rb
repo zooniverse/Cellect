@@ -1,11 +1,11 @@
-require 'socket'
+require 'zk'
 require 'timeout'
 
 module Cellect
   class NodeSet
     include Celluloid
     
-    attr_accessor :zk, :state, :id
+    attr_accessor :zk, :state
     
     def initialize
       self.state = :initializing
@@ -32,10 +32,7 @@ module Cellect
     end
     
     def setup
-      zk.mkdir_p '/nodes'
-      ip = Socket.ip_address_list.find{ |address| address.ipv4? && !address.ipv4_loopback? }.ip_address
-      path = zk.create '/nodes/node', data: ip, mode: :ephemeral_sequential
-      self.id = path.sub /^\/nodes\//, ''
+      
     end
   end
 end

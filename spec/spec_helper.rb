@@ -8,8 +8,9 @@ end
 Bundler.require :test, :development
 
 require 'pry'
+require 'oj'
 require './spec/support/zk_setup.rb'
-require 'cellect'
+require 'cellect/server'
 require 'celluloid/rspec'
 require 'rack/test'
 Celluloid.shutdown_timeout = 1
@@ -17,7 +18,7 @@ Celluloid.logger = nil
 
 Dir["./spec/support/**/*.rb"].sort.each{ |f| require f }
 
-Cellect.adapter = SpecAdapter.new
+Cellect::Server.adapter = SpecAdapter.new
 SET_TYPES = %w(random priority pairwise_random pairwise_priority)
 
 RSpec.configure do |config|

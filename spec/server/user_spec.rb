@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module Cellect
+module Cellect::Server
   describe User do
     let(:user){ User.new 1, project_name: 'random' }
     

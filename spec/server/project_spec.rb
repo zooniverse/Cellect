@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module Cellect
+module Cellect::Server
   describe Project do
     SET_TYPES.each do |project_type|
       context project_type do
