@@ -6,7 +6,7 @@ module Cellect
     module Adapters
       class Postgres < Default
         def initialize
-          @pg ||= ConnectionPool.new(size: 50) do
+          @pg ||= ConnectionPool.new(size: ENV.fetch('PG_POOL_SIZE', 25).to_i) do
             PG.connect connection_options
           end
         end
