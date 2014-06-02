@@ -12,18 +12,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :forwarded_port, guest: 2181, host: 2181    # zookeeper
   
   config.vm.synced_folder 'data', '/cellect_data'
-  
-  config.vm.provision :shell, inline: <<-BASH
-    mkdir -p /postgres_data; \
-    cd /home/vagrant && rm -rf docker-postgresql; \
-    git clone https://github.com/Painted-Fox/docker-postgresql.git
-  BASH
+  config.vm.provision :shell, inline: 'mkdir -p /postgres_data'
   
   config.vm.provision 'docker' do |d|
     d.pull_images 'edpaget/zookeeper:3.4.6'
-    # d.pull_images 'paintedfox/postgresql' # currently broken
-    
-    d.build_image '/home/vagrant/docker-postgresql', args: '-t paintedfox/postgresql'
+    d.pull_images 'paintedfox/postgresql'
     
     d.run 'paintedfox/postgresql',
           args: '--name pg --publish 5432:5432 --env USER="cellect" --env DB="cellect" --env PASS="ce11ect!" -v /postgres_data:/data -v /cellect_data:/cellect_data'
