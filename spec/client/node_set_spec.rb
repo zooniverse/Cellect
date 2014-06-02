@@ -9,8 +9,7 @@ module Cellect::Client
       begin
         pass_until node_set, is: :ready
         node_set.zk.create '/nodes/node', data: 'foo', mode: :ephemeral_sequential
-        
-        10.times do
+        100.times do |i|
           break if node_set.nodes['node0000000001']
           Thread.pass
         end

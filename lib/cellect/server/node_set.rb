@@ -10,8 +10,9 @@ module Cellect
       
       def setup
         zk.mkdir_p '/nodes'
-        ip = Socket.ip_address_list.find{ |address| address.ipv4? && !address.ipv4_loopback? }.ip_address
-        path = zk.create '/nodes/node', data: ip, mode: :ephemeral_sequential
+        address = Socket.ip_address_list.find{ |address| address.ipv4? && !address.ipv4_loopback? }
+        raise "Cannot identify IP address" unless address
+        path = zk.create '/nodes/node', data: address.ip_address, mode: :ephemeral_sequential
         self.id = path.sub /^\/nodes\//, ''
       end
     end
