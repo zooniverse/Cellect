@@ -6,28 +6,28 @@ module Cellect
       include Celluloid
       include Celluloid::IO
       
-      def reload_project(id)
-        broadcast :post, "/projects/#{ id }/reload"
+      def reload_workflow(id)
+        broadcast :post, "/workflows/#{ id }/reload"
       end
       
-      def delete_project(id)
-        broadcast :delete, "/projects/#{ id }"
+      def delete_workflow(id)
+        broadcast :delete, "/workflows/#{ id }"
       end
       
-      def add_subject(id, project_id: project_id, group_id: nil, priority: nil)
-        broadcast :put, "/projects/#{ project_id }/add", querystring(subject_id: id, group_id: group_id, priority: priority)
+      def add_subject(id, workflow_id: workflow_id, group_id: nil, priority: nil)
+        broadcast :put, "/workflows/#{ workflow_id }/add", querystring(subject_id: id, group_id: group_id, priority: priority)
       end
       
-      def remove_subject(id, project_id: project_id, group_id: nil)
-        broadcast :put, "/projects/#{ project_id }/remove", querystring(subject_id: id, group_id: group_id)
+      def remove_subject(id, workflow_id: workflow_id, group_id: nil)
+        broadcast :put, "/workflows/#{ workflow_id }/remove", querystring(subject_id: id, group_id: group_id)
       end
       
-      def load_user(id, host: host, project_id: project_id)
-        send_http host, :post, "/projects/#{ project_id }/users/#{ id }/load"
+      def load_user(id, host: host, workflow_id: workflow_id)
+        send_http host, :post, "/workflows/#{ workflow_id }/users/#{ id }/load"
       end
       
-      def add_seen(id, user_id: user_id, host: host, project_id: project_id)
-        send_http host, :put, "/projects/#{ project_id }/users/#{ user_id }/add_seen", querystring(subject_id: id)
+      def add_seen(id, user_id: user_id, host: host, workflow_id: workflow_id)
+        send_http host, :put, "/workflows/#{ workflow_id }/users/#{ user_id }/add_seen", querystring(subject_id: id)
       end
       
       protected

@@ -1,17 +1,17 @@
 require 'oj'
 
 class SpecAdapter < Cellect::Server::Adapters::Default
-  def project_list
+  def workflow_list
     fixtures.values
   end
   
-  def load_data_for(project_name)
-    fixtures.fetch(project_name, { }).fetch 'entries', []
+  def load_data_for(workflow_name)
+    fixtures.fetch(workflow_name, { }).fetch 'entries', []
   end
   
   def fixtures
     @fixtures ||= { }.tap do |fixtures|
-      Dir["#{ _fixture_path }/project_data/*.json"].collect do |f|
+      Dir["#{ _fixture_path }/workflow_data/*.json"].collect do |f|
         name = File.basename(f).sub /\.json$/, ''
         data = Oj.strict_load File.read f
         fixtures[name] = data
@@ -30,9 +30,9 @@ class SpecAdapter < Cellect::Server::Adapters::Default
     end
   end
   
-  def load_user(project_name, id)
+  def load_user(workflow_name, id)
     user = user_fixtures[id]
-    user ? user[project_name] : user_fixtures['new_user'][project_name]
+    user ? user[workflow_name] : user_fixtures['new_user'][workflow_name]
   end
   
   protected

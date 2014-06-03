@@ -1,6 +1,6 @@
 module Cellect
   module Server
-    class GroupedProject < Project
+    class GroupedWorkflow < Workflow
       attr_accessor :groups
       
       def initialize(name, pairwise: false, prioritized: false)

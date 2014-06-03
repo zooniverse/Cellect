@@ -6,8 +6,8 @@ module Cellect
   module Server
     require 'cellect/server/node_set'
     require 'cellect/server/adapters'
-    require 'cellect/server/project'
-    require 'cellect/server/grouped_project'
+    require 'cellect/server/workflow'
+    require 'cellect/server/grouped_workflow'
     require 'cellect/server/user'
     require 'cellect/server/api'
     
@@ -16,8 +16,8 @@ module Cellect
     end
     
     def self.ready?
-      Project.all.each do |project|
-        return false unless project.ready?
+      Workflow.all.each do |workflow|
+        return false unless workflow.ready?
       end
       
       true

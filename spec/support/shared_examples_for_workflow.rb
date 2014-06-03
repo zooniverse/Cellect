@@ -1,12 +1,12 @@
-shared_examples_for 'project' do |name|
+shared_examples_for 'workflow' do |name|
   let(:obj){ send name }
   
   before(:each) do
-    Cellect::Server.adapter.load_project obj.name
+    Cellect::Server.adapter.load_workflow obj.name
   end
   
   it 'should add singleton instances to the registry' do
-    obj.class[:foo].should be_a_kind_of Cellect::Server::Project
+    obj.class[:foo].should be_a_kind_of Cellect::Server::Workflow
     obj.class[:foo].object_id.should == obj.class[:foo].object_id
   end
   

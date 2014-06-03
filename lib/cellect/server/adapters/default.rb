@@ -2,7 +2,7 @@ module Cellect
   module Server
     module Adapters
       class Default
-        # Return a list of projects to load in the form:
+        # Return a list of workflows to load in the form:
         #   [{
         #     'id' => 123,
         #     'name' => 'foo',
@@ -10,49 +10,49 @@ module Cellect
         #     'pairwise' => false,
         #     'grouped' => false
         #   }, ...]
-        def project_list
+        def workflow_list
           raise NotImplementedError
         end
         
-        # Load the data for a project, this method:
-        #   Accepts a project
+        # Load the data for a workflow, this method:
+        #   Accepts a workflow
         #   Returns an array of hashes in the form:
         #   {
         #     'id' => 123,
         #     'priority' => 0.123,
         #     'group_id' => 456
         #   }
-        def load_data_for(project_name)
+        def load_data_for(workflow_name)
           raise NotImplementedError
         end
         
         # Load seen ids for a user, this method:
-        #   Accepts a project_name, and a user id
+        #   Accepts a workflow_name, and a user id
         #   Returns an array in the form:
         #   [1, 2, 3]
-        def load_user(project_name, id)
+        def load_user(workflow_name, id)
           raise NotImplementedError
         end
         
-        def load_projects
-          project_list.each{ |project_info| load_project project_info }
+        def load_workflows
+          workflow_list.each{ |workflow_info| load_workflow workflow_info }
         end
         
-        def load_project(args)
+        def load_workflow(args)
           info = if args.is_a?(Hash)
             args
           elsif args.is_a?(String)
-            project_list.select{ |h| h['name'] == args }.first
+            workflow_list.select{ |h| h['name'] == args }.first
           else
             raise ArgumentError
           end
           
-          project_for info
+          workflow_for info
         end
         
-        def project_for(opts = { })
-          project_klass = opts.fetch('grouped', false) ? GroupedProject : Project
-          project_klass[opts['name'], pairwise: opts['pairwise'], prioritized: opts['prioritized']]
+        def workflow_for(opts = { })
+          workflow_klass = opts.fetch('grouped', false) ? GroupedWorkflow : Workflow
+          workflow_klass[opts['name'], pairwise: opts['pairwise'], prioritized: opts['prioritized']]
         end
       end
     end

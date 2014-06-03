@@ -20,26 +20,26 @@ module Cellect
         }
       end
       
-      resources :projects do
+      resources :workflows do
         get do
-          Cellect::Server.adapter.project_list
+          Cellect::Server.adapter.workflow_list
         end
         
-        segment '/:project_id' do
+        segment '/:workflow_id' do
           helpers Helpers
           mount Sets
           mount Users
           
           get :status do
-            project.status
+            workflow.status
           end
           
           post :reload do
-            project.async.load_data
+            workflow.async.load_data
           end
           
           delete do
-            # delete a project (maybe?)
+            # delete a workflow (maybe?)
           end
         end
       end

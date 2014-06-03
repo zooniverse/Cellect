@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Cellect::Server
   describe User do
-    let(:user){ User.new 1, project_name: 'random' }
+    let(:user){ User.new 1, workflow_name: 'random' }
     
     it 'should store seen ids' do
       user.seen.should be_a DiffSet::RandomSet
@@ -13,7 +13,7 @@ module Cellect::Server
     end
     
     it 'should allow custom ttl' do
-      User.new(2, project_name: 'random', ttl: 123).ttl.should == 123
+      User.new(2, workflow_name: 'random', ttl: 123).ttl.should == 123
     end
     
     it 'should reset the ttl timer on activity' do
@@ -22,9 +22,9 @@ module Cellect::Server
     end
     
     it 'should terminate on ttl expiry' do
-      async_project = double
-      Project[user.project_name].should_receive(:async).and_return async_project
-      async_project.should_receive(:remove_user).with user.id
+      async_workflow = double
+      Workflow[user.workflow_name].should_receive(:async).and_return async_workflow
+      async_workflow.should_receive(:remove_user).with user.id
       user.ttl_expired!
       user.ttl_timer.should be_nil
     end

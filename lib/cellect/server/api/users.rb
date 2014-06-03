@@ -9,7 +9,7 @@ module Cellect
               subject_id = param_to_int :subject_id
               
               if user_id && user_id > 0 && subject_id && subject_id > 0
-                project.async.add_seen_for user_id, subject_id
+                workflow.async.add_seen_for user_id, subject_id
               end
               
               nil
@@ -19,7 +19,7 @@ module Cellect
               user_id = param_to_int :user_id
               
               if user_id && user_id > 0
-                project.async.user user_id
+                workflow.async.user user_id
               end
               
               nil

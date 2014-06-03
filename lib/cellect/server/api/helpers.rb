@@ -2,8 +2,8 @@ module Cellect
   module Server
     class API
       module Helpers
-        def project
-          @project ||= Project[params[:project_id]]
+        def workflow
+          @workflow ||= Workflow[params[:workflow_id]]
         end
         
         def selector_params

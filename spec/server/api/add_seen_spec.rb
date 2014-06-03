@@ -7,16 +7,16 @@ module Cellect::Server
     { 'Ungrouped' => nil, 'Grouped' => 'grouped' }.each_pair do |grouping_type, grouping|
       SET_TYPES.shuffle.each do |set_type|
         context "#{ grouping_type } #{ set_type }" do
-          let(:project_type){ [grouping, set_type].compact.join '_' }
-          let(:project){ Project[project_type] }
-          let(:user){ project.user 123 }
-          before(:each){ pass_until project, is: :ready }
+          let(:workflow_type){ [grouping, set_type].compact.join '_' }
+          let(:workflow){ Workflow[workflow_type] }
+          let(:user){ workflow.user 123 }
+          before(:each){ pass_until workflow, is: :ready }
           
           it 'should add seen subjects' do
-            async_project = double
-            project.should_receive(:async).and_return async_project
-            async_project.should_receive(:add_seen_for).with 123, 123
-            put "/projects/#{ project_type }/users/123/add_seen", subject_id: 123
+            async_workflow = double
+            workflow.should_receive(:async).and_return async_workflow
+            async_workflow.should_receive(:add_seen_for).with 123, 123
+            put "/workflows/#{ workflow_type }/users/123/add_seen", subject_id: 123
             last_response.status.should == 200
           end
         end

@@ -11,9 +11,9 @@ module Cellect
           end
         end
         
-        def project_list
+        def workflow_list
           with_pg do |pg|
-            pg.exec('select * from projects').collect do |row|
+            pg.exec('select * from workflows').collect do |row|
               {
                 'id' => row['id'].to_i,
                 'name' => row['id'],
@@ -25,9 +25,9 @@ module Cellect
           end
         end
         
-        def load_data_for(project_name)
+        def load_data_for(workflow_name)
           with_pg do |pg|
-            pg.exec("select id, priority, group_id from project_#{ project_name }_subjects").collect do |row|
+            pg.exec("select id, priority, group_id from workflow_#{ workflow_name }_subjects").collect do |row|
               {
                 'id' => row['id'].to_i,
                 'priority' => row['priority'].to_f,
@@ -37,9 +37,9 @@ module Cellect
           end
         end
         
-        def load_user(project_name, id)
+        def load_user(workflow_name, id)
           with_pg do |pg|
-            pg.exec("select subject_id from project_#{ project_name }_classifications where user_id=#{ id }").collect do |row|
+            pg.exec("select subject_id from workflow_#{ workflow_name }_classifications where user_id=#{ id }").collect do |row|
               row['subject_id'].to_i
             end
           end

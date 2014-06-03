@@ -1,25 +1,25 @@
 module Cellect
   module Server
-    class Project
+    class Workflow
       include Celluloid
       
       attr_accessor :name, :users, :subjects, :state
       attr_accessor :pairwise, :prioritized
       
       def self.[](name, pairwise: false, prioritized: false)
-        key = "project_#{ name }".to_sym
+        key = "workflow_#{ name }".to_sym
         Actor[key] ||= supervise name, pairwise: pairwise, prioritized: prioritized
         Actor[key].actors.first
       end
       
       def self.names
         actor_names = Celluloid.actor_system.registry.names.collect &:to_s
-        project_actors = actor_names.select{ |key| key =~ /^project_/ }
-        project_actors.collect{ |name| name.sub(/^project_/, '').to_sym }
+        workflow_actors = actor_names.select{ |key| key =~ /^workflow_/ }
+        workflow_actors.collect{ |name| name.sub(/^workflow_/, '').to_sym }
       end
       
       def self.all
-        names.collect{ |name| Project[name] }
+        names.collect{ |name| Workflow[name] }
       end
       
       def initialize(name, pairwise: false, prioritized: false)
@@ -41,7 +41,7 @@ module Cellect
       end
       
       def user(id)
-        self.users[id] ||= User.supervise id, project_name: name
+        self.users[id] ||= User.supervise id, workflow_name: name
         users[id].actors.first
       end
       

@@ -6,8 +6,8 @@ data_dir = File.expand_path File.join(File.dirname(__FILE__), '../data')
 pg = PG.connect host: '127.0.0.1', port: '5433', dbname: 'cellect', user: 'cellect', password: 'ce11ect!'
 
 pg.exec <<-SQL
-  DROP TABLE IF EXISTS projects;
-  CREATE TABLE projects (
+  DROP TABLE IF EXISTS workflows;
+  CREATE TABLE workflows (
     "id" SERIAL NOT NULL,
     "name" varchar(255) NOT NULL,
     "grouped" boolean DEFAULT FALSE,
@@ -17,19 +17,19 @@ pg.exec <<-SQL
   );
 SQL
 
-projects = 10
+workflows = 10
 subject_distribution = [10_000] + [40_000] + [90_000] * 2 + [290_000] * 3 + [490_000] * 2 + [990_000]
 
-1.upto(projects).each do |project_id|
+1.upto(workflows).each do |workflow_id|
   grouped = rand < 0.5
   prioritized = rand < 0.5
   pairwise = rand < 0.2
   
-  pg.exec "INSERT INTO projects VALUES(#{ project_id }, 'Project #{ project_id }', #{ grouped }, #{ prioritized }, #{ pairwise })"
+  pg.exec "INSERT INTO workflows VALUES(#{ workflow_id }, 'Workflow #{ workflow_id }', #{ grouped }, #{ prioritized }, #{ pairwise })"
   
-  groups_per_project = 3 + rand(50)
-  subjects_per_project = 10_000 + rand(subject_distribution.sample)
-  users_per_project = 10_000 + rand(50_000)
+  groups_per_workflow = 3 + rand(50)
+  subjects_per_workflow = 10_000 + rand(subject_distribution.sample)
+  users_per_workflow = 10_000 + rand(50_000)
   
   user_seen_distribution = []
   380.times{ user_seen_distribution << [    1,      10] }
@@ -42,10 +42,10 @@ subject_distribution = [10_000] + [40_000] + [90_000] * 2 + [290_000] * 3 + [490
   
   subjects = { }
   
-  1.upto(users_per_project).each do |user_id|
+  1.upto(users_per_workflow).each do |user_id|
     user_seen_range = user_seen_distribution.sample
     seen_count = user_seen_range[0] + rand(user_seen_range[1])
-    seen_ids = seen_count.times.collect{ rand(subjects_per_project) }
+    seen_ids = seen_count.times.collect{ rand(subjects_per_workflow) }
     
     seen_ids.each do |subject_id|
       subjects[subject_id] ||= []
@@ -53,8 +53,8 @@ subject_distribution = [10_000] + [40_000] + [90_000] * 2 + [290_000] * 3 + [490
     end
   end
   
-  subject_table = "project_#{ project_id }_subjects"
-  classification_table = "project_#{ project_id }_classifications"
+  subject_table = "workflow_#{ workflow_id }_subjects"
+  classification_table = "workflow_#{ workflow_id }_classifications"
   
   pg.exec <<-SQL
     DROP TABLE IF EXISTS #{ subject_table };
@@ -81,13 +81,13 @@ subject_distribution = [10_000] + [40_000] + [90_000] * 2 + [290_000] * 3 + [490
   classification_data = File.open "#{ data_dir }/#{ classification_table }.csv", 'w'
   classification_id = 0
   
-  1.upto(subjects_per_project - 1).each do |subject_id|
+  1.upto(subjects_per_workflow - 1).each do |subject_id|
     if subject_id % 100 == 0
-      progress = (100 * subject_id / subjects_per_project.to_f).round
-      puts "[#{ project_id }:#{ projects }] #{ subject_id } / #{ subjects_per_project } (#{ progress }%)"
+      progress = (100 * subject_id / subjects_per_workflow.to_f).round
+      puts "[#{ workflow_id }:#{ workflows }] #{ subject_id } / #{ subjects_per_workflow } (#{ progress }%)"
     end
     
-    group_id = grouped ? 1 + rand(groups_per_project) : 'NULL'
+    group_id = grouped ? 1 + rand(groups_per_workflow) : 'NULL'
     priority = prioritized ? rand : 0.0
     user_ids = subjects.fetch(subject_id, [])
     user_id_a = "\"{#{ user_ids.join(',') }}\""

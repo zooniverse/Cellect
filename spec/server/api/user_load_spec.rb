@@ -7,15 +7,15 @@ module Cellect::Server
     { 'Ungrouped' => nil, 'Grouped' => 'grouped' }.each_pair do |grouping_type, grouping|
       SET_TYPES.shuffle.each do |set_type|
         context "#{ grouping_type } #{ set_type }" do
-          let(:project_type){ [grouping, set_type].compact.join '_' }
-          let(:project){ Project[project_type] }
-          before(:each){ pass_until project, is: :ready }
+          let(:workflow_type){ [grouping, set_type].compact.join '_' }
+          let(:workflow){ Workflow[workflow_type] }
+          before(:each){ pass_until workflow, is: :ready }
           
           it 'should load users' do
-            async_project = double
-            project.should_receive(:async).and_return async_project
-            async_project.should_receive(:user).with 123
-            post "/projects/#{ project_type }/users/123/load"
+            async_workflow = double
+            workflow.should_receive(:async).and_return async_workflow
+            async_workflow.should_receive(:user).with 123
+            post "/workflows/#{ workflow_type }/users/123/load"
             last_response.status.should == 201
           end
         end
