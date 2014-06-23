@@ -29,12 +29,9 @@ module Cellect
       def add_seen(id, user_id: user_id, host: host, workflow_id: workflow_id)
         send_http host, :put, "/workflows/#{ workflow_id }/users/#{ user_id }/add_seen", querystring(subject_id: id)
       end
-
+      
       def get_subjects(user_id: user_id, host: host, workflow_id: workflow_id, limit: limit, group_id: group_id)
-        query = {user_id: user_id}
-        query[:group_id] = group_id if group_id
-        query[:limit] = limit if limit
-        send_http host, :get, "/workflows/#{ workflow_id }", querystring(query)
+        send_http host, :get, "/workflows/#{ workflow_id }", querystring(user_id: user_id, group_id: group_id, limit: limit)
       end
       
       protected
