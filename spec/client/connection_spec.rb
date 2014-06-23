@@ -60,5 +60,12 @@ module Cellect::Client
       should_send action: :put, url: 'workflows/random/users/123/add_seen?subject_id=456', to: 1
       connection.add_seen 456, host: '1', user_id: 123, workflow_id: 'random'
     end
+
+    it 'should get subjects' do
+      should_send action: :get, url: 'workflows/random?user_id=1&limit=10&group_id=1', to: 1
+      connection.get_subjects host: 1, workflow_id: 'random', user_id: 1, limit: 10, group_id: 1
+      should_send action: :get, url: 'workflows/random?user_id=1', to: 1
+      connection.get_subjects host: 1, workflow_id: 'random', user_id: 1
+    end
   end
 end
