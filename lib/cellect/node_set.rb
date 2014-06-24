@@ -7,7 +7,7 @@ module Cellect
     
     attr_accessor :zk, :state
     
-    def initialize(zk_url=nil)
+    def initialize(zk_url = nil)
       @zk_url = zk_url
       self.state = :initializing
       after(0.001){ async.initialize_zk } # don't block waiting for ZK to connect

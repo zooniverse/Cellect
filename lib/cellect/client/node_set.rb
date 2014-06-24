@@ -5,7 +5,7 @@ module Cellect
     class NodeSet < Cellect::NodeSet
       attr_accessor :nodes
       
-      def initialize(zk_url=nil)
+      def initialize(zk_url = nil)
         self.nodes = { }
         super
       end
