@@ -7,7 +7,7 @@ module Cellect
         ensure_config_file
         config = YAML.load_file config_file
         ensure_config_environment config
-        config = config.symbolize_keys
+        config = config[Rails.env].symbolize_keys
         ensure_config_url config
         
         Client.node_set config[:zk_url]
