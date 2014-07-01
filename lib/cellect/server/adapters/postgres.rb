@@ -13,7 +13,7 @@ module Cellect
         
         def workflow_list
           with_pg do |pg|
-            pg.exec('select * from workflows').collect do |row|
+            pg.exec('SELECT * FROM workflows').collect do |row|
               {
                 'id' => row['id'].to_i,
                 'name' => row['id'],
@@ -27,7 +27,15 @@ module Cellect
         
         def load_data_for(workflow_name)
           with_pg do |pg|
-            pg.exec("select id, priority, group_id from workflow_#{ workflow_name }_subjects").collect do |row|
+            statement = <<-SQL
+              SELECT sms.id as id, sms.priority as priority, sms.subject_set_id as group_id 
+              FROM workflows w
+              JOIN subject_sets_workflows ssw ON (ssw.workflow_id = w.id) 
+              JOIN subject_sets ss ON (ss.id = ssw.subject_set_id) 
+              JOIN set_member_subjects sms ON (s.id = sms.subject_set_id)
+              WHERE w.id = #{ workflow_name } 
+            SQL
+            pg.exec(statement).collect do |row|
               {
                 'id' => row['id'].to_i,
                 'priority' => row['priority'].to_f,
@@ -39,8 +47,12 @@ module Cellect
         
         def load_user(workflow_name, id)
           with_pg do |pg|
-            pg.exec("select subject_id from workflow_#{ workflow_name }_classifications where user_id=#{ id }").collect do |row|
-              row['subject_id'].to_i
+            statement = <<-SQL
+              SELECT subject_ids FROM user_seen_subjects
+              WHERE user_id = #{ id } AND workflow_id = #{ workflow_name }
+            SQL
+            pg.exec(statement).collect do |row|
+              row['subject_ids'].map(&:to_i)
             end
           end
         end
