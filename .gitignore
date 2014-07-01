@@ -13,3 +13,5 @@ log/*
 tmp/*
 *.gem
 pkg/*
+*.swp
+ext/
