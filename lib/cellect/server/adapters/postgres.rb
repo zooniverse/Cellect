@@ -35,7 +35,7 @@ module Cellect
               JOIN set_member_subjects sms ON (s.id = sms.subject_set_id)
               WHERE w.id = #{ workflow_name } 
             SQL
-            pg.exec(statment).collect do |row|
+            pg.exec(statement).collect do |row|
               {
                 'id' => row['id'].to_i,
                 'priority' => row['priority'].to_f,
