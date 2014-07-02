@@ -9,7 +9,7 @@ module Cellect
         ensure_config_environment config
         config = config[Rails.env].symbolize_keys
         ensure_config_url config
-        connect_zookeeper config if Client.mock_zookeeper?
+        connect_zookeeper config if load_zookeeper
       end
       
       private
@@ -36,6 +36,12 @@ module Cellect
       def connect_zookeeper(config)
         Client.node_set config[:zk_url]
         Client.connection = Connection.pool size: config.fetch(:pool_size, 100)
+      end
+      
+      def load_zookeeper
+        !Client.mock_zookeeper?
+      rescue NoMethodError
+        true
       end
     end
   end
