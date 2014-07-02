@@ -1,15 +1,15 @@
 PATH
   remote: .
   specs:
-    cellect (0.0.5)
-      cellect-client (= 0.0.5)
-      cellect-server (= 0.0.5)
-    cellect-client (0.0.5)
+    cellect (0.0.6)
+      cellect-client (= 0.0.6)
+      cellect-server (= 0.0.6)
+    cellect-client (0.0.6)
       celluloid (= 0.16.0.pre)
       celluloid-io (= 0.16.0.pre)
       http (~> 0.6)
       zk (~> 1.9)
-    cellect-server (0.0.5)
+    cellect-server (0.0.6)
       celluloid (= 0.16.0.pre)
       celluloid-io (= 0.16.0.pre)
       diff_set
