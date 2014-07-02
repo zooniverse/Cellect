@@ -22,6 +22,10 @@ module Cellect
       node_set.nodes.values.sample
     end
     
+    def self.mock_zookeeper?
+      false
+    end
+    
     if defined?(::Rails)
       require 'cellect/client/railtie'
     else

@@ -18,7 +18,6 @@ require 'celluloid/rspec'
 require 'rack/test'
 Celluloid.shutdown_timeout = 1
 Celluloid.logger = nil
-
 Dir["./spec/support/**/*.rb"].sort.each{ |f| require f }
 
 Cellect::Server.adapter = SpecAdapter.new
