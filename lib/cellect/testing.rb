@@ -1,17 +1,7 @@
 module Cellect
-  class NodeSet
-    class ZK
-      def initialize(*args)
-        
-      end
-      
-      def children(*args)
-        []
-      end
-      
-      def method_missing(*args, &block)
-        
-      end
+  module Client
+    def self.mock_zookeeper?
+      true
     end
   end
 end
