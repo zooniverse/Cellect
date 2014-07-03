@@ -22,12 +22,12 @@ module Cellect
         broadcast :put, "/workflows/#{ workflow_id }/remove", querystring(subject_id: id, group_id: group_id)
       end
       
-      def load_user(id, host: host, workflow_id: workflow_id)
-        send_http host, :post, "/workflows/#{ workflow_id }/users/#{ id }/load"
+      def load_user(user_id: user_id, host: host, workflow_id: workflow_id)
+        send_http host, :post, "/workflows/#{ workflow_id }/users/#{ user_id }/load"
       end
       
-      def add_seen(id, user_id: user_id, host: host, workflow_id: workflow_id)
-        send_http host, :put, "/workflows/#{ workflow_id }/users/#{ user_id }/add_seen", querystring(subject_id: id)
+      def add_seen(subject_id: subject_id, user_id: user_id, host: host, workflow_id: workflow_id)
+        send_http host, :put, "/workflows/#{ workflow_id }/users/#{ user_id }/add_seen", querystring(subject_id: subject_id)
       end
       
       def get_subjects(user_id: user_id, host: host, workflow_id: workflow_id, limit: limit, group_id: group_id)
