@@ -1,9 +1,4 @@
-# Cellect
-# 
-# VERSION 1.0
-
-FROM ubuntu:14.04
-MAINTAINER Michael Parrish <michael@zooniverse.org>
+FROM zooniverse/ruby:2.1.2
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN locale-gen en_US.UTF-8
@@ -11,17 +6,9 @@ ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
 # Apt-get install dependencies
-RUN apt-get update
-RUN apt-get install -y build-essential libssl-dev libreadline-dev wget libc6-dev libssl-dev libreadline6-dev zlib1g-dev libyaml-dev libpq-dev autoconf libboost-all-dev libffi-dev supervisor
-
-# Install ruby-build
-RUN apt-get install -y git-core && apt-get clean
-RUN git clone https://github.com/sstephenson/ruby-build.git && cd ruby-build && ./install.sh
-
-# Install ruby 2.1.2
-ENV CONFIGURE_OPTS --disable-install-rdoc --enable-shared
-RUN ruby-build 2.1.2 /usr/local
-RUN gem install bundler
+RUN apt-get update && \
+    apt-get -y upgrade && \
+    apt-get install -y  autoconf automake libboost-all-dev libffi-dev supervisor
 
 # Install Cellect
 WORKDIR /cellect
