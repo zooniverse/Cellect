@@ -12,12 +12,12 @@ module Cellect::Server
       end
       
       it 'should return a workflow given a set of options' do
-        default.workflow_for('name' => 'a').should be_an_instance_of Workflow
-        default.workflow_for('name' => 'b', 'grouped' => true).should be_an_instance_of GroupedWorkflow
-        default.workflow_for('name' => 'c', 'pairwise' => true).should be_pairwise
-        default.workflow_for('name' => 'd', 'prioritized' => true).should be_prioritized
-        default.workflow_for('name' => 'e', 'pairwise' => true, 'prioritized' => true).should be_pairwise
-        default.workflow_for('name' => 'e', 'pairwise' => true, 'prioritized' => true).should be_prioritized
+        expect(default.workflow_for('name' => 'a')).to be_an_instance_of Workflow
+        expect(default.workflow_for('name' => 'b', 'grouped' => true)).to be_an_instance_of GroupedWorkflow
+        expect(default.workflow_for('name' => 'c', 'pairwise' => true)).to be_pairwise
+        expect(default.workflow_for('name' => 'd', 'prioritized' => true)).to be_prioritized
+        expect(default.workflow_for('name' => 'e', 'pairwise' => true, 'prioritized' => true)).to be_pairwise
+        expect(default.workflow_for('name' => 'e', 'pairwise' => true, 'prioritized' => true)).to be_prioritized
       end
     end
   end

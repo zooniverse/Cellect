@@ -14,10 +14,10 @@ module Cellect::Server
           
           it 'should add seen subjects' do
             async_workflow = double
-            workflow.should_receive(:async).and_return async_workflow
-            async_workflow.should_receive(:add_seen_for).with 123, 123
+            expect(workflow).to receive(:async).and_return async_workflow
+            expect(async_workflow).to receive(:add_seen_for).with 123, 123
             put "/workflows/#{ workflow_type }/users/123/add_seen", subject_id: 123
-            last_response.status.should == 200
+            expect(last_response.status).to eq 200
           end
         end
       end

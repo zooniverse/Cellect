@@ -1,11 +1,11 @@
 shared_examples_for 'a set' do
   it 'should convert to an Array' do
-    set.to_a.should =~ (1..5).to_a
+    expect(set.to_a).to eq (1..5).to_a
   end
   
   it 'should add elements' do
     set.add 100
-    set.to_a.should include 100
+    expect(set.to_a).to include 100
   end
   
   it 'should remove elements' do
@@ -14,7 +14,7 @@ shared_examples_for 'a set' do
   end
   
   it 'should sample elements' do
-    set.sample(2).length.should == 2
+    expect(set.sample(2).length).to eq 2
   end
   
   it 'should not include removed elements in samples' do
@@ -29,6 +29,6 @@ shared_examples_for 'a set' do
   it 'should know if it contains an element' do
     set.should_not include 100
     set.add 100
-    set.should include 100
+    expect(set).to include 100
   end
 end

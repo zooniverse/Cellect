@@ -13,39 +13,39 @@ module Cellect::Server
         it 'should provide unseen from a random group for users' do
           workflow.groups = { }
           workflow.groups[1] = set_klass.new
-          workflow.groups[1].should_receive(:subtract).with user.seen, 3
+          expect(workflow.groups[1]).to receive(:subtract).with user.seen, 3
           workflow.unseen_for 123, limit: 3
         end
         
         it 'should provide unseen from a specific group for users' do
           3.times{ |i| workflow.groups[i] = set_klass.new }
-          workflow.group(1).should_receive(:subtract).with user.seen, 3
+          expect(workflow.group(1)).to receive(:subtract).with user.seen, 3
           workflow.unseen_for 123, group_id: 1, limit: 3
         end
         
         it 'should sample subjects from a random group without a user' do
           workflow.groups = { }
           workflow.groups[1] = set_klass.new
-          workflow.group(1).should_receive(:sample).with 3
+          expect(workflow.group(1)).to receive(:sample).with 3
           workflow.sample limit: 3
         end
         
         it 'should sample subjects from a specific group without a user' do
           3.times{ |i| workflow.groups[i] = set_klass.new }
-          workflow.group(1).should_receive(:sample).with 3
+          expect(workflow.group(1)).to receive(:sample).with 3
           workflow.sample group_id: 1, limit: 3
         end
         
         it 'should sample subjects from a random group for a user' do
           workflow.groups = { }
           workflow.groups[1] = set_klass.new
-          workflow.groups[1].should_receive(:subtract).with user.seen, 3
+          expect(workflow.groups[1]).to receive(:subtract).with user.seen, 3
           workflow.sample user_id: 123, limit: 3
         end
         
         it 'should sample subjects from a specific group for a user' do
           3.times{ |i| workflow.groups[i] = set_klass.new }
-          workflow.group(1).should_receive(:subtract).with user.seen, 3
+          expect(workflow.group(1)).to receive(:subtract).with user.seen, 3
           workflow.sample user_id: 123, group_id: 1, limit: 3
         end
         
@@ -53,22 +53,22 @@ module Cellect::Server
           workflow.groups[1] = set_klass.new
           
           if workflow.prioritized?
-            workflow.groups[1].should_receive(:add).with 123, 456
+            expect(workflow.groups[1]).to receive(:add).with 123, 456
             workflow.add subject_id: 123, group_id: 1, priority: 456
           else
-            workflow.groups[1].should_receive(:add).with 123
+            expect(workflow.groups[1]).to receive(:add).with 123
             workflow.add subject_id: 123, group_id: 1
           end
         end
         
         it 'should remove subjects' do
           workflow.groups[1] = set_klass.new
-          workflow.groups[1].should_receive(:remove).with 123
+          expect(workflow.groups[1]).to receive(:remove).with 123
           workflow.remove subject_id: 123, group_id: 1
         end
         
         it 'should be grouped' do
-          workflow.should be_grouped
+          expect(workflow).to be_grouped
         end
       end
     end

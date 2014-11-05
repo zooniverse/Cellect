@@ -6,8 +6,8 @@ module Cellect::Server
     let(:node_set){ Cellect::Server.node_set.actors.first }
     
     it 'should register this node' do
-      node_set.id.should == 'node0000000000'
-      node_set.zk.get('/nodes/node0000000000').first.should =~ /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/
+      expect(node_set.id).to eq 'node0000000000'
+      expect(node_set.zk.get('/nodes/node0000000000').first).to match /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/
     end
   end
 end

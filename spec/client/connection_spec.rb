@@ -5,11 +5,11 @@ module Cellect::Client
     let(:connection){ Cellect::Client.connection }
     
     before(:each) do
-      Cellect::Client.node_set.stub(:nodes).and_return 'a' => '1', 'b' => '2'
+      allow(Cellect::Client.node_set).to receive(:nodes).and_return 'a' => '1', 'b' => '2'
     end
     
     def should_send(action: action, url: url, to: to)
-      HTTP.should_receive(:send).with action, "http://#{ to }/#{ url }", socket_class: Celluloid::IO::TCPSocket
+      expect(HTTP).to receive(:send).with action, "http://#{ to }/#{ url }", socket_class: Celluloid::IO::TCPSocket
     end
     
     def should_broadcast(action: action, url: url)

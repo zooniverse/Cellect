@@ -20,13 +20,13 @@ module Cellect::Server
           
           it 'should remove subjects' do
             if workflow.grouped?
-              workflow.should_receive(:remove).with subject_id: 123, group_id: 1, priority: nil
+              expect(workflow).to receive(:remove).with subject_id: 123, group_id: 1, priority: nil
             else
-              workflow.should_receive(:remove).with subject_id: 123, group_id: nil, priority: nil
+              expect(workflow).to receive(:remove).with subject_id: 123, group_id: nil, priority: nil
             end
             
             put "/workflows/#{ workflow_type }/remove", opts
-            last_response.status.should == 200
+            expect(last_response.status).to eq 200
           end
         end
       end

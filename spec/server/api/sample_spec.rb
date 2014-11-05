@@ -13,19 +13,19 @@ module Cellect::Server
           before(:each){ pass_until workflow, is: :ready }
           
           it 'should sample without a user, limit, or group' do
-            workflow.should_receive(:sample).with(limit: 5, user_id: nil, group_id: nil).and_call_original
+            expect(workflow).to receive(:sample).with(limit: 5, user_id: nil, group_id: nil).and_call_original
             get "/workflows/#{ workflow_type }"
-            last_response.status.should == 200
-            json.should be_a Array
+            expect(last_response.status).to eq 200
+            expect(json).to be_a Array
           end
           
           shoulda = grouping ? 'limit, group, and user' : 'limit and user'
           it "should sample with a #{ shoulda }" do
             group_id = grouping ? 1 : nil
-            workflow.should_receive(:sample).with(limit: 3, user_id: 123, group_id: group_id).and_call_original
+            expect(workflow).to receive(:sample).with(limit: 3, user_id: 123, group_id: group_id).and_call_original
             get "/workflows/#{ workflow_type }?limit=3&user_id=123#{ grouping ? '&group_id=1' : '' }"
-            last_response.status.should == 200
-            json.should be_a Array
+            expect(last_response.status).to eq 200
+            expect(json).to be_a Array
           end
         end
       end

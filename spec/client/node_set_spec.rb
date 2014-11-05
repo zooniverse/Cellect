@@ -14,7 +14,7 @@ module Cellect::Client
           Thread.pass
         end
         
-        node_set.nodes['node0000000001'].should == 'foo'
+        expect(node_set.nodes['node0000000001']).to eq 'foo'
       ensure
         node_set.zk.delete '/nodes/node0000000001'
       end

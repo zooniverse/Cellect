@@ -21,17 +21,17 @@ module Cellect::Server
           
           it 'should add subjects' do
             if workflow.grouped? && workflow.prioritized?
-              workflow.should_receive(:add).with subject_id: 123, group_id: 1, priority: 456.0
+              expect(workflow).to receive(:add).with subject_id: 123, group_id: 1, priority: 456.0
             elsif workflow.grouped?
-              workflow.should_receive(:add).with subject_id: 123, group_id: 1, priority: nil
+              expect(workflow).to receive(:add).with subject_id: 123, group_id: 1, priority: nil
             elsif workflow.prioritized?
-              workflow.should_receive(:add).with subject_id: 123, group_id: nil, priority: 456.0
+              expect(workflow).to receive(:add).with subject_id: 123, group_id: nil, priority: 456.0
             else
-              workflow.should_receive(:add).with subject_id: 123, group_id: nil, priority: nil
+              expect(workflow).to receive(:add).with subject_id: 123, group_id: nil, priority: nil
             end
             
             put "/workflows/#{ workflow_type }/add", opts
-            last_response.status.should == 200
+            expect(last_response.status).to eq 200
           end
         end
       end

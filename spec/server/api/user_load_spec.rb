@@ -13,10 +13,10 @@ module Cellect::Server
           
           it 'should load users' do
             async_workflow = double
-            workflow.should_receive(:async).and_return async_workflow
-            async_workflow.should_receive(:user).with 123
+            expect(workflow).to receive(:async).and_return async_workflow
+            expect(async_workflow).to receive(:user).with 123
             post "/workflows/#{ workflow_type }/users/123/load"
-            last_response.status.should == 201
+            expect(last_response.status).to eq 201
           end
         end
       end
