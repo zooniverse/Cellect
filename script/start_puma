@@ -1,13 +1,35 @@
-#!/bin/bash
+#!/usr/bin/env ruby
 
-set -e
-cd /cellect
-bundle install
+require 'yaml'
 
-ZK_URL="$ZK_PORT_2181_TCP_ADDR:$ZK_PORT_2181_TCP_PORT" \
-PG_HOST=$PG_PORT_5432_TCP_ADDR \
-PG_PORT=$PG_PORT_5432_TCP_PORT \
-PG_DB=$PG_ENV_DB \
-PG_USER=$PG_ENV_PG_USER \
-PG_PASS=$PG_ENV_PASS \
-puma
+begin
+    environment = ENV['ENVIRONMENT']
+    if environment == nil
+        environment = 'production'
+    end
+
+    databases = YAML.load(File.read("/production_config/database.yml"))
+    db = databases[environment]
+
+    PG_HOST = db['host']
+    PG_PORT = db['port']
+    PG_DB = db['database']
+    PG_USER = db['user']
+    PG_PASS = db['password']
+rescue Errno::ENOENT
+    PG_HOST = ENV['PG_PORT_5432_TCP_ADDR']
+    PG_PORT = ENV['PG_PORT_5432_TCP_PORT']
+    PG_DB = ENV['PG_ENV_DB']
+    PG_USER = ENV['PG_ENV_PG_USER']
+    PG_PASS = ENV['PG_ENV_PASS']
+end
+
+system(
+    "ZK_URL=\"#{ENV["ZK_PORT_2181_TCP_ADDR"]}:#{ENV["ZK_PORT_2181_TCP_PORT"]}\" \
+    PG_HOST=#{PG_HOST} \
+    PG_PORT=#{PG_PORT} \
+    PG_DB=#{PG_DB} \
+    PG_USER=#{PG_USER} \
+    PG_PASS=#{PG_PASS} \
+    puma"
+)
