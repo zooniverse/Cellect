@@ -24,7 +24,7 @@ rescue Errno::ENOENT
     PG_PASS = ENV['PG_ENV_PASS']
 end
 
-system(
+exit system(
     "ZK_URL=\"#{ENV["ZK_PORT_2181_TCP_ADDR"]}:#{ENV["ZK_PORT_2181_TCP_PORT"]}\" \
     PG_HOST=#{PG_HOST} \
     PG_PORT=#{PG_PORT} \
