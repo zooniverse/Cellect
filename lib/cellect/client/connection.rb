@@ -1,7 +1,9 @@
 require 'http'
+require 'multi_json'
 
 module Cellect
   module Client
+    class CellectServerError < StandardError; end
     class Connection
       include Celluloid
       include Celluloid::IO
@@ -31,7 +33,12 @@ module Cellect
       end
       
       def get_subjects(user_id: user_id, host: host, workflow_id: workflow_id, limit: limit, group_id: group_id)
-        send_http host, :get, "/workflows/#{ workflow_id }", querystring(user_id: user_id, group_id: group_id, limit: limit)
+        response = send_http host, :get, "/workflows/#{ workflow_id }", querystring(user_id: user_id, group_id: group_id, limit: limit)
+        if response.code == 200
+          MultiJson.load(response.to_s)
+        else
+          raise CellectServerError, "Server Responded #{ response.code }"
+        end
       end
       
       protected

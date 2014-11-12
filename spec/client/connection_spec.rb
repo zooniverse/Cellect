@@ -9,7 +9,7 @@ module Cellect::Client
     end
     
     def should_send(action: action, url: url, to: to)
-      expect(HTTP).to receive(:send).with action, "http://#{ to }/#{ url }", socket_class: Celluloid::IO::TCPSocket
+      expect(HTTP).to receive(:send).with(action, "http://#{ to }/#{ url }", socket_class: Celluloid::IO::TCPSocket).and_return(HTTP::Response.new(200, nil, nil, "{ \"this response\": \"intentionally blank\" }"))
     end
     
     def should_broadcast(action: action, url: url)
@@ -66,6 +66,24 @@ module Cellect::Client
       connection.get_subjects host: '1', workflow_id: 'random', user_id: 1, limit: 10, group_id: 1
       should_send action: :get, url: 'workflows/random?user_id=1', to: 1
       connection.get_subjects host: '1', workflow_id: 'random', user_id: 1
+    end
+
+    context 'when get subject request is successful' do
+      it 'should return subjects as an array' do
+        response = HTTP::Response.new(200, "1.1", nil, "[1, 2, 3, 4, 5]")
+        allow(HTTP).to receive(:send).and_return(response)
+        expect(connection.get_subjects host: '1', workflow_id: 'random', user_id: 1, limit: 10, group_id: 1).to eq([1, 2, 3, 4, 5])
+      end
+    end
+
+    context 'when get subject request is successful' do
+      it 'should raise a get subjects error' do
+        response = HTTP::Response.new(404, "1.1", nil, "")
+        allow(HTTP).to receive(:send).and_return(response)
+        expect do
+          connection.get_subjects host: '1', workflow_id: 'random', user_id: 1, limit: 10, group_id: 1
+        end.to raise_error(Cellect::Client::CellectServerError, "Server Responded 404")
+      end
     end
   end
 end
