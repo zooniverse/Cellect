@@ -8,6 +8,7 @@ end
 Bundler.require :test, :development
 
 ENV['CELLECT_POOL_SIZE'] = '3'
+SPAWN_ZK = !ENV['ZK_URL']
 
 require 'pry'
 require 'oj'
@@ -36,6 +37,6 @@ RSpec.configure do |config|
   end
   
   config.after(:suite) do
-    `zkServer stop #{ CELLECT_ZK_CONFIG } > /dev/null 2>&1`
+    `zkServer stop #{ CELLECT_ZK_CONFIG } > /dev/null 2>&1` if SPAWN_ZK
   end
 end

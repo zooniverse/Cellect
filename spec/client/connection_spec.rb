@@ -60,29 +60,29 @@ module Cellect::Client
       should_send action: :put, url: 'workflows/random/users/123/add_seen?subject_id=456', to: 1
       connection.add_seen subject_id: 456, host: '1', user_id: 123, workflow_id: 'random'
     end
-
+    
     it 'should get subjects' do
       should_send action: :get, url: 'workflows/random?user_id=1&group_id=1&limit=10', to: 1
       connection.get_subjects host: '1', workflow_id: 'random', user_id: 1, limit: 10, group_id: 1
       should_send action: :get, url: 'workflows/random?user_id=1', to: 1
       connection.get_subjects host: '1', workflow_id: 'random', user_id: 1
     end
-
-    context 'when get subject request is successful' do
-      it 'should return subjects as an array' do
-        response = HTTP::Response.new(200, "1.1", nil, "[1, 2, 3, 4, 5]")
-        allow(HTTP).to receive(:send).and_return(response)
-        expect(connection.get_subjects host: '1', workflow_id: 'random', user_id: 1, limit: 10, group_id: 1).to eq([1, 2, 3, 4, 5])
+    
+    context 'getting subjects' do
+      def get_subjects
+        connection.get_subjects host: '1', workflow_id: 'random', user_id: 1, limit: 10, group_id: 1
       end
-    end
-
-    context 'when get subject request is successful' do
-      it 'should raise a get subjects error' do
-        response = HTTP::Response.new(404, "1.1", nil, "")
-        allow(HTTP).to receive(:send).and_return(response)
-        expect do
-          connection.get_subjects host: '1', workflow_id: 'random', user_id: 1, limit: 10, group_id: 1
-        end.to raise_error(Cellect::Client::CellectServerError, "Server Responded 404")
+      
+      it 'should return subjects as an array' do
+        response = HTTP::Response.new 200, '1.1', nil, '[1, 2, 3, 4, 5]'
+        allow(HTTP).to receive(:send).and_return response
+        expect(get_subjects).to eq [1, 2, 3, 4, 5]
+      end
+      
+      it 'should raise an error for unexpected responses' do
+        response = HTTP::Response.new 404, '1.1', nil, ''
+        allow(HTTP).to receive(:send).and_return response
+        expect{ get_subjects }.to raise_error Cellect::Client::CellectServerError, 'Server Responded 404'
       end
     end
   end

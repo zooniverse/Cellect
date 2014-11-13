@@ -34,11 +34,8 @@ module Cellect
       
       def get_subjects(user_id: user_id, host: host, workflow_id: workflow_id, limit: limit, group_id: group_id)
         response = send_http host, :get, "/workflows/#{ workflow_id }", querystring(user_id: user_id, group_id: group_id, limit: limit)
-        if response.code == 200
-          MultiJson.load(response.to_s)
-        else
-          raise CellectServerError, "Server Responded #{ response.code }"
-        end
+        ensure_valid_response response
+        MultiJson.load response.body
       end
       
       protected
@@ -63,6 +60,12 @@ module Cellect
             list << "#{ key }=#{ value }"
           end
         end.join('&')
+      end
+      
+      def ensure_valid_response(response)
+        unless response.code == 200
+          raise CellectServerError, "Server Responded #{ response.code }"
+        end
       end
     end
   end
