@@ -10,7 +10,7 @@ module Cellect
             PG.connect connection_options
           end
         end
-        
+
         def workflow_list
           with_pg do |pg|
             pg.exec('SELECT * FROM workflows').collect do |row|
@@ -24,16 +24,16 @@ module Cellect
             end
           end
         end
-        
+
         def load_data_for(workflow_name)
           with_pg do |pg|
             statement = <<-SQL
-              SELECT sms.id as id, sms.priority as priority, sms.subject_set_id as group_id 
+              SELECT sms.id as id, sms.priority as priority, sms.subject_set_id as group_id
               FROM workflows w
-              JOIN subject_sets_workflows ssw ON (ssw.workflow_id = w.id) 
-              JOIN subject_sets ss ON (ss.id = ssw.subject_set_id) 
+              JOIN subject_sets_workflows ssw ON (ssw.workflow_id = w.id)
+              JOIN subject_sets ss ON (ss.id = ssw.subject_set_id)
               JOIN set_member_subjects sms ON (ss.id = sms.subject_set_id)
-              WHERE w.id = #{ workflow_name } 
+              WHERE w.id = #{ workflow_name }
             SQL
             pg.exec(statement).collect do |row|
               {
@@ -44,11 +44,11 @@ module Cellect
             end
           end
         end
-        
+
         def load_user(workflow_name, id)
           with_pg do |pg|
             statement = <<-SQL
-              SELECT subject_ids FROM user_seen_subjects
+              SELECT set_member_subject_ids FROM user_seen_subjects
               WHERE user_id = #{ id } AND workflow_id = #{ workflow_name }
             SQL
             pg.exec(statement).collect do |row|
@@ -56,11 +56,11 @@ module Cellect
             end
           end
         end
-        
+
         def with_pg
           @pg.with{ |pg| yield pg }
         end
-        
+
         def connection_options
           {
             host: ENV.fetch('PG_HOST', '127.0.0.1'),
