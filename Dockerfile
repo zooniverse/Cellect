@@ -16,7 +16,7 @@ RUN apt-get update && \
 WORKDIR /cellect
 
 ADD . /cellect
-RUN bundle install
+RUN bundle install --without development
 
 EXPOSE 80
 
