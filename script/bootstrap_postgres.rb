@@ -49,8 +49,7 @@ end
          end
 
   sets.each do |s|
-    subject_sets_workflows << [subject_sets_workflows_id, s[0], workflow_id]
-    subject_sets_workflows_id += 1
+    set.push(workflow_id)
   end
 
   subject_ids = sets.flat_map{ |s| subjects.select{ |ss| ss[1] == s[0] }.map{ |s| s[0] } }
@@ -81,7 +80,6 @@ data_dir = '/tmp'
 
 File.open("#{ data_dir }/workflows.csv", 'w') { |f| f.write(workflows.map{ |l| l.join(',') }.join("\n")) }
 File.open("#{ data_dir }/subject_sets.csv", 'w') { |f| f.write(subject_sets.map{ |l| l.join(',') }.join("\n")) }
-File.open("#{ data_dir }/subject_sets_workflows.csv", 'w') { |f| f.write(subject_sets_workflows.map{ |l| l.join(',') }.join("\n")) }
 File.open("#{ data_dir }/set_member_subjects.csv", 'w') { |f| f.write(subjects.map{ |l| l.join(',') }.join("\n")) }
 File.open("#{ data_dir }/user_seen_subjects.csv", 'w') { |f| f.write(user_seen_subjects.map{ |l| l.join(',') }.join("\n")) }
 
@@ -100,14 +98,7 @@ pg.exec <<-SQL
   CREATE TABLE subject_sets (
     "id" SERIAL NOT NULL,
     "prioritized" boolean DEFAULT FALSE,
-    PRIMARY KEY ("id")
-  );
-
-  DROP TABLE IF EXISTS subject_sets_workflows;
-  CREATE TABLE subject_sets_workflows (
-    "id" SERIAL NOT NULL,
-    "subject_set_id" int DEFAULT NULL,
-    "workflow_id" int DEFAULT NULL,
+    "workflow_id" int NOT NULL,
     PRIMARY KEY ("id")
   );
 
@@ -132,11 +123,9 @@ pg.exec <<-SQL
 
   COPY workflows FROM '#{ data_dir }/workflows.csv' DELIMITER ',' NULL AS 'NULL' CSV;
   COPY subject_sets FROM '#{ data_dir }/subject_sets.csv' DELIMITER ',' NULL AS 'NULL' CSV;
-  COPY subject_sets_workflows FROM '#{ data_dir }/subject_sets_workflows.csv' DELIMITER ',' NULL AS 'NULL' CSV;
   COPY set_member_subjects FROM '#{ data_dir }/set_member_subjects.csv' DELIMITER ',' NULL AS 'NULL' CSV;
   COPY user_seen_subjects FROM '#{ data_dir }/user_seen_subjects.csv' DELIMITER ',' NULL AS 'NULL' CSV;
   CREATE INDEX idx_user_workflow ON user_seen_subjects(user_id, workflow_id);
   CREATE INDEX idx_subject_set_member_id ON set_member_subjects(subject_set_id);
-  CREATE INDEX idx_subject_set_id ON subject_sets_workflows(subject_set_id);
-  CREATE INDEX idx_workflow_id ON subject_sets_workflows(workflow_id);
+  CREATE INDEX idx_workflow_id ON subject_sets(workflow_id);
 SQL

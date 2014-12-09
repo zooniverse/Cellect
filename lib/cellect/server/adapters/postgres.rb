@@ -30,9 +30,8 @@ module Cellect
             statement = <<-SQL
               SELECT sms.id as id, sms.priority as priority, sms.subject_set_id as group_id
               FROM workflows w
-              JOIN subject_sets_workflows ssw ON (ssw.workflow_id = w.id)
-              JOIN subject_sets ss ON (ss.id = ssw.subject_set_id)
-              JOIN set_member_subjects sms ON (ss.id = sms.subject_set_id)
+              JOIN subject_sets ss ON (ss.workflow_id = w.id)
+              JOIN set_member_subjects sms ON (sms.subject_set_id = ss.id)
               WHERE w.id = #{ workflow_name }
             SQL
             pg.exec(statement).collect do |row|
