@@ -8,11 +8,11 @@ module Cellect::Client
       allow(Cellect::Client.node_set).to receive(:nodes).and_return 'a' => '1', 'b' => '2'
     end
     
-    def should_send(action: action, url: url, to: to)
+    def should_send(action:, url:, to:)
       expect(HTTP).to receive(:send).with(action, "http://#{ to }/#{ url }", socket_class: Celluloid::IO::TCPSocket).and_return(HTTP::Response.new(200, nil, nil, "{ \"this response\": \"intentionally blank\" }"))
     end
     
-    def should_broadcast(action: action, url: url)
+    def should_broadcast(action:, url:)
       [1, 2].each{ |i| should_send action: action, url: url, to: i }
     end
     

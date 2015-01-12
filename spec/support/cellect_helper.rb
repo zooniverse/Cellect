@@ -1,7 +1,7 @@
 require 'timeout'
 
 module CellectHelper
-  def pass_until(obj, is: is)
+  def pass_until(obj, is:)
     Timeout::timeout(1) do
       Thread.pass until obj.state == is
     end
