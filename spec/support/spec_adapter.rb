@@ -1,8 +1,12 @@
 require 'oj'
 
 class SpecAdapter < Cellect::Server::Adapters::Default
-  def workflow_list
-    fixtures.values
+  def workflow_list(*names)
+    if names.empty?
+      fixtures.values
+    else
+      fixtures.values_at(*names)
+    end
   end
   
   def load_data_for(workflow_name)

@@ -2,13 +2,19 @@ require 'spec_helper'
 
 module Cellect::Server
   describe Workflow do
+    it "should try to load workflows that aren't loaded" do
+      fake_actors = double({actors: []})
+      expect(Cellect::Server.adapter).to receive(:load_workflows).with("random").and_call_original
+      Workflow["random"]
+    end
+    
     SET_TYPES.each do |workflow_type|
       context workflow_type do
         it_behaves_like 'workflow', :workflow
         let(:workflow){ Workflow[workflow_type] }
         let(:user){ workflow.user 123 }
         before(:each){ pass_until workflow, is: :ready }
-        
+
         it 'should provide unseen for users' do
           expect(workflow.subjects).to receive(:subtract).with user.seen, 3
           workflow.unseen_for 123, limit: 3
@@ -35,8 +41,8 @@ module Cellect::Server
         end
         
         it 'should remove subjects' do
-          expect(workflow.subjects).to receive(:add).with 123
-          workflow.add subject_id: 123
+          expect(workflow.subjects).to receive(:remove).with 123
+          workflow.remove subject_id: 123
         end
         
         it 'should be notified of a user ttl expiry' do

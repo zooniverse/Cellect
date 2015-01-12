@@ -10,7 +10,7 @@ module Cellect
         #     'pairwise' => false,
         #     'grouped' => false
         #   }, ...]
-        def workflow_list
+        def workflow_list(*names)
           raise NotImplementedError
         end
         
@@ -34,8 +34,8 @@ module Cellect
           raise NotImplementedError
         end
         
-        def load_workflows
-          workflow_list.each{ |workflow_info| load_workflow workflow_info }
+        def load_workflows(*names)
+          workflow_list(*names).each{ |workflow_info| load_workflow workflow_info }
         end
         
         def load_workflow(args)
@@ -52,7 +52,8 @@ module Cellect
         
         def workflow_for(opts = { })
           workflow_klass = opts.fetch('grouped', false) ? GroupedWorkflow : Workflow
-          workflow_klass[opts['name'], pairwise: opts['pairwise'], prioritized: opts['prioritized']]
+          workflow_klass[opts['name']] = opts 
+          workflow_klass[opts['name']]
         end
       end
     end
