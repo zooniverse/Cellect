@@ -1,4 +1,4 @@
-# Cellect
+# Cellect [![Build Status](https://travis-ci.org/zooniverse/Cellect.svg?branch=master)](https://travis-ci.org/zooniverse/Cellect)
 
 This is a work in progress
 
