@@ -14,6 +14,7 @@ shared_examples_for 'node set' do
   end
   
   it 'should accept a connection string' do
+    url_before = ENV['ZK_URL']
     begin
       pass_until node_set, is: :ready
       ENV['ZK_URL'] = 'foobar'
@@ -21,7 +22,7 @@ shared_examples_for 'node set' do
       ENV.delete 'ZK_URL'
       expect(node_set.send(:zk_url)).to eq 'localhost:2181'
     ensure
-      ENV['ZK_URL'] = 'localhost:21811'
+      ENV['ZK_URL'] = url_before
     end
   end
 end
