@@ -11,9 +11,18 @@ module Cellect
           end
         end
 
-        def workflow_list
+        def workflow_list(*names)
           with_pg do |pg|
-            pg.exec('SELECT * FROM workflows').collect do |row|
+            statement = 'SELECT * FROM workflows'
+            statement += case names.length
+                         when 0
+                           ""
+                         when 1
+                           "WHERE \"workflows\".\"id\" = #{ names.first }"
+                         else
+                           "WHERE \"workflows\".\"id\" IN (#{ names.join(',') })"
+                         end
+            pg.exec(statement).collect do |row|
               {
                 'id' => row['id'].to_i,
                 'name' => row['id'],

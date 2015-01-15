@@ -6,8 +6,8 @@ shared_examples_for 'workflow' do |name|
   end
   
   it 'should add singleton instances to the registry' do
-    expect(obj.class[:foo]).to be_a_kind_of Cellect::Server::Workflow
-    expect(obj.class[:foo].object_id).to eq obj.class[:foo].object_id
+    expect(obj.class[obj.name]).to be_a_kind_of Cellect::Server::Workflow
+    expect(obj.class[obj.name].object_id).to eq obj.class[obj.name].object_id
   end
   
   it 'should initialize empty' do
