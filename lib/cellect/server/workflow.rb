@@ -5,20 +5,14 @@ module Cellect
       
       attr_accessor :name, :users, :subjects, :state
       attr_accessor :pairwise, :prioritized
-
-      def self.name_to_key(name)
-        "workflow_#{ name }".to_sym
-      end
       
       def self.[](name)
-        Actor[name_to_key(name)].actors.first
-      rescue StandardError => e
-        Cellect::Server.adapter.load_workflows(name)
-        Actor[name_to_key(name)].actors.first
+        Cellect::Server.adapter.load_workflows(name) unless Actor[name]
+        Actor[name].actors.first
       end
-
+      
       def self.[]=(name, opts)
-        Actor[name_to_key(name)] = supervise name, pairwise: opts['pairwise'], prioritized: opts['prioritized']
+        Actor[name] = supervise name, pairwise: opts['pairwise'], prioritized: opts['prioritized']
       end
       
       def self.names
