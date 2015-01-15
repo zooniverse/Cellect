@@ -7,6 +7,7 @@ before_install:
   - sudo apt-get install -y autoconf automake boost1.55 libffi-dev
 
 before_script:
+  - test `which zkServer.sh` && zkServer.sh stop && rm -rf /tmp/zookeeper/*
   - wget -q -O - "http://mirrors.koehn.com/apache/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz" | tar zx -C "$HOME/"
   - export PATH="$PATH:/$HOME/zookeeper-3.4.6/bin"
   - cp "$HOME/zookeeper-3.4.6/conf/zoo_sample.cfg" "$HOME/zookeeper-3.4.6/conf/zoo.cfg"
