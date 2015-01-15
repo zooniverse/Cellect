@@ -3,7 +3,6 @@ require 'spec_helper'
 module Cellect::Server
   describe Workflow do
     it "should try to load workflows that aren't loaded" do
-      fake_actors = double actors: []
       expect(Cellect::Server.adapter).to receive(:load_workflows).with('random').and_call_original
       Workflow['random']
     end
