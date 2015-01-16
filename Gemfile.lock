@@ -1,16 +1,16 @@
 PATH
   remote: .
   specs:
-    cellect (0.1.0)
-      cellect-client (= 0.1.0)
-      cellect-server (= 0.1.0)
-    cellect-client (0.1.0)
+    cellect (0.1.1)
+      cellect-client (= 0.1.1)
+      cellect-server (= 0.1.1)
+    cellect-client (0.1.1)
       celluloid (= 0.16.0)
       celluloid-io (= 0.16.0)
       http (~> 0.6)
       multi_json (~> 1.10.1)
       zk (~> 1.9)
-    cellect-server (0.1.0)
+    cellect-server (0.1.1)
       celluloid (= 0.16.0)
       celluloid-io (= 0.16.0)
       diff_set (~> 0.0.3)
