@@ -41,7 +41,7 @@ module Cellect
               FROM workflows w
               JOIN subject_sets ss ON (ss.workflow_id = w.id)
               JOIN set_member_subjects sms ON (sms.subject_set_id = ss.id)
-              WHERE w.id = #{ workflow_name }
+              WHERE w.id = #{ workflow_name } AND sms.state = 0
             SQL
             pg.exec(statement).collect do |row|
               {
