@@ -22,6 +22,10 @@ module Cellect
       node_set.nodes.values.sample
     end
     
+    def self.host_exists?(ip)
+      node_set.nodes.values.include? ip
+    end
+    
     if defined?(::Rails)
       require 'cellect/client/railtie'
     else
