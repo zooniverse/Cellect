@@ -9,6 +9,7 @@ module Cellect
       attr_accessor :connection, :_node_set
     end
     
+    # Sets up the set of server nodes
     def self.node_set(zk_url=nil)
       self._node_set ||= NodeSet.supervise(zk_url)
       _node_set.actors.first
@@ -18,10 +19,12 @@ module Cellect
       node_set.ready?
     end
     
+    # Selects a server for a user
     def self.choose_host
       node_set.nodes.values.sample
     end
     
+    # Ensure a previously selected server is still available
     def self.host_exists?(ip)
       node_set.nodes.values.include? ip
     end

@@ -4,6 +4,11 @@ module Cellect
       class Users < Grape::API
         resources :users do
           segment '/:user_id' do
+            # PUT /workflows/:workflow_id/users/:user_id/add_seen
+            # 
+            # Adds a subject to a user's seen set for a workflow
+            # Accepts params
+            #   subject_id: integer, required
             put :add_seen do
               user_id = param_to_int :user_id
               subject_id = param_to_int :subject_id
@@ -15,6 +20,9 @@ module Cellect
               nil
             end
             
+            # POST /workflows/:workflow_id/users/:user_id/load
+            # 
+            # Preloads a user for a workflow
             post :load do
               user_id = param_to_int :user_id
               

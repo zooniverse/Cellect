@@ -34,10 +34,6 @@ module Cellect
           val = params[param].try conversion
           params[param] && val && val > 0 ? val : default
         end
-        
-        def to_query(hash)
-          hash.select{ |k, v| v }.collect{ |k, v| "#{ k }=#{ v }" }.join '&'
-        end
       end
     end
   end
