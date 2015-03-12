@@ -1,4 +1,7 @@
-# Cellect 
+# Cellect
+
+A scalable subject selector for [Panoptes](https://github.com/zooniverse/panoptes)
+
 [![Build Status](https://travis-ci.org/zooniverse/Cellect.svg?branch=master)](https://travis-ci.org/zooniverse/Cellect)
 [![Test Coverage](https://codeclimate.com/github/zooniverse/Cellect/badges/coverage.svg)](https://codeclimate.com/github/zooniverse/Cellect)
 [![Gem Version](https://img.shields.io/gem/v/cellect.svg)](https://rubygems.org/gems/cellect)
@@ -6,10 +9,6 @@
 [![Gem Version](https://img.shields.io/gem/v/cellect-server.svg)](https://rubygems.org/gems/cellect-server)
 [![Code Climate](https://codeclimate.com/github/zooniverse/Cellect/badges/gpa.svg)](https://codeclimate.com/github/zooniverse/Cellect)
 <!-- [![Dependency Status](https://gemnasium.com/zooniverse/cellect.png)](https://gemnasium.com/zooniverse/cellect) -->
-
-A scalable subject selector for [Panoptes](https://github.com/zooniverse/panoptes)
-
-[![Build Status](https://travis-ci.org/zooniverse/Cellect.svg?branch=master)](https://travis-ci.org/zooniverse/Cellect)
 
 Available as
   - [cellect-server](https://rubygems.org/gems/cellect-server)
