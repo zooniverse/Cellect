@@ -15,6 +15,7 @@ module Cellect
       attr_accessor :node_set
     end
     
+    # The server is ready when all workflows have finished loading
     def self.ready?
       Workflow.all.each do |workflow|
         return false unless workflow.ready?

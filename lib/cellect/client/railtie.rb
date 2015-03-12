@@ -2,6 +2,11 @@ module Cellect
   module Client
     class ConfigurationError < StandardError; end;
     
+    # Allow YAML configuration from config/cellect.yml
+    # 
+    # development:
+    #   zk_url: localhost:2181
+    #   pool_size: 50
     class CellectRailtie < Rails::Railtie
       initializer 'cellect.connect_to_zookeeper' do
         ensure_config_file
