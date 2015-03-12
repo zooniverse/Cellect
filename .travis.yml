@@ -18,7 +18,7 @@ rvm:
   - 2.1.2
   - 2.2.0
 
-jdk:
-  - openjdk7
+# jdk:
+#   - openjdk7
 
 script: ZK_URL=localhost:2181 bundle exec rake
