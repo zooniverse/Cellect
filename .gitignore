@@ -1,7 +1,7 @@
 .bundle
 .DS_Store
 .rvmrc
-.ruby-version
+.ruby-*
 /data/*
 /ext/*.o
 /ext/Makefile
