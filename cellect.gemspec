@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'puma', '~> 2.8'
   spec.add_development_dependency 'pg', '~> 0.17'
   spec.add_development_dependency 'connection_pool', '~> 2.0'
+  spec.add_development_dependency 'codeclimate-test-reporter'
   
   spec.add_runtime_dependency 'cellect-server', Cellect::VERSION
   spec.add_runtime_dependency 'cellect-client', Cellect::VERSION
