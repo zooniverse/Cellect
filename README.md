@@ -45,11 +45,15 @@ To install rice your Ruby must be compiled with shared libraries enabled, from t
 
 ## Testing
 
+* You'll need a local Zookeeper server to run the specs (they will auto start / stop the server for you).
+  * `brew install zookeeper`
+  * Note: this may require a Java Runtime (JRE) install, `brew cask install java`
+
 Run the specs with `rake`
 
 ## Start server:
 
-`rackup # uses config.ru file` 
+`rackup # uses config.ru file`
 
 ## Versions
 
