@@ -55,7 +55,7 @@ module Cellect::Server
           id = user.id
           workflow.remove_user id
           expect(workflow.users).to_not have_key id
-          expect{ user.id }.to raise_error
+          expect{ user.id }.to raise_error Celluloid::DeadActorError
         end
         
         it 'should not be grouped' do
