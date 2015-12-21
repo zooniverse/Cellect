@@ -7,13 +7,6 @@ before_install:
   - sudo apt-get install -y autoconf automake boost1.55 libffi-dev
   - gem update bundler
 
-before_script:
-  - test `which zkServer.sh` && zkServer.sh stop && rm -rf /tmp/zookeeper/*; true
-  - wget -q -O - "http://mirrors.koehn.com/apache/zookeeper/zookeeper-3.4.7/zookeeper-3.4.7.tar.gz" | tar zx -C "$HOME/"
-  - export PATH="$PATH:/$HOME/zookeeper-3.4.7/bin"
-  - cp "$HOME/zookeeper-3.4.7/conf/zoo_sample.cfg" "$HOME/zookeeper-3.4.7/conf/zoo.cfg"
-  - zkServer.sh start
-
 rvm:
   - 2.1.5
   - 2.2.1

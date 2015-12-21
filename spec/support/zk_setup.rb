@@ -3,7 +3,7 @@ module ZK_Setup
     @port = port
     if SPAWN_ZK
       kill_old_zk_servers
-      # remove_zk_data
+      remove_zk_data
       server = ZK::Server.new do |config|
         config.client_port = port
         config.client_port_address = 'localhost'
@@ -16,13 +16,6 @@ module ZK_Setup
       end
       server.run
       @zk_server = server
-      times = 5
-      puts zk_ok?
-      while !zk_ok? || times > 0
-        sleep(1)
-        times =- 1
-      end
-      puts zk_ok?
       ENV['ZK_URL'] = "localhost:#{port}"
     end
   end
@@ -30,7 +23,6 @@ module ZK_Setup
   def self.stop_zk
     if SPAWN_ZK
       @zk_server.shutdown
-      # remove_zk_data
     end
   end
 
@@ -55,3 +47,5 @@ module ZK_Setup
     `rm -rf #{ zk_dir }; mkdir -p #{ zk_dir }`
   end
 end
+
+ZK_Setup.start_zk

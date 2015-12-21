@@ -1,9 +1,9 @@
 require 'zk'
-require 'timeout'
 
 module Cellect
   class NodeSet
     include Celluloid
+    ConnectionError = Class.new(StandardError)
 
     attr_accessor :zk, :state
 
@@ -16,12 +16,15 @@ module Cellect
 
     # Connect to ZooKeeper, setup this node, and change state
     def initialize_zk
-      # don't let ZK hang the thread, just retry connection on restart
-      Timeout::timeout(5) do
-        self.zk = ZK.new zk_url, chroot: '/cellect'
+      # don't let ZK hang the thread, timeout and check connection status
+      zk = ZK::Client.new zk_url, timeout: 0.5, chroot: '/cellect'
+      if zk.connected?
+        self.zk = zk
+        setup
+        self.state = :ready
+      else
+        raise ConnectionError.new("Can't connect to ZK server.")
       end
-      setup
-      self.state = :ready
     end
 
     def ready?

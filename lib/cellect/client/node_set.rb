@@ -11,17 +11,6 @@ module Cellect
         super
       end
 
-      # Connect to ZooKeeper, setup this node, and change state
-      def initialize_zk
-        puts zk_url
-        binding.pry
-        puts `echo ruok | nc #{zk_url.split(":").join(" ")}`#.chomp == 'imok'
-        self.zk = ZK.new zk_url, chroot: '/cellect'
-        setup
-        self.state = :ready
-      # rescue Zookeeper::Exceptions::ContinuationTimeoutError: => e
-      end
-
       protected
 
       # Respond to a node coming online or timing out
