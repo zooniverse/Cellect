@@ -12,7 +12,7 @@ module Cellect
         get do
           workflow.sample selector_params
         end
-        
+
         # PUT /workflows/:workflow_id/add
         # 
         # Adds a subject to a workflow or updates the priority
@@ -24,7 +24,7 @@ module Cellect
           workflow.add update_params
           nil
         end
-        
+
         # PUT /workflows/:workflow_id/remove
         # 
         # Removes a subject from a workflow

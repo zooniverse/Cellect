@@ -26,9 +26,9 @@ user_seen_subjects_id_offset = 1
 
   1.upto(subjects_per_set - 1).each do |subject_id|
     subject_id += subject_id_offset
-    
+
     priority = prioritized ? rand : 0.0
-    
+
     subjects << [subject_id, subject_set_id, subject_id, priority, 0]
   end
 
@@ -39,7 +39,7 @@ end
   grouped = rand < 0.5
   prioritized = rand < 0.5
   pairwise = rand < 0.2
-  
+
   workflows << [workflow_id, "Workflow #{ workflow_id }", grouped, prioritized, pairwise]
 
   sets = if prioritized
@@ -53,9 +53,9 @@ end
   end
 
   subject_ids = sets.flat_map{ |s| subjects.select{ |ss| ss[1] == s[0] }.map{ |s| s[0] } }
-  
+
   users_per_workflow = 10_000 + rand(50_000)
-  
+
   user_seen_distribution = []
   380.times{ user_seen_distribution << [    1,      10] }
   180.times{ user_seen_distribution << [   10,      20] }
@@ -64,7 +64,7 @@ end
   100.times{ user_seen_distribution << [  100,   1_000] }
    17.times{ user_seen_distribution << [1_000,   5_000] }
     3.times{ user_seen_distribution << [5_000, 50_000] }
-  
+
   1.upto(users_per_workflow).each do |user_id|
     user_seen_range = user_seen_distribution.sample
     seen_count = user_seen_range[0] + rand(user_seen_range[1])
@@ -111,7 +111,7 @@ pg.exec <<-SQL
     "state" int DEFAULT 0,
     PRIMARY KEY ("id")
   );
-  
+
   DROP TABLE IF EXISTS user_seen_subjects;
   CREATE TABLE user_seen_subjects (
     "id" SERIAL NOT NULL,

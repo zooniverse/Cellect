@@ -12,24 +12,24 @@ module Cellect
             put :add_seen do
               user_id = param_to_int :user_id
               subject_id = param_to_int :subject_id
-              
+
               if user_id && user_id > 0 && subject_id && subject_id > 0
                 workflow.async.add_seen_for user_id, subject_id
               end
-              
+
               nil
             end
-            
+
             # POST /workflows/:workflow_id/users/:user_id/load
             # 
             # Preloads a user for a workflow
             post :load do
               user_id = param_to_int :user_id
-              
+
               if user_id && user_id > 0
                 workflow.async.user user_id
               end
-              
+
               nil
             end
           end

@@ -8,11 +8,11 @@ class SpecAdapter < Cellect::Server::Adapters::Default
       fixtures.values_at(*names)
     end
   end
-  
+
   def load_data_for(workflow_name)
     fixtures.fetch(workflow_name, { }).fetch 'entries', []
   end
-  
+
   def fixtures
     @fixtures ||= { }.tap do |fixtures|
       Dir["#{ _fixture_path }/workflow_data/*.json"].collect do |f|
@@ -22,7 +22,7 @@ class SpecAdapter < Cellect::Server::Adapters::Default
       end
     end
   end
-  
+
   def user_fixtures
     @user_fixtures ||= { }.tap do |user_fixtures|
       Dir["#{ _fixture_path }/user_data/*.json"].sort.collect.with_index do |f, i|
@@ -33,14 +33,14 @@ class SpecAdapter < Cellect::Server::Adapters::Default
       end
     end
   end
-  
+
   def load_user(workflow_name, id)
     user = user_fixtures[id]
     user ? user[workflow_name] : user_fixtures['new_user'][workflow_name]
   end
-  
+
   protected
-  
+
   def _fixture_path
     File.expand_path File.join(__FILE__, '../../fixtures')
   end

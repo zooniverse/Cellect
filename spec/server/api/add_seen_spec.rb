@@ -3,7 +3,7 @@ require 'spec_helper'
 module Cellect::Server
   describe API do
     include_context 'API'
-    
+
     { 'Ungrouped' => nil, 'Grouped' => 'grouped' }.each_pair do |grouping_type, grouping|
       SET_TYPES.shuffle.each do |set_type|
         context "#{ grouping_type } #{ set_type }" do
@@ -11,7 +11,7 @@ module Cellect::Server
           let(:workflow){ Workflow[workflow_type] }
           let(:user){ workflow.user 123 }
           before(:each){ pass_until workflow, is: :ready }
-          
+
           it 'should add seen subjects' do
             async_workflow = double
             expect(workflow).to receive(:async).and_return async_workflow

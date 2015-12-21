@@ -5,9 +5,9 @@ module Cellect
   module Server
     class NodeSet < Cellect::NodeSet
       attr_accessor :id
-      
+
       protected
-      
+
       # Registers this server instance with ZooKeeper
       def setup
         zk.mkdir_p '/nodes'

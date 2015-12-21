@@ -12,15 +12,15 @@ Gem::Specification.new do |spec|
   spec.description   = ''
   spec.homepage      = 'https://github.com/parrish/Cellect'
   spec.license       = 'MIT'
-  
+
   ignored_paths = %w(config data log script tmp).collect{ |path| Dir["#{ path }/**/*"] }.flatten
   ignored_files = %w(Dockerfile Vagrantfile Gemfile.lock config.ru) + ignored_paths
-  
+
   spec.files         = `git ls-files -z`.split("\x0").reject{ |f| f =~ /client/ } - ignored_files
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
-  
+
   spec.add_development_dependency 'bundler', '~> 1.5'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'oj'
@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'puma', '~> 2.8'
   spec.add_development_dependency 'pg', '~> 0.17'
   spec.add_development_dependency 'connection_pool', '~> 2.0'
-  
+
   spec.add_runtime_dependency 'diff_set', '~> 0.0.3'
   spec.add_runtime_dependency 'celluloid', '0.16.0'
   spec.add_runtime_dependency 'celluloid-io', '0.16.0'

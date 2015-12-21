@@ -13,7 +13,7 @@ module Cellect
         def workflow_list(*names)
           raise NotImplementedError
         end
-        
+
         # Load the data for a workflow, this method:
         #   Accepts a workflow
         #   Returns an array of hashes in the form:
@@ -25,7 +25,7 @@ module Cellect
         def load_data_for(workflow_name)
           raise NotImplementedError
         end
-        
+
         # Load seen ids for a user, this method:
         #   Accepts a workflow_name, and a user id
         #   Returns an array in the form:
@@ -33,11 +33,11 @@ module Cellect
         def load_user(workflow_name, id)
           raise NotImplementedError
         end
-        
+
         def load_workflows(*names)
           workflow_list(*names).each{ |workflow_info| load_workflow workflow_info }
         end
-        
+
         def load_workflow(args)
           info = if args.is_a?(Hash)
             args
@@ -46,10 +46,10 @@ module Cellect
           else
             raise ArgumentError
           end
-          
+
           workflow_for info
         end
-        
+
         def workflow_for(opts = { })
           workflow_klass = opts.fetch('grouped', false) ? GroupedWorkflow : Workflow
           workflow_klass[opts['name']] = opts 

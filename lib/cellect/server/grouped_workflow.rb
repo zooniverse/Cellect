@@ -2,13 +2,13 @@ module Cellect
   module Server
     class GroupedWorkflow < Workflow
       attr_accessor :groups
-      
+
       # Sets up the new workflow
       def initialize(name, pairwise: false, prioritized: false)
         self.groups = { }
         super
       end
-      
+
       # Load subjects from the adapter into their groups
       def load_data
         self.state = :initializing
@@ -20,17 +20,17 @@ module Cellect
         end
         self.state = :ready
       end
-      
+
       # Returns a group by id or samples one randomly
       def group(group_id = nil)
         groups[group_id] || groups.values.sample
       end
-      
+
       # Get unseen subjects from a group for a user
       def unseen_for(user_name, group_id: nil, limit: 5)
         group(group_id).subtract user(user_name).seen, limit
       end
-      
+
       # Get a sample of subjects from a group for a user
       # 
       # Accepts a hash in the form:
@@ -46,7 +46,7 @@ module Cellect
            group(opts[:group_id]).sample opts[:limit]
         end
       end
-      
+
       # Adds or updates a subject in a group
       # 
       # Accepts a hash in the form:
@@ -62,7 +62,7 @@ module Cellect
           groups[opts[:group_id]].add opts[:subject_id]
         end
       end
-      
+
       # Removes a subject from a group
       # 
       # Accepts a hash in the form:
@@ -73,19 +73,19 @@ module Cellect
       def remove(opts = { })
         groups[opts[:group_id]].remove opts[:subject_id]
       end
-      
+
       # General information about this workflow
       def status
         # Get the number of subjects in each group
         group_counts = Hash[*groups.collect{ |id, set| [id, set.size] }.flatten]
-        
+
         super.merge({
           grouped: true,
           subjects: group_counts.values.inject(:+),
           groups: group_counts
         })
       end
-      
+
       def grouped?
         true
       end

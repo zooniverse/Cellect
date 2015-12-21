@@ -10,7 +10,7 @@ module Cellect
             PG.connect connection_options
           end
         end
-        
+
         def workflow_list(*names)
           with_pg do |pg|
             statement = 'SELECT * FROM workflows'
@@ -33,7 +33,7 @@ module Cellect
             end
           end
         end
-        
+
         def load_data_for(workflow_name)
           with_pg do |pg|
             statement = <<-SQL
@@ -52,7 +52,7 @@ module Cellect
             end
           end
         end
-        
+
         def load_user(workflow_name, id)
           with_pg do |pg|
             statement = <<-SQL
@@ -64,11 +64,11 @@ module Cellect
             end
           end
         end
-        
+
         def with_pg
           @pg.with{ |pg| yield pg }
         end
-        
+
         def connection_options
           {
             host: ENV.fetch('PG_HOST', '127.0.0.1'),
