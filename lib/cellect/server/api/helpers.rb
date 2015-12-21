@@ -31,7 +31,7 @@ module Cellect
         end
 
         def _param_to(param, conversion, default)
-          val = params[param].try conversion
+          val = params[param] && params[param].send(conversion)
           params[param] && val && val > 0 ? val : default
         end
       end
