@@ -1,28 +1,51 @@
-if SPAWN_ZK
-  zk_dir = File.join CELLECT_ROOT, 'tmp/zookeeper'
-  CELLECT_ZK_CONFIG = "#{ zk_dir }/zoo.cfg"
-  
-  `rm -rf #{ zk_dir }; mkdir -p #{ zk_dir }`
-  
-  File.open(CELLECT_ZK_CONFIG, 'w') do |out|
-    out.puts <<-TEXT
-      tickTime=2000
-      initLimit=10
-      syncLimit=5
-      dataDir=#{ zk_dir }
-      clientPort=21811
-      forceSync=no
-      snapCount=1000000
-    TEXT
+module ZK_Setup
+  def self.start_zk(port=21811)
+    @port = port
+    if SPAWN_ZK
+      kill_old_zk_servers
+      remove_zk_data
+      server = ZK::Server.new do |config|
+        config.client_port = port
+        config.client_port_address = 'localhost'
+        config.force_sync = false
+        config.tick_time = 2000
+        config.init_limit = 10
+        config.sync_limit = 5
+        config.snap_count = 1000000
+        config.base_dir = zk_dir
+      end
+      server.run
+      @zk_server = server
+      ENV['ZK_URL'] = "localhost:#{port}"
+    end
   end
-  
-  if `echo ruok | nc 127.0.0.1 21811`.chomp == 'imok'
-    pid = `ps aux | grep -e 'Cellect[\/]tmp[\/]zookeeper'`.split[1]
-    puts "Killing rogue zookeeper process: #{ pid }..."
-    `kill -s TERM #{ pid }`
-    sleep 1
+
+  def self.stop_zk
+    if SPAWN_ZK
+      @zk_server.shutdown
+    end
   end
-  
-  `zkServer start #{ CELLECT_ZK_CONFIG } > /dev/null 2>&1`
-  ENV['ZK_URL'] = 'localhost:21811'
+
+  def self.zk_dir
+    File.join CELLECT_ROOT, 'tmp/zookeeper'
+  end
+
+  def self.zk_ok?
+    `echo ruok | nc 127.0.0.1 #{@port}`.chomp == 'imok'
+  end
+
+  def self.kill_old_zk_servers
+    if zk_ok?
+      pid = `ps aux | grep -e 'Cellect[\/]tmp[\/]zookeeper'`.split[1]
+      puts "Killing rogue zookeeper process: #{ pid }..."
+      `kill -s TERM #{ pid }`
+      sleep 1
+    end
+  end
+
+  def self.remove_zk_data
+    `rm -rf #{ zk_dir }; mkdir -p #{ zk_dir }`
+  end
 end
+
+ZK_Setup.start_zk

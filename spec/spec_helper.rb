@@ -12,7 +12,6 @@ Bundler.require :test, :development
 
 ENV['CELLECT_POOL_SIZE'] = '3'
 SPAWN_ZK = !ENV['ZK_URL']
-
 require 'pry'
 require 'oj'
 require './spec/support/zk_setup.rb'
@@ -32,14 +31,14 @@ RSpec.configure do |config|
   config.filter_run :focus
   config.order = 'random'
   config.include CellectHelper
-  
+
   config.around(:each) do |example|
     Celluloid.boot
     example.run
     Celluloid.shutdown
   end
-  
+
   config.after(:suite) do
-    `zkServer stop #{ CELLECT_ZK_CONFIG } > /dev/null 2>&1` if SPAWN_ZK
+    ZK_Setup.stop_zk
   end
 end

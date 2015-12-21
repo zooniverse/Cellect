@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'oj'
   spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'zk-server'
   spec.add_development_dependency 'rack-test'
   spec.add_development_dependency 'pry'
 
