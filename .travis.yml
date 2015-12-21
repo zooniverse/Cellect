@@ -11,4 +11,4 @@ rvm:
   - 2.1.5
   - 2.2.1
 
-script: ZK_URL=localhost:2181 bundle exec rake
+script: bundle exec rake spec
