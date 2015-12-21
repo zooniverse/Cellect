@@ -16,3 +16,4 @@ pkg/*
 *.swp
 ext/
 /coverage
+/Gemfile.lock
