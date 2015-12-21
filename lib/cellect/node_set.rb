@@ -18,13 +18,10 @@ module Cellect
     def initialize_zk
       # don't let ZK hang the thread, timeout and check connection status
       zk = ZK::Client.new zk_url, timeout: 0.5, chroot: '/cellect'
-      if zk.connected?
-        self.zk = zk
-        setup
-        self.state = :ready
-      else
-        raise ConnectionError.new("Can't connect to ZK server.")
-      end
+      raise ConnectionError.new("Can't connect to ZK server.") unless zk.connected?
+      self.zk = zk
+      setup
+      self.state = :ready
     end
 
     def ready?
