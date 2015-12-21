@@ -9,9 +9,9 @@ before_install:
 
 before_script:
   - test `which zkServer.sh` && zkServer.sh stop && rm -rf /tmp/zookeeper/*; true
-  - wget -q -O - "http://mirrors.koehn.com/apache/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz" | tar zx -C "$HOME/"
-  - export PATH="$PATH:/$HOME/zookeeper-3.4.6/bin"
-  - cp "$HOME/zookeeper-3.4.6/conf/zoo_sample.cfg" "$HOME/zookeeper-3.4.6/conf/zoo.cfg"
+  - wget -q -O - "http://mirrors.koehn.com/apache/zookeeper/zookeeper-3.4.7/zookeeper-3.4.7.tar.gz" | tar zx -C "$HOME/"
+  - export PATH="$PATH:/$HOME/zookeeper-3.4.7/bin"
+  - cp "$HOME/zookeeper-3.4.7/conf/zoo_sample.cfg" "$HOME/zookeeper-3.4.7/conf/zoo.cfg"
   - zkServer.sh start
 
 rvm:
