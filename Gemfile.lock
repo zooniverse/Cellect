@@ -117,6 +117,8 @@ GEM
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
     slop (3.6.0)
+    slyphon-log4j (1.2.15)
+    slyphon-zookeeper_jar (3.3.5)
     thread_safe (0.3.5)
     timers (4.0.4)
       hitimes
@@ -132,6 +134,11 @@ GEM
       equalizer (~> 0.0, >= 0.0.9)
     zk (1.9.6)
       zookeeper (~> 1.4.0)
+    zk-server (1.1.8)
+      bundler (>= 1)
+      slop (>= 3.2.0, < 4.0)
+      slyphon-log4j (= 1.2.15)
+      slyphon-zookeeper_jar (~> 3.3.5)
     zookeeper (1.4.11)
 
 PLATFORMS
@@ -149,3 +156,7 @@ DEPENDENCIES
   rack-test
   rake
   rspec
+  zk-server
+
+BUNDLED WITH
+   1.11.2

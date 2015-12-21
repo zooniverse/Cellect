@@ -32,14 +32,18 @@ RSpec.configure do |config|
   config.filter_run :focus
   config.order = 'random'
   config.include CellectHelper
-  
+
+  config.before(:suite) do
+    ZK_Setup.start_zk
+  end
+
   config.around(:each) do |example|
     Celluloid.boot
     example.run
     Celluloid.shutdown
   end
-  
+
   config.after(:suite) do
-    `zkServer stop #{ CELLECT_ZK_CONFIG } > /dev/null 2>&1` if SPAWN_ZK
+    ZK_Setup.stop_zk
   end
 end
