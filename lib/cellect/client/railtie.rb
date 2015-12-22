@@ -14,7 +14,7 @@ module Cellect
         ensure_config_environment config
         config = config[Rails.env].symbolize_keys
         ensure_config_url config
-        connect_zookeeper config if load_zookeeper
+        connect_zookeeper config
       end
 
       private
@@ -39,6 +39,7 @@ module Cellect
       end
 
       def connect_zookeeper(config)
+        return if Client.mock_zookeeper?
         ENV['ZK_URL'] ||= config[:zk_url]
         ENV['CELLECT_POOL_SIZE'] ||= config.fetch(:pool_size, 100)
         Client.node_set ENV['ZK_URL']
