@@ -9,6 +9,11 @@ module Cellect
       attr_accessor :connection, :_node_set
     end
 
+    # Disabled with lib/cellect/testing.rb
+    def self.mock_zookeeper?
+      false
+    end
+
     # Sets up the set of server nodes
     def self.node_set(zk_url=nil)
       self._node_set ||= NodeSet.supervise(zk_url)

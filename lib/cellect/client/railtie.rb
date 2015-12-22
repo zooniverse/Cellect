@@ -45,8 +45,6 @@ module Cellect
 
       def load_zookeeper
         !Client.mock_zookeeper?
-      rescue NoMethodError
-        true
       end
     end
   end
