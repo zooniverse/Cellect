@@ -39,12 +39,10 @@ module Cellect
       end
 
       def connect_zookeeper(config)
-        Client.node_set config[:zk_url]
-        Client.connection = Connection.pool size: config.fetch(:pool_size, 100)
-      end
-
-      def load_zookeeper
-        !Client.mock_zookeeper?
+        ENV['ZK_URL'] ||= config[:zk_url]
+        ENV['CELLECT_POOL_SIZE'] ||= config.fetch(:pool_size, 100)
+        Client.node_set ENV['ZK_URL']
+        Client.connection = Connection.pool size: ENV['CELLECT_POOL_SIZE']
       end
     end
   end
