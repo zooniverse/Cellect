@@ -16,10 +16,11 @@ module Cellect
 
     # Connect to ZooKeeper, setup this node, and change state
     def initialize_zk
-      # don't let ZK hang the thread, timeout and check connection status
-      zk = ZK::Client.new zk_url, timeout: timeout_duration, chroot: '/cellect'
-      raise ConnectionError.new("Can't connect to ZK server.") unless zk.connected?
-      self.zk = zk
+      begin
+        Timeout::timeout(timeout_duration) do
+          self.zk = ZK.new zk_url, chroot: '/cellect'
+        end
+      end
       setup
       self.state = :ready
     end
