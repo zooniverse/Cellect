@@ -34,11 +34,7 @@ module Cellect
       node_set.nodes.values.include? ip
     end
 
-    if defined?(::Rails)
-      require 'cellect/client/railtie'
-    else
-      Client.node_set
-      Client.connection = Connection.pool size: ENV.fetch('CELLECT_POOL_SIZE', 100).to_i
-    end
+    Client.node_set
+    Client.connection = Connection.pool size: ENV.fetch('CELLECT_POOL_SIZE', 100).to_i
   end
 end
