@@ -16,10 +16,8 @@ module Cellect
 
     # Connect to ZooKeeper, setup this node, and change state
     def initialize_zk
-      begin
-        Timeout::timeout(timeout_duration) do
-          self.zk = ZK.new zk_url, chroot: '/cellect'
-        end
+      Timeout::timeout(timeout_duration) do
+        self.zk = ZK.new zk_url, chroot: '/cellect'
       end
       setup
       self.state = :ready
