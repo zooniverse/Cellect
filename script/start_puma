@@ -25,7 +25,7 @@ rescue Errno::ENOENT
 end
 
 exit system(
-    "ZK_URL=\"#{ENV["ZK_PORT_2181_TCP_ADDR"]}:#{ENV["ZK_PORT_2181_TCP_PORT"]}\" \
+    "REDIS_URL=\"#{ ENV["REDIS_PORT_6379_TCP_ADDR"] }:6379\" \
     PG_HOST=#{PG_HOST} \
     PG_PORT=#{PG_PORT} \
     PG_DB=#{PG_DB} \

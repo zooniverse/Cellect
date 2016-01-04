@@ -14,7 +14,7 @@ Available as
 
 ## Cellect::Server
 
-An actor based system that provides an API around subject selection actions.  Server nodes are discovered via [ZooKeeper](http://zookeeper.apache.org/).
+An actor based system that provides an API around subject selection actions.  Server nodes are discovered via [Attention](https://github.com/parrish/attention).
 
 ### Cellect::Server::Adapters
 
@@ -25,7 +25,13 @@ We're overriding the default adapter with a customization in [cellect_panoptes](
 
 ## Cellect::Client
 
-Provides a mix of asynchronous and synchronous operations for server awareness and API communication.
+Provides operations for server awareness and API communication.
+
+API timeouts can be set with
+
+```ruby
+  Cellect::Client::Connection.timeout = 5 # seconds
+```
 
 
 ## Building
@@ -42,9 +48,7 @@ To install rice your Ruby must be compiled with shared libraries enabled, from t
 
 ## Testing
 
-* You'll need a local Zookeeper server to run the specs (they will auto start / stop the server for you).
-  * `brew install zookeeper`
-  * Note: this may require a Java Runtime (JRE) install, `brew cask install java`
+* You'll need a local Redis server to run the specs.
 
 Run the specs with `rake`
 

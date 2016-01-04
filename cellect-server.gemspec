@@ -27,14 +27,15 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec'
   spec.add_development_dependency 'rack-test'
   spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'guard'
+  spec.add_development_dependency 'guard-rspec'
   spec.add_development_dependency 'puma', '~> 2.8'
   spec.add_development_dependency 'pg', '~> 0.17'
   spec.add_development_dependency 'connection_pool', '~> 2.0'
 
   spec.add_runtime_dependency 'diff_set', '~> 0.0.3'
   spec.add_runtime_dependency 'celluloid', '0.16.0'
-  spec.add_runtime_dependency 'celluloid-io', '0.16.0'
   spec.add_runtime_dependency 'http', '~> 0.6'
-  spec.add_runtime_dependency 'zk', '~> 1.9'
+  spec.add_runtime_dependency 'attention', '~> 0.0.3'
   spec.add_runtime_dependency 'grape', '~> 0.7'
 end

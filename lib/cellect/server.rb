@@ -26,6 +26,6 @@ module Cellect
       false
     end
 
-    Server.node_set = NodeSet.supervise
+    Server.node_set = NodeSet.new
   end
 end

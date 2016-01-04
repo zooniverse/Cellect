@@ -5,8 +5,11 @@ module Cellect
   module Client
     class CellectServerError < StandardError; end
     class Connection
-      include Celluloid
-      include Celluloid::IO
+      class << self
+        attr_accessor :timeout
+      end
+
+      @timeout = 5
 
       # Reload the data for a workflow on all servers
       def reload_workflow(id)
@@ -49,17 +52,21 @@ module Cellect
 
       # Broadcast by iterating over each server
       def broadcast(action, path, query = '')
-        Cellect::Client.node_set.nodes.each_pair do |node, host|
-          send_http host, action, path, query
+        Cellect::Client.node_set.nodes.each do |node|
+          send_http node['ip'], action, path, query
         end
       end
 
-      # Makes an API call through an evented Celluloid Socket
+      # Makes an API call
       def send_http(host, action, path, query = '')
         params = { host: host, path: path }
         params[:query] = query if query && !query.empty?
         uri = URI::HTTP.build params
-        HTTP.send action, uri.to_s, socket_class: Celluloid::IO::TCPSocket
+        with_timeout.send action, uri.to_s
+      end
+
+      def with_timeout
+        HTTP.timeout :global, connect: self.class.timeout
       end
 
       # Builds a querystring from a hash
