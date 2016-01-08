@@ -20,5 +20,46 @@ module Cellect::Server
         expect(default.workflow_for('name' => 'e', 'pairwise' => true, 'prioritized' => true)).to be_prioritized
       end
     end
+
+    describe '/stats' do
+      include_context 'API'
+
+      let(:response){ JSON.parse last_response.body }
+      let(:all_workflows) do
+        [].tap do |list|
+          { 'Ungrouped' => nil, 'Grouped' => 'grouped' }.each_pair do |grouping_type, grouping|
+            SET_TYPES.each do |set_type|
+              workflow_type = [grouping, set_type].compact.join '_'
+              list << Workflow[workflow_type]
+            end
+          end
+        end
+      end
+
+      before(:each) do
+        pass_until{ all_workflows.all? &:ready? }
+        get '/stats'
+      end
+
+      it 'should include information' do
+        expect(response.keys).to match_array %w(memory cpu instance status)
+      end
+
+      context 'status' do
+        let(:status){ response['status'] }
+
+        it 'should include the aggregate workflow status' do
+          expect(status['workflows_ready']).to eql true
+        end
+
+        context 'workflows' do
+          let(:workflows){ status['workflows'] }
+
+          it 'should include all workflow statuses' do
+            expect(workflows.length).to eql all_workflows.length
+          end
+        end
+      end
+    end
   end
 end

@@ -12,7 +12,7 @@ module Cellect::Server
         it_behaves_like 'workflow', :workflow
         let(:workflow){ Workflow[workflow_type] }
         let(:user){ workflow.user 123 }
-        before(:each){ pass_until workflow, is: :ready }
+        before(:each){ pass_until_state_of workflow, is: :ready }
 
         it 'should provide unseen for users' do
           expect(workflow.subjects).to receive(:subtract).with user.seen, 3

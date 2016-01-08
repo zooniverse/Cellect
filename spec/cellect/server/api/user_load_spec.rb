@@ -9,7 +9,7 @@ module Cellect::Server
         context "#{ grouping_type } #{ set_type }" do
           let(:workflow_type){ [grouping, set_type].compact.join '_' }
           let(:workflow){ Workflow[workflow_type] }
-          before(:each){ pass_until workflow, is: :ready }
+          before(:each){ pass_until_state_of workflow, is: :ready }
 
           it 'should load users' do
             async_workflow = double
