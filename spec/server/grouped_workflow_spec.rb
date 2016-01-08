@@ -8,7 +8,7 @@ module Cellect::Server
         let(:workflow){ GroupedWorkflow[workflow_type] }
         let(:user){ workflow.user 123 }
         let(:set_klass){ workflow.prioritized? ? DiffSet::PrioritySet : DiffSet::RandomSet }
-        before(:each){ pass_until workflow, is: :ready }
+        before(:each){ pass_until_state_of workflow, is: :ready }
 
         it 'should provide unseen from a random group for users' do
           workflow.groups = { }

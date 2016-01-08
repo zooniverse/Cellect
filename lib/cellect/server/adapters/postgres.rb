@@ -65,6 +65,12 @@ module Cellect
           end
         end
 
+        def status
+          {
+            connected: pg.status == PG::CONNECTION_OK
+          }
+        end
+
         def with_pg
           @pg.with{ |pg| yield pg }
         end

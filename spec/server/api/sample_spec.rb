@@ -10,7 +10,7 @@ module Cellect::Server
           let(:workflow_type){ [grouping, set_type].compact.join '_' }
           let(:workflow){ Workflow[workflow_type] }
           let(:user){ workflow.user 123 }
-          before(:each){ pass_until workflow, is: :ready }
+          before(:each){ pass_until_state_of workflow, is: :ready }
 
           it 'should sample without a user, limit, or group' do
             expect(workflow).to receive(:sample).with(limit: 5, user_id: nil, group_id: nil).and_call_original

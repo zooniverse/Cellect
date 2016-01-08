@@ -10,7 +10,7 @@ module Cellect::Client
     # see Cellect::Client / Cellect::Server
     it 'should update the node list when changing' do
       begin
-        pass_until node_set, is: :ready
+        pass_until_state_of node_set, is: :ready
         node_set.zk.create '/nodes/node', data: 'foo', mode: :ephemeral_sequential
         100.times do |i|
           break if node_set.nodes['node0000000001']

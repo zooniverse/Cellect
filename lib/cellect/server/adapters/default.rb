@@ -34,6 +34,11 @@ module Cellect
           raise NotImplementedError
         end
 
+        # Report adapter status as a Hash
+        def status
+          { }
+        end
+
         def load_workflows(*names)
           workflow_list(*names).each{ |workflow_info| load_workflow workflow_info }
         end

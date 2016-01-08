@@ -3,6 +3,11 @@ module Cellect
     class Workflow
       include Celluloid
 
+      class << self
+        attr_accessor :workflow_names
+      end
+      self.workflow_names = { }
+
       attr_accessor :name, :users, :subjects, :state
       attr_accessor :pairwise, :prioritized
 
@@ -14,14 +19,14 @@ module Cellect
 
       # Load a workflow
       def self.[]=(name, opts)
+        Workflow.workflow_names[name] = true
         Actor[name] = supervise name, pairwise: opts['pairwise'], prioritized: opts['prioritized']
       end
 
       # The names of all workflows currently loaded
       def self.names
         actor_names = Celluloid.actor_system.registry.names.collect &:to_s
-        workflow_actors = actor_names.select{ |key| key =~ /^workflow_/ }
-        workflow_actors.collect{ |name| name.sub(/^workflow_/, '').to_sym }
+        actor_names.select{ |key| workflow_names[key] }
       end
 
       # All currently loaded workflows
@@ -146,6 +151,7 @@ module Cellect
       # General information about this workflow
       def status
         {
+          name: name,
           state: state,
           grouped: false,
           prioritized: prioritized,
