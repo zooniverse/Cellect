@@ -33,6 +33,38 @@ module Cellect::Server
             put "/workflows/#{ workflow_type }/add", opts
             expect(last_response.status).to eq 200
           end
+
+          it 'should handle invalid subject_ids' do
+            bad_opts = opts.merge subject_id: '%(*ERRRR)'
+            put "/workflows/#{ workflow_type }/add", bad_opts
+            expect(last_response.status).to eql 400
+            expect(last_response.body).to match /Bad Request/
+          end
+
+          it 'should handle invalid group_ids' do
+            if workflow.grouped?
+              bad_opts = opts.merge group_id: '%(*ERRRR)'
+              put "/workflows/#{ workflow_type }/add", bad_opts
+              expect(last_response.status).to eql 400
+              expect(last_response.body).to match /Bad Request/
+            else
+              put "/workflows/#{ workflow_type }/add", opts
+              expect(last_response).to be_ok
+            end
+          end
+
+          it 'should handle invalid priorities' do
+            bad_opts = opts.merge priority: '%(*ERRRR)'
+
+            if workflow.prioritized?
+              put "/workflows/#{ workflow_type }/add", bad_opts
+              expect(last_response.status).to eql 400
+              expect(last_response.body).to match /Bad Request/
+            else
+              put "/workflows/#{ workflow_type }/add", bad_opts
+              expect(last_response).to be_ok
+            end
+          end
         end
       end
     end

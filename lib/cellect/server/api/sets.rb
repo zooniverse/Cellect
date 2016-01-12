@@ -23,6 +23,9 @@ module Cellect
         #   priority: float, required if prioritized
         put :add do
           return four_oh_four unless workflow
+          return bad_request unless valid_subject_id_update?
+          return bad_request unless valid_group_id_update?
+          return bad_request unless valid_priority_update?
           workflow.add(update_params)
           nil
         end
@@ -35,6 +38,8 @@ module Cellect
         #   group_id: integer, required if grouped
         put :remove do
           return four_oh_four unless workflow
+          return bad_request unless valid_subject_id_update?
+          return bad_request unless valid_group_id_update?
           workflow.remove(update_params)
           nil
         end
