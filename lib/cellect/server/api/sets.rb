@@ -10,7 +10,8 @@ module Cellect
         #   user_id: integer, optional
         #   group_id: integer, optional
         get do
-          workflow.sample selector_params
+          return four_oh_four unless workflow
+          workflow.sample(selector_params)
         end
 
         # PUT /workflows/:workflow_id/add
@@ -21,7 +22,8 @@ module Cellect
         #   group_id: integer, required if grouped
         #   priority: float, required if prioritized
         put :add do
-          workflow.add update_params
+          return four_oh_four unless workflow
+          workflow.add(update_params)
           nil
         end
 
@@ -32,7 +34,8 @@ module Cellect
         #   subject_id: integer
         #   group_id: integer, required if grouped
         put :remove do
-          workflow.remove update_params
+          return four_oh_four unless workflow
+          workflow.remove(update_params)
           nil
         end
       end

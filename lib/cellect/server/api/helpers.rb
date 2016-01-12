@@ -6,6 +6,10 @@ module Cellect
           @workflow ||= Workflow[params[:workflow_id]]
         end
 
+        def four_oh_four
+          error! 'Not Found', 404
+        end
+
         def selector_params
           {
             limit: param_to_int(:limit, default: 5),

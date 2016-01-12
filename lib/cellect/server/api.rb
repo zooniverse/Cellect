@@ -47,6 +47,7 @@ module Cellect
           # 
           # Returns the workflow's status
           get :status do
+            return four_oh_four unless workflow
             workflow.status
           end
 
@@ -54,6 +55,7 @@ module Cellect
           # 
           # Reloads the workflow from the adapter
           post :reload do
+            return four_oh_four unless workflow
             workflow.async.load_data
           end
 

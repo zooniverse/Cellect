@@ -22,5 +22,12 @@ module Cellect::Server
         end
       end
     end
+
+    it 'should handle missing workflows' do
+      allow(Workflow).to receive(:[]).with('missing').and_return nil
+      put '/workflows/missing/users/123/add_seen', subject_id: 123
+      expect(last_response.status).to eql 404
+      expect(last_response.body).to match /Not Found/
+    end
   end
 end

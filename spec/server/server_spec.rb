@@ -69,6 +69,12 @@ module Cellect::Server
           end
         end
       end
+
+      it 'should handle missing workflows' do
+        Workflow.names << 'missing'
+        get '/stats'
+        expect(last_response).to be_ok
+      end
     end
   end
 end

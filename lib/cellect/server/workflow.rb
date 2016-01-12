@@ -19,8 +19,9 @@ module Cellect
 
       # Load a workflow
       def self.[]=(name, opts)
-        Workflow.workflow_names[name] = true
         Actor[name] = supervise name, pairwise: opts['pairwise'], prioritized: opts['prioritized']
+        Workflow.workflow_names[name] = true if Actor[name]
+        Actor[name]
       end
 
       # The names of all workflows currently loaded
@@ -31,7 +32,7 @@ module Cellect
 
       # All currently loaded workflows
       def self.all
-        names.collect{ |name| Workflow[name] }
+        names.collect{ |name| Workflow[name] }.compact
       end
 
       # Sets up a new workflow and starts the data loading
