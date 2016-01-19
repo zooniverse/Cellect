@@ -6,6 +6,32 @@ module Cellect
           @workflow ||= Workflow[params[:workflow_id]]
         end
 
+        def four_oh_four
+          error! 'Not Found', 404
+        end
+
+        def bad_request
+          error! 'Bad Request', 400
+        end
+
+        def validate_param(hash, key, expect: nil)
+          hash[key] && hash[key].is_a?(expect)
+        end
+
+        def valid_subject_id_update?
+          validate_param update_params, :subject_id, expect: Fixnum
+        end
+
+        def valid_group_id_update?
+          return true unless workflow.grouped?
+          validate_param update_params, :group_id, expect: Fixnum
+        end
+
+        def valid_priority_update?
+          return true unless workflow.prioritized?
+          validate_param update_params, :priority, expect: Numeric
+        end
+
         def selector_params
           {
             limit: param_to_int(:limit, default: 5),

@@ -19,8 +19,21 @@ module Cellect::Server
             put "/workflows/#{ workflow_type }/users/123/add_seen", subject_id: 123
             expect(last_response.status).to eq 200
           end
+
+          it 'should handle invalid params' do
+            put "/workflows/#{ workflow_type }/users/123/add_seen", subject_id: '%(*ERRRR)'
+            expect(last_response.status).to eql 400
+            expect(last_response.body).to match /Bad Request/
+          end
         end
       end
+    end
+
+    it 'should handle missing workflows' do
+      allow(Workflow).to receive(:[]).with('missing').and_return nil
+      put '/workflows/missing/users/123/add_seen', subject_id: 123
+      expect(last_response.status).to eql 404
+      expect(last_response.body).to match /Not Found/
     end
   end
 end

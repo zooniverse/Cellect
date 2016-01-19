@@ -10,6 +10,8 @@ module Cellect
             # Accepts params
             #   subject_id: integer, required
             put :add_seen do
+              return four_oh_four unless workflow
+              return bad_request unless valid_subject_id_update?
               user_id = param_to_int :user_id
               subject_id = param_to_int :subject_id
 
@@ -24,6 +26,7 @@ module Cellect
             # 
             # Preloads a user for a workflow
             post :load do
+              return four_oh_four unless workflow
               user_id = param_to_int :user_id
 
               if user_id && user_id > 0
