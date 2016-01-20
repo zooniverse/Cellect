@@ -14,10 +14,6 @@ module Cellect
       @connection ||= Connection.new
     end
 
-    def self.ready?
-      node_set.ready?
-    end
-
     # Selects a server for a user
     def self.choose_host
       host = node_set.nodes.sample

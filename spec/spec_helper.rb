@@ -30,8 +30,9 @@ RSpec.configure do |config|
   config.include CellectHelper
 
   config.around(:each) do |example|
-    Redis.new.flushall
+    Redis.new.flushdb
     Celluloid.boot
+    Attention.deactivate
     example.run
     Celluloid.shutdown
     Attention.deactivate
