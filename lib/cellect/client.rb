@@ -1,4 +1,5 @@
 require 'cellect'
+require 'cellect/attention'
 
 module Cellect
   module Client
