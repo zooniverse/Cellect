@@ -27,6 +27,13 @@ module Cellect
       false
     end
 
-    Server.node_set = NodeSet.new
+    def self.node_set
+      @node_set ||= NodeSet.new
+    end
+
+    # Connects this server to the node set
+    def self.connect
+      node_set
+    end
   end
 end
