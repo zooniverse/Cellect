@@ -38,6 +38,7 @@ module Cellect::Server
 
       before(:each) do
         pass_until{ all_workflows.all? &:ready? }
+        Cellect::Server.connect
         get '/stats'
       end
 
