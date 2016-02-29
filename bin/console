@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+require 'cellect'
+require 'cellect/server'
+require 'cellect/client'
+require 'pry'
+
+Pry.start

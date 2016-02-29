@@ -1,6 +1,7 @@
 require 'diff_set'
 require 'cellect'
 require 'celluloid/autostart'
+require 'cellect/attention'
 
 module Cellect
   module Server
@@ -26,6 +27,13 @@ module Cellect
       false
     end
 
-    Server.node_set = NodeSet.supervise
+    def self.node_set
+      @node_set ||= NodeSet.new
+    end
+
+    # Connects this server to the node set
+    def self.connect
+      node_set
+    end
   end
 end

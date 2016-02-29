@@ -1,8 +1,8 @@
 require 'timeout'
 
 module CellectHelper
-  def pass_until(&block)
-    Timeout::timeout(1) do
+  def pass_until(timeout: 1, &block)
+    Timeout::timeout(timeout) do
       Thread.pass until block.call
     end
   rescue => e
@@ -10,7 +10,7 @@ module CellectHelper
     raise e
   end
 
-  def pass_until_state_of(obj, is:)
+  def pass_until_state_of(obj, timeout: 1, is:)
     Timeout::timeout(1) do
       Thread.pass until obj.state == is
     end

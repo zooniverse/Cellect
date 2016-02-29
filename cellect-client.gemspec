@@ -24,14 +24,14 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 1.10'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'oj'
+  spec.add_development_dependency 'guard'
+  spec.add_development_dependency 'guard-rspec'
   spec.add_development_dependency 'rspec'
-  spec.add_development_dependency 'zk-server'
   spec.add_development_dependency 'rack-test'
   spec.add_development_dependency 'pry'
 
   spec.add_runtime_dependency 'celluloid', '0.16.0'
-  spec.add_runtime_dependency 'celluloid-io', '0.16.0'
   spec.add_runtime_dependency 'http', '~> 0.9'
-  spec.add_runtime_dependency 'zk', '~> 1.9'
+  spec.add_runtime_dependency 'attention', '~> 0.0.4'
   spec.add_runtime_dependency 'multi_json', '~> 1.11'
 end

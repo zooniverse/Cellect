@@ -38,20 +38,12 @@ module Cellect::Server
 
       before(:each) do
         pass_until{ all_workflows.all? &:ready? }
+        Cellect::Server.connect
         get '/stats'
       end
 
       it 'should include information' do
-        expect(response.keys).to match_array %w(memory cpu node_set status)
-      end
-
-      context 'node_set' do
-        let(:node_set){ response['node_set'] }
-
-        it 'should include information' do
-          expect(node_set['id']).to eql 'node0000000000'
-          expect(node_set['ready']).to eql true
-        end
+        expect(response.keys).to match_array %w(memory cpu instance status)
       end
 
       context 'status' do

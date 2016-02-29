@@ -1,7 +1,6 @@
 require 'celluloid'
-require 'celluloid/io'
 require 'cellect/version'
+require 'cellect/attention'
 
 module Cellect
-
 end

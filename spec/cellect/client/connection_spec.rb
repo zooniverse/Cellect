@@ -5,15 +5,20 @@ module Cellect::Client
     let(:connection){ Cellect::Client.connection }
 
     before(:each) do
-      allow(Cellect::Client.node_set).to receive(:nodes).and_return 'a' => '1', 'b' => '2'
+      allow(Cellect::Client.node_set).to receive(:nodes).and_return [
+        { 'id' => '1', 'ip' => '1.2.3.4' },
+        { 'id' => '2', 'ip' => '5.6.7.8' }
+      ]
     end
 
     def should_send(action:, url:, to:)
-      expect(HTTP).to receive(:send).with(action, "http://#{ to }/#{ url }", socket_class: Celluloid::IO::TCPSocket).and_return(HTTP::Response.new(200, nil, nil, "{ \"this response\": \"intentionally blank\" }"))
+      send_double = double
+      expect(HTTP).to receive(:timeout).with(:global, connect: Connection.timeout).and_return send_double
+      expect(send_double).to receive(:send).with(action, "http://#{ to }/#{ url }").and_return(HTTP::Response.new(200, nil, nil, "{ \"this response\": \"intentionally blank\" }"))
     end
 
     def should_broadcast(action:, url:)
-      [1, 2].each{ |i| should_send action: action, url: url, to: i }
+      ['1.2.3.4', '5.6.7.8'].each{ |ip| should_send action: action, url: url, to: ip }
     end
 
     it 'should reload workflows' do
@@ -52,40 +57,44 @@ module Cellect::Client
     end
 
     it 'should load users' do
-      should_send action: :post, url: 'workflows/random/users/123/load', to: 1
-      connection.load_user user_id: 123, host: '1', workflow_id: 'random'
+      should_send action: :post, url: 'workflows/random/users/123/load', to: '1.2.3.4'
+      connection.load_user user_id: 123, host: '1.2.3.4', workflow_id: 'random'
     end
 
     it 'should add seen subjects' do
-      should_send action: :put, url: 'workflows/random/users/123/add_seen?subject_id=456', to: 1
-      connection.add_seen subject_id: 456, host: '1', user_id: 123, workflow_id: 'random'
+      should_send action: :put, url: 'workflows/random/users/123/add_seen?subject_id=456', to: '1.2.3.4'
+      connection.add_seen subject_id: 456, host: '1.2.3.4', user_id: 123, workflow_id: 'random'
     end
 
     it 'should get subjects' do
-      should_send action: :get, url: 'workflows/random?user_id=1', to: 1
-      connection.get_subjects host: '1', workflow_id: 'random', user_id: 1
+      should_send action: :get, url: 'workflows/random?user_id=1', to: '1.2.3.4'
+      connection.get_subjects host: '1.2.3.4', workflow_id: 'random', user_id: 1
     end
 
     it 'should get grouped subjects' do
-      should_send action: :get, url: 'workflows/random?user_id=1&group_id=1&limit=10', to: 1
-      connection.get_subjects host: '1', workflow_id: 'random', user_id: 1, limit: 10, group_id: 1
+      should_send action: :get, url: 'workflows/random?user_id=1&group_id=1&limit=10', to: '1.2.3.4'
+      connection.get_subjects host: '1.2.3.4', workflow_id: 'random', user_id: 1, limit: 10, group_id: 1
     end
 
     context 'getting subjects' do
       def get_subjects
-        connection.get_subjects host: '1', workflow_id: 'random', user_id: 1, limit: 10, group_id: 1
+        connection.get_subjects host: '1.2.3.4', workflow_id: 'random', user_id: 1, limit: 10, group_id: 1
       end
 
       it 'should return subjects as an array' do
         response = HTTP::Response.new 200, '1.1', nil, '[1, 2, 3, 4, 5]'
-        allow(HTTP).to receive(:send).and_return response
+        send_double = double
+        expect(HTTP).to receive(:timeout).with(:global, connect: Connection.timeout).and_return send_double
+        expect(send_double).to receive(:send).and_return response
         expect(get_subjects).to eq [1, 2, 3, 4, 5]
       end
 
       it 'should raise an error for unexpected responses' do
         response = HTTP::Response.new 404, '1.1', nil, ''
-        allow(HTTP).to receive(:send).and_return response
-        expect{ get_subjects }.to raise_error Cellect::Client::CellectServerError, 'Server Responded 404'
+        send_double = double
+        expect(HTTP).to receive(:timeout).with(:global, connect: Connection.timeout).and_return send_double
+        expect(send_double).to receive(:send).and_return response
+        expect{ get_subjects }.to raise_error CellectServerError, 'Server Responded 404'
       end
     end
   end

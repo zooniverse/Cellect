@@ -13,7 +13,7 @@ module Cellect
       # 
       # Provides system load information
       get :stats do
-        node_set = Cellect::Server.node_set.actors.first
+        instance = Attention.instance
         usage = ->(keyword) do
           `ps axo #{ keyword }`.chomp.split("\n")[1..-1].collect(&:to_f).inject :+
         end
@@ -21,7 +21,7 @@ module Cellect
         {
           memory: usage.call('%mem'),
           cpu: usage.call('%cpu'),
-          node_set: { id: node_set.id, ready: node_set.ready? },
+          instance: instance.id,
           status: Cellect::Server.adapter.status.merge({
             workflows_ready: Cellect::Server.ready?,
             workflows: Workflow.all.map(&:status)

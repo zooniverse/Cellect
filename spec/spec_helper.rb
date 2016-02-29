@@ -10,11 +10,8 @@ end
 
 Bundler.require :test, :development
 
-ENV['CELLECT_POOL_SIZE'] = '3'
-SPAWN_ZK = !ENV['ZK_URL']
 require 'pry'
 require 'oj'
-require './spec/support/zk_setup.rb'
 require 'cellect/server'
 require 'cellect/client'
 require 'celluloid/rspec'
@@ -33,12 +30,11 @@ RSpec.configure do |config|
   config.include CellectHelper
 
   config.around(:each) do |example|
+    Redis.new.flushdb
     Celluloid.boot
+    Attention.deactivate
     example.run
     Celluloid.shutdown
-  end
-
-  config.after(:suite) do
-    ZK_Setup.stop_zk
+    Attention.deactivate
   end
 end
