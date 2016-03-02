@@ -30,7 +30,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rack-test'
   spec.add_development_dependency 'pry'
 
-  spec.add_runtime_dependency 'celluloid', '0.16.0'
   spec.add_runtime_dependency 'http', '~> 0.9'
   spec.add_runtime_dependency 'attention', '~> 0.0.4'
   spec.add_runtime_dependency 'multi_json', '~> 1.11'
