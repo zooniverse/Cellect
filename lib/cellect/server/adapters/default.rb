@@ -57,7 +57,8 @@ module Cellect
 
         def workflow_for(opts = { })
           workflow_klass = opts.fetch('grouped', false) ? GroupedWorkflow : Workflow
-          workflow_klass[opts['name']] = opts 
+          workflow_klass[opts['name']] = opts
+          workflow_klass[opts['name']].load_data
           workflow_klass[opts['name']]
         end
       end
