@@ -42,7 +42,6 @@ module Cellect
         self.pairwise = !!pairwise
         self.prioritized = !!prioritized
         self.subjects = set_klass.new
-        load_data
       end
 
       # Loads subjects from the adapter

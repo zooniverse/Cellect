@@ -21,7 +21,7 @@ module Cellect
         {
           memory: usage.call('%mem'),
           cpu: usage.call('%cpu'),
-          instance: instance.id,
+          instance: instance.try(:id),
           status: Cellect::Server.adapter.status.merge({
             workflows_ready: Cellect::Server.ready?,
             workflows: Workflow.all.map(&:status)
