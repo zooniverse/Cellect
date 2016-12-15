@@ -1,4 +1,3 @@
-require 'celluloid'
 require 'cellect/version'
 require 'cellect/attention'
 

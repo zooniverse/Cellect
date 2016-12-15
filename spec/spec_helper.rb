@@ -14,10 +14,8 @@ require 'pry'
 require 'oj'
 require 'cellect/server'
 require 'cellect/client'
-require 'celluloid/rspec'
 require 'rack/test'
-Celluloid.shutdown_timeout = 1
-Celluloid.logger = nil
+
 Dir["./spec/support/**/*.rb"].sort.each{ |f| require f }
 
 Cellect::Server.adapter = SpecAdapter.new
@@ -31,10 +29,8 @@ RSpec.configure do |config|
 
   config.around(:each) do |example|
     Redis.new.flushdb
-    Celluloid.boot
     Attention.deactivate
     example.run
-    Celluloid.shutdown
     Attention.deactivate
   end
 end

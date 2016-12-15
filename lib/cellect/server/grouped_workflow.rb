@@ -1,3 +1,5 @@
+require 'concurrent'
+
 module Cellect
   module Server
     class GroupedWorkflow < Workflow

@@ -1,6 +1,5 @@
 require 'diff_set'
 require 'cellect'
-require 'celluloid/autostart'
 require 'cellect/attention'
 
 module Cellect

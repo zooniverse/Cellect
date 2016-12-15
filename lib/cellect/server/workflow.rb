@@ -1,38 +1,38 @@
+require 'concurrent'
+
 module Cellect
   module Server
     class Workflow
-      include Celluloid
+      include Concurrent::Async
 
       class << self
-        attr_accessor :workflow_names
+        attr_accessor :workflows
       end
-      self.workflow_names = { }
+      self.workflows = { }
 
       attr_accessor :name, :users, :subjects, :state
       attr_accessor :pairwise, :prioritized
 
       # Look up and/or load a workflow
       def self.[](name)
-        Cellect::Server.adapter.load_workflows(name) unless Actor[name]
-        Actor[name].actors.first
+        Cellect::Server.adapter.load_workflows(name) unless Workflow.workflows[name]
+        Workflow.workflows[name]
       end
 
       # Load a workflow
       def self.[]=(name, opts)
-        Actor[name] = supervise name, pairwise: opts['pairwise'], prioritized: opts['prioritized']
-        Workflow.workflow_names[name] = true if Actor[name]
-        Actor[name]
+        Workflow.workflows[name] = new name, pairwise: opts['pairwise'], prioritized: opts['prioritized']
+        Workflow.workflows[name]
       end
 
       # The names of all workflows currently loaded
       def self.names
-        actor_names = Celluloid.actor_system.registry.names.collect &:to_s
-        actor_names.select{ |key| workflow_names[key] }
+        Workflow.workflows.keys
       end
 
       # All currently loaded workflows
       def self.all
-        names.collect{ |name| Workflow[name] }.compact
+        Workflow.workflows.values
       end
 
       # Sets up a new workflow and starts the data loading
@@ -56,8 +56,8 @@ module Cellect
 
       # Look up and/or load a user
       def user(id)
-        self.users[id] ||= User.supervise id, workflow_name: name
-        users[id].actors.first
+        self.users[id] ||= User.new id, workflow_name: name
+        users[id]
       end
 
       # Get unseen subjects for a user
@@ -75,7 +75,9 @@ module Cellect
       # Unload a user
       def remove_user(user_id)
         removed = self.users.delete user_id
-        removed.terminate if removed
+        # TODO: Is this enough?
+        removed.cancel_ttl_timer
+        # removed.terminate if removed
       end
 
       # Get a sample of subjects for a user

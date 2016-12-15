@@ -17,7 +17,7 @@ module Cellect::Server
     end
 
     it 'should reset the ttl timer on activity' do
-      expect(user.bare_object).to receive(:restart_ttl_timer).at_least :once
+      expect(user).to receive(:restart_ttl_timer).at_least :once
       user.seen
     end
 

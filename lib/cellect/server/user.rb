@@ -1,12 +1,11 @@
+require 'concurrent'
+
 module Cellect
   module Server
     class User
-      include Celluloid
-      include Celluloid::Logger
-
-      # Gracefully exit when the actor dies
-      trap_exit :workflow_crashed
-      finalizer :cancel_ttl_timer
+      # TODO: replace this?
+      # trap_exit :workflow_crashed
+      # finalizer :cancel_ttl_timer
 
       attr_accessor :id, :workflow_name, :seen, :state
       attr_accessor :ttl, :ttl_timer
@@ -16,7 +15,8 @@ module Cellect
         self.id = id
         self.workflow_name = workflow_name
         self.seen = DiffSet::RandomSet.new
-        monitor Workflow[workflow_name]
+        # TODO: supervise?
+        # monitor Workflow[workflow_name]
         @ttl = ttl
         load_data
       end
@@ -39,7 +39,7 @@ module Cellect
 
       # (Re)starts the inactivity countdown
       def restart_ttl_timer
-        self.ttl_timer ||= after(ttl){ ttl_expired! }
+        self.ttl_timer ||= Concurrent::ScheduledTask.execute(ttl){ ttl_expired! }
         ttl_timer.reset
       end
 
@@ -51,7 +51,6 @@ module Cellect
 
       # Removes the user from inactivity
       def ttl_expired!
-        debug "User #{ id } TTL expired"
         cancel_ttl_timer
         Workflow[workflow_name].async.remove_user(id)
       end
@@ -60,10 +59,11 @@ module Cellect
         @ttl || 60 * 15 # 15 minutes
       end
 
-      # Handle errors and let the actor die
+      # TO-DO: Handle errors and let the actor die
       def workflow_crashed(actor, reason)
         cancel_ttl_timer
-        terminate
+        # TODO: fully terminate?
+        # terminate
       end
     end
   end
