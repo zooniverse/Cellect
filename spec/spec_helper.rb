@@ -1,6 +1,3 @@
-require 'codeclimate-test-reporter'
-CodeClimate::TestReporter.start
-
 CELLECT_ROOT = File.expand_path File.join(File.dirname(__FILE__), '../')
 
 %w(lib ext).each do |name|
