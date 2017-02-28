@@ -42,11 +42,13 @@ module Cellect
         self.pairwise = !!pairwise
         self.prioritized = !!prioritized
         self.subjects = set_klass.new
+        self.state = :initializing
       end
 
       # Loads subjects from the adapter
       def load_data
-        self.state = :initializing
+        return if self.state == :ready
+        self.state = :loading
         self.subjects = set_klass.new
         Cellect::Server.adapter.load_data_for(name).each do |hash|
           subjects.add hash['id'], hash['priority']
