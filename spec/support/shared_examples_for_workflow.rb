@@ -18,6 +18,25 @@ shared_examples_for 'workflow' do |name|
     expect(obj.users.keys).to include 1
   end
 
+  describe '#load_data' do
+    it 'should request data from the adapater' do
+      expect(Cellect::Server.adapter)
+        .to receive(:load_data_for)
+        .with(obj.name)
+        .and_return([])
+      obj.load_data
+    end
+
+    it 'should add data to subjects' do
+      expect { obj.load_data }.to change { obj.subjects.size }
+    end
+
+    it 'should not reload subjects when in ready state' do
+      obj.state = :ready
+      expect { obj.load_data }.not_to change { obj.subjects.size }
+    end
+  end
+
   describe '#reload_data' do
     let(:adapter) { Cellect::Server.adapter }
 

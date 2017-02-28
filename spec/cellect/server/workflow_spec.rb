@@ -63,25 +63,6 @@ module Cellect::Server
         it 'should not be grouped' do
           expect(workflow).to_not be_grouped
         end
-
-        describe '#load_data' do
-          it 'should request data from the adapater' do
-            expect(Cellect::Server.adapter)
-              .to receive(:load_data_for)
-              .with(workflow.name)
-              .and_return([])
-            workflow.load_data
-          end
-
-          it 'should add data to subjects' do
-            expect { workflow.load_data }.to change { workflow.subjects }
-          end
-
-          it 'should not reload subjects when already loaded' do
-            workflow.load_data
-            expect { workflow.load_data }.not_to change { workflow.subjects }
-          end
-        end
       end
     end
   end
