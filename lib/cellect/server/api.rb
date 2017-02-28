@@ -56,7 +56,7 @@ module Cellect
           # Reloads the workflow from the adapter
           post :reload do
             return four_oh_four unless workflow
-            workflow.async.load_data
+            workflow.async.reload_data
           end
 
           # DELETE /workflows/:workflow_id
