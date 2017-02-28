@@ -1,10 +1,4 @@
 shared_examples_for 'workflow' do |name|
-  let(:obj){ send name }
-
-  before(:each) do
-    Cellect::Server.adapter.load_workflow obj.name
-  end
-
   it 'should add singleton instances to the registry' do
     expect(obj.class[obj.name]).to be_a_kind_of Cellect::Server::Workflow
     expect(obj.class[obj.name].object_id).to eq obj.class[obj.name].object_id

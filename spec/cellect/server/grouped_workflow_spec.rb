@@ -4,11 +4,17 @@ module Cellect::Server
   describe GroupedWorkflow do
     SET_TYPES.collect{ |type| "grouped_#{ type }" }.each do |workflow_type|
       context workflow_type do
-        it_behaves_like 'workflow', :workflow
         let(:workflow){ GroupedWorkflow[workflow_type] }
         let(:user){ workflow.user 123 }
         let(:set_klass){ workflow.prioritized? ? DiffSet::PrioritySet : DiffSet::RandomSet }
-        before(:each){ pass_until_state_of workflow, is: :ready }
+
+        before do
+          pass_until_state_of workflow, is: :ready
+        end
+
+        it_behaves_like 'workflow', :workflow do
+          let(:obj) { workflow }
+        end
 
         it 'should provide unseen from a random group for users' do
           workflow.groups = { }
