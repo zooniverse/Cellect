@@ -56,6 +56,18 @@ module Cellect
         self.state = :ready
       end
 
+      # Reloads subjects from the adapter
+      def reload_data
+        return if self.state == :reloading
+        self.state = :reloading
+        new_data = set_klass.new
+        Cellect::Server.adapter.load_data_for(name).each do |hash|
+          new_data.add hash['id'], hash['priority']
+        end
+        self.subjects = new_data
+        self.state = :ready
+      end
+
       # Look up and/or load a user
       def user(id)
         self.users[id] ||= User.supervise id, workflow_name: name

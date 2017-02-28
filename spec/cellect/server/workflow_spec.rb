@@ -82,6 +82,28 @@ module Cellect::Server
             expect { workflow.load_data }.not_to change { workflow.subjects }
           end
         end
+
+        describe '#reload_data' do
+          let(:adapter) { Cellect::Server.adapter }
+
+          it 'should request data from the adapater' do
+            expect(adapter)
+              .to receive(:load_data_for)
+              .with(workflow.name)
+              .and_return([])
+            workflow.reload_data
+          end
+
+          it 'should add data to subjects' do
+            expect { workflow.reload_data }.to change { workflow.subjects }
+          end
+
+          it 'should not reload subjects when state is reloading' do
+            workflow.state = :reloading
+            expect(adapter).not_to receive(:load_data_for)
+            workflow.reload_data
+          end
+        end
       end
     end
   end
