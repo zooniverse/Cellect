@@ -83,7 +83,7 @@ module Cellect
       end
 
       # Get a sample of subjects for a user
-      # 
+      #
       # Accepts a hash in the form:
       #   {
       #     user_id: 123,
@@ -98,7 +98,7 @@ module Cellect
       end
 
       # Adds or updates a subject
-      # 
+      #
       # Accepts a hash in the form:
       # {
       #   subject_id: 1,
@@ -113,7 +113,7 @@ module Cellect
       end
 
       # Removes a subject
-      # 
+      #
       # Accepts a hash in the form:
       # {
       #   subject_id: 1
