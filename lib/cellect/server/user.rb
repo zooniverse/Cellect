@@ -18,11 +18,13 @@ module Cellect
         self.seen = DiffSet::RandomSet.new
         monitor Workflow[workflow_name]
         @ttl = ttl
-        load_data
+        self.state = :initializing
       end
 
       # Load the seen subjects for a user and restarts the TTL
       def load_data
+        return if self.state == :ready
+        self.state = :loading
         data = Cellect::Server.adapter.load_user(workflow_name, id) || []
         data.each do |subject_id|
           @seen.add subject_id
