@@ -11,6 +11,8 @@ module Cellect
       attr_accessor :name, :users, :subjects, :state
       attr_accessor :pairwise, :prioritized
 
+      LOADING_STATES = [ :reloading, :loading ].freeze
+
       # Look up and/or load a workflow
       def self.[](name)
         Cellect::Server.adapter.load_workflows(name) unless Actor[name]
@@ -41,7 +43,7 @@ module Cellect
         self.users = { }
         self.pairwise = !!pairwise
         self.prioritized = !!prioritized
-        self.subjects = set_klass.new
+        self.subjects ||= set_klass.new
         self.state = :initializing
       end
 
@@ -49,21 +51,16 @@ module Cellect
       def load_data
         return if self.state == :ready
         self.state = :loading
-        self.subjects = set_klass.new
-        Cellect::Server.adapter.load_data_for(name).each do |hash|
-          subjects.add hash['id'], hash['priority']
-        end
+        load_adapter_data(self.subjects)
         self.state = :ready
       end
 
       # Reloads subjects from the adapter
       def reload_data
-        return if self.state == :reloading
+        return if LOADING_STATES.include? self.state
         self.state = :reloading
-        new_data = set_klass.new
-        Cellect::Server.adapter.load_data_for(name).each do |hash|
-          new_data.add hash['id'], hash['priority']
-        end
+        new_data = self.subjects.class.new
+        load_adapter_data(new_data)
         self.subjects = new_data
         self.state = :ready
       end
@@ -161,7 +158,7 @@ module Cellect
 
       # Looks up the set class
       def set_klass
-        SET_KLASS[[prioritized, pairwise]]
+        @set_klass ||= SET_KLASS[[prioritized, pairwise]]
       end
 
       # General information about this workflow
@@ -175,6 +172,14 @@ module Cellect
           subjects: subjects.size,
           users: users.length
         }
+      end
+
+      private
+
+      def load_adapter_data(set)
+        Cellect::Server.adapter.load_data_for(name).each do |hash|
+          set.add hash['id'], hash['priority']
+        end
       end
     end
   end

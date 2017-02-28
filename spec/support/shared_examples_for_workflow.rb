@@ -8,8 +8,12 @@ shared_examples_for 'workflow' do |name|
     expect(obj.name).to be_a String
     expect(obj.users).to be_a Hash
 
-    set_klass = obj.prioritized? ? DiffSet::PrioritySet : DiffSet::RandomSet
-    expect(obj.subjects).to be_a set_klass
+    if obj.grouped?
+      expect(obj.subjects).to eq({})
+    else
+      set_klass = obj.prioritized? ? DiffSet::PrioritySet : DiffSet::RandomSet
+      expect(obj.subjects).to be_a set_klass
+    end
   end
 
   it 'should provide a user lookup' do
@@ -43,19 +47,21 @@ shared_examples_for 'workflow' do |name|
     it 'should request data from the adapater' do
       expect(adapter)
         .to receive(:load_data_for)
-        .with(workflow.name)
+        .with(obj.name)
         .and_return([])
-      workflow.reload_data
+      obj.reload_data
     end
 
     it 'should add data to subjects' do
-      expect { workflow.reload_data }.to change { workflow.subjects }
+      expect { obj.reload_data }.to change { obj.subjects }
     end
 
-    it 'should not reload subjects when state is reloading' do
-      workflow.state = :reloading
-      expect(adapter).not_to receive(:load_data_for)
-      workflow.reload_data
+    it 'should not reload subjects when state is in any kind of loading' do
+      %i(reloading loading).each do |state|
+        obj.state = state
+        expect(adapter).not_to receive(:load_data_for)
+        obj.reload_data
+      end
     end
   end
 end
