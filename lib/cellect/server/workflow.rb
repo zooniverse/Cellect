@@ -59,7 +59,9 @@ module Cellect
       # Look up and/or load a user
       def user(id)
         self.users[id] ||= User.supervise id, workflow_name: name
-        users[id].actors.first
+        user = self.users[id].actors.first
+        user.load_data
+        user
       end
 
       # Get unseen subjects for a user
