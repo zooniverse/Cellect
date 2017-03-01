@@ -8,6 +8,8 @@ module Cellect
       end
       self.workflow_names = { }
 
+      finalizer :cancel_reload_timer
+
       attr_accessor :name, :users, :subjects, :state, :pairwise,
         :prioritized, :can_reload, :reload_timer
 
@@ -200,6 +202,12 @@ module Cellect
         self.reload_timer = after(RELOAD_TIMEOUT) do
           self.can_reload = true
         end
+      end
+
+      # Releases the reload timer
+      def cancel_reload_timer
+        reload_timer.cancel if reload_timer
+        self.reload_timer = nil
       end
     end
   end
