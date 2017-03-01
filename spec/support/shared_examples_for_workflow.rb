@@ -44,23 +44,54 @@ shared_examples_for 'workflow' do |name|
   describe '#reload_data' do
     let(:adapter) { Cellect::Server.adapter }
 
-    it 'should request data from the adapater' do
-      expect(adapter)
-        .to receive(:load_data_for)
-        .with(obj.name)
-        .and_return([])
+    context "able to reload" do
+      before do
+        obj.can_reload = true
+      end
+
+      it 'should request data from the adapater' do
+        expect(adapter)
+          .to receive(:load_data_for)
+          .with(obj.name)
+          .and_return([])
+        obj.reload_data
+      end
+
+      it 'should add data to subjects' do
+        expect { obj.reload_data }.to change { obj.subjects }
+      end
+
+      it 'should not reload subjects when state is in any kind of loading' do
+        %i(reloading loading).each do |state|
+          obj.state = state
+          expect(adapter).not_to receive(:load_data_for)
+          obj.reload_data
+        end
+      end
+    end
+
+    it 'should not allow reloading until after loading' do
+      expect(adapter).not_to receive(:load_data_for)
       obj.reload_data
     end
 
-    it 'should add data to subjects' do
-      expect { obj.reload_data }.to change { obj.subjects }
-    end
+    context "after initial data load" do
+      before do
+        obj.load_data
+      end
 
-    it 'should not reload subjects when state is in any kind of loading' do
-      %i(reloading loading).each do |state|
-        obj.state = state
+      it 'should not allow reloading after first load' do
         expect(adapter).not_to receive(:load_data_for)
         obj.reload_data
+      end
+
+      context "when the reload timer has reset" do
+
+        it 'should allow reloading after timer has reset' do
+          obj.can_reload = true
+          expect(adapter).to receive(:load_data_for).and_call_original
+          obj.reload_data
+        end
       end
     end
   end

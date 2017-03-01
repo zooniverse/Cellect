@@ -8,10 +8,11 @@ module Cellect
       end
       self.workflow_names = { }
 
-      attr_accessor :name, :users, :subjects, :state
-      attr_accessor :pairwise, :prioritized
+      attr_accessor :name, :users, :subjects, :state, :pairwise,
+        :prioritized, :can_reload, :reload_timer
 
       LOADING_STATES = [ :reloading, :loading ].freeze
+      RELOAD_TIMEOUT = ENV.fetch('reload_timer', 600).to_i.freeze
 
       # Look up and/or load a workflow
       def self.[](name)
@@ -45,6 +46,7 @@ module Cellect
         self.prioritized = !!prioritized
         self.subjects ||= set_klass.new
         self.state = :initializing
+        self.can_reload = false
       end
 
       # Loads subjects from the adapter
@@ -52,17 +54,21 @@ module Cellect
         return if self.state == :ready
         self.state = :loading
         load_adapter_data(self.subjects)
+        reset_can_reload_timer
         self.state = :ready
       end
 
       # Reloads subjects from the adapter
       def reload_data
-        return if LOADING_STATES.include? self.state
-        self.state = :reloading
-        new_data = self.subjects.class.new
-        load_adapter_data(new_data)
-        self.subjects = new_data
-        self.state = :ready
+        if can_reload_data?
+          self.can_reload = false
+          self.state = :reloading
+          new_data = self.subjects.class.new
+          load_adapter_data(new_data)
+          self.subjects = new_data
+          reset_can_reload_timer
+          self.state = :ready
+        end
       end
 
       # Look up and/or load a user
@@ -179,6 +185,20 @@ module Cellect
       def load_adapter_data(set)
         Cellect::Server.adapter.load_data_for(name).each do |hash|
           set.add hash['id'], hash['priority']
+        end
+      end
+
+      def can_reload_data?
+        if LOADING_STATES.include?(self.state)
+          false
+        else
+          self.can_reload
+        end
+      end
+
+      def reset_can_reload_timer
+        self.reload_timer = after(RELOAD_TIMEOUT) do
+          self.can_reload = true
         end
       end
     end
