@@ -14,7 +14,7 @@ module Cellect
         :prioritized, :can_reload, :reload_timer
 
       LOADING_STATES = [ :reloading, :loading ].freeze
-      RELOAD_TIMEOUT = ENV.fetch('reload_timer', 600).to_i.freeze
+      RELOAD_TIMEOUT = ENV.fetch('RELOAD_TIMER', 600).to_i.freeze
 
       # Look up and/or load a workflow
       def self.[](name)
