@@ -1,5 +1,5 @@
-require 'codeclimate-test-reporter'
-CodeClimate::TestReporter.start
+require "simplecov"
+SimpleCov.start
 
 CELLECT_ROOT = File.expand_path File.join(File.dirname(__FILE__), '../')
 

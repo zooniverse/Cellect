@@ -13,3 +13,10 @@ rvm:
 script: bundle exec rake spec
 services:
   - redis-server
+
+addons:
+  code_climate:
+    repo_token: $CODECLIMATE_REPO_TOKEN
+
+after_success:
+  - bundle exec codeclimate-test-reporter
