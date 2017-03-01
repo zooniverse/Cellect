@@ -22,15 +22,6 @@ shared_examples_for 'workflow' do |name|
     expect(obj.users.keys).to include 1
   end
 
-  describe "#finalizer" do
-
-    it "should cancel reload_timer" do
-      obj.load_data
-      expect(obj.reload_timer).to receive(:cancel).and_call_original
-      obj.terminate
-    end
-  end
-
   describe '#load_data' do
     it 'should request data from the adapater' do
       expect(Cellect::Server.adapter)
@@ -55,7 +46,8 @@ shared_examples_for 'workflow' do |name|
 
     context "able to reload" do
       before do
-        obj.can_reload = true
+        obj.can_reload_at = Time.now - 1
+        obj.state = :ready
       end
 
       it 'should request data from the adapater' do
@@ -94,9 +86,9 @@ shared_examples_for 'workflow' do |name|
         obj.reload_data
       end
 
-      context "when the reload timer has reset" do
+      context "when reload time gaurds has past" do
         it 'should allow reloading after timer has reset' do
-          obj.can_reload = true
+          obj.can_reload_at = Time.now - 1
           expect(adapter).to receive(:load_data_for).and_call_original
           obj.reload_data
         end

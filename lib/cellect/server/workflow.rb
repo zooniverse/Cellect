@@ -8,13 +8,11 @@ module Cellect
       end
       self.workflow_names = { }
 
-      finalizer :cancel_reload_timer
-
       attr_accessor :name, :users, :subjects, :state, :pairwise,
-        :prioritized, :can_reload, :reload_timer
+        :prioritized, :can_reload_at
 
-      LOADING_STATES = [ :reloading, :loading ].freeze
-      RELOAD_TIMEOUT = ENV.fetch('RELOAD_TIMER', 600).to_i.freeze
+      SKIP_RELOAD_STATES = [ :reloading, :loading, :initializing ].freeze
+      RELOAD_TIMEOUT = ENV.fetch('RELOAD_TIMEOUT', 600).to_i.freeze
 
       # Look up and/or load a workflow
       def self.[](name)
@@ -48,7 +46,6 @@ module Cellect
         self.prioritized = !!prioritized
         self.subjects ||= set_klass.new
         self.state = :initializing
-        self.can_reload = false
       end
 
       # Loads subjects from the adapter
@@ -56,19 +53,18 @@ module Cellect
         return if self.state == :ready
         self.state = :loading
         load_adapter_data(self.subjects)
-        reset_can_reload_timer
+        set_reload_at_time
         self.state = :ready
       end
 
       # Reloads subjects from the adapter
       def reload_data
         if can_reload_data?
-          self.can_reload = false
           self.state = :reloading
           new_data = self.subjects.class.new
           load_adapter_data(new_data)
           self.subjects = new_data
-          reset_can_reload_timer
+          set_reload_at_time
           self.state = :ready
         end
       end
@@ -191,23 +187,17 @@ module Cellect
       end
 
       def can_reload_data?
-        if LOADING_STATES.include?(self.state)
+        if SKIP_RELOAD_STATES.include?(self.state)
           false
+        elsif can_reload_at.nil?
+          true
         else
-          self.can_reload
+          can_reload_at <= Time.now
         end
       end
 
-      def reset_can_reload_timer
-        self.reload_timer = after(RELOAD_TIMEOUT) do
-          self.can_reload = true
-        end
-      end
-
-      # Releases the reload timer
-      def cancel_reload_timer
-        reload_timer.cancel if reload_timer
-        self.reload_timer = nil
+      def set_reload_at_time(time_stamp=Time.now + RELOAD_TIMEOUT)
+        self.can_reload_at = time_stamp
       end
     end
   end
