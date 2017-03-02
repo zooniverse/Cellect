@@ -4,14 +4,16 @@ module Cellect::Server
   describe GroupedWorkflow do
     SET_TYPES.collect{ |type| "grouped_#{ type }" }.each do |workflow_type|
       context workflow_type do
-        it_behaves_like 'workflow', :workflow
-        let(:workflow){ GroupedWorkflow[workflow_type] }
+        let(:workflow){ GroupedWorkflow.new(workflow_type) }
         let(:user){ workflow.user 123 }
         let(:set_klass){ workflow.prioritized? ? DiffSet::PrioritySet : DiffSet::RandomSet }
-        before(:each){ pass_until_state_of workflow, is: :ready }
+
+        it_behaves_like 'workflow', :workflow do
+          let(:obj) { workflow }
+        end
 
         it 'should provide unseen from a random group for users' do
-          workflow.groups = { }
+          workflow.subjects = { }
           workflow.groups[1] = set_klass.new
           expect(workflow.groups[1]).to receive(:subtract).with user.seen, 3
           workflow.unseen_for 123, limit: 3
@@ -24,7 +26,7 @@ module Cellect::Server
         end
 
         it 'should sample subjects from a random group without a user' do
-          workflow.groups = { }
+          workflow.subjects = { }
           workflow.groups[1] = set_klass.new
           expect(workflow.group(1)).to receive(:sample).with 3
           workflow.sample limit: 3
@@ -37,7 +39,7 @@ module Cellect::Server
         end
 
         it 'should sample subjects from a random group for a user' do
-          workflow.groups = { }
+          workflow.subjects = { }
           workflow.groups[1] = set_klass.new
           expect(workflow.groups[1]).to receive(:subtract).with user.seen, 3
           workflow.sample user_id: 123, limit: 3

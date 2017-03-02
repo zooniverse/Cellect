@@ -9,10 +9,12 @@ module Cellect::Server
 
     SET_TYPES.each do |workflow_type|
       context workflow_type do
-        it_behaves_like 'workflow', :workflow
-        let(:workflow){ Workflow[workflow_type] }
-        let(:user){ workflow.user 123 }
-        before(:each){ pass_until_state_of workflow, is: :ready }
+        let(:workflow) { Workflow.new(workflow_type) }
+        let(:user) { workflow.user 123 }
+
+        it_behaves_like 'workflow', :workflow do
+          let(:obj) { workflow }
+        end
 
         it 'should provide unseen for users' do
           expect(workflow.subjects).to receive(:subtract).with user.seen, 3
@@ -46,7 +48,7 @@ module Cellect::Server
 
         it 'should be notified of a user ttl expiry' do
           async_workflow = double
-          expect(workflow).to receive(:async).and_return async_workflow
+          expect(Workflow[workflow.name]).to receive(:async).and_return async_workflow
           expect(async_workflow).to receive(:remove_user).with user.id
           user.ttl_expired!
         end

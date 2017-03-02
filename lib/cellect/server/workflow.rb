@@ -8,8 +8,11 @@ module Cellect
       end
       self.workflow_names = { }
 
-      attr_accessor :name, :users, :subjects, :state
-      attr_accessor :pairwise, :prioritized
+      attr_accessor :name, :users, :subjects, :state, :pairwise,
+        :prioritized, :can_reload_at
+
+      SKIP_RELOAD_STATES = [ :reloading, :loading, :initializing ].freeze
+      RELOAD_TIMEOUT = ENV.fetch('RELOAD_TIMEOUT', 600).to_i.freeze
 
       # Look up and/or load a workflow
       def self.[](name)
@@ -41,23 +44,37 @@ module Cellect
         self.users = { }
         self.pairwise = !!pairwise
         self.prioritized = !!prioritized
-        self.subjects = set_klass.new
+        self.subjects ||= set_klass.new
+        self.state = :initializing
       end
 
       # Loads subjects from the adapter
       def load_data
-        self.state = :initializing
-        self.subjects = set_klass.new
-        Cellect::Server.adapter.load_data_for(name).each do |hash|
-          subjects.add hash['id'], hash['priority']
-        end
+        return if self.state == :ready
+        self.state = :loading
+        load_adapter_data(self.subjects)
+        set_reload_at_time
         self.state = :ready
+      end
+
+      # Reloads subjects from the adapter
+      def reload_data
+        if can_reload_data?
+          self.state = :reloading
+          new_data = self.subjects.class.new
+          load_adapter_data(new_data)
+          self.subjects = new_data
+          set_reload_at_time
+          self.state = :ready
+        end
       end
 
       # Look up and/or load a user
       def user(id)
         self.users[id] ||= User.supervise id, workflow_name: name
-        users[id].actors.first
+        user = self.users[id].actors.first
+        user.load_data
+        user
       end
 
       # Get unseen subjects for a user
@@ -79,7 +96,7 @@ module Cellect
       end
 
       # Get a sample of subjects for a user
-      # 
+      #
       # Accepts a hash in the form:
       #   {
       #     user_id: 123,
@@ -94,7 +111,7 @@ module Cellect
       end
 
       # Adds or updates a subject
-      # 
+      #
       # Accepts a hash in the form:
       # {
       #   subject_id: 1,
@@ -109,7 +126,7 @@ module Cellect
       end
 
       # Removes a subject
-      # 
+      #
       # Accepts a hash in the form:
       # {
       #   subject_id: 1
@@ -145,7 +162,7 @@ module Cellect
 
       # Looks up the set class
       def set_klass
-        SET_KLASS[[prioritized, pairwise]]
+        @set_klass ||= SET_KLASS[[prioritized, pairwise]]
       end
 
       # General information about this workflow
@@ -159,6 +176,28 @@ module Cellect
           subjects: subjects.size,
           users: users.length
         }
+      end
+
+      private
+
+      def load_adapter_data(set)
+        Cellect::Server.adapter.load_data_for(name).each do |hash|
+          set.add hash['id'], hash['priority']
+        end
+      end
+
+      def can_reload_data?
+        if SKIP_RELOAD_STATES.include?(self.state)
+          false
+        elsif can_reload_at.nil?
+          true
+        else
+          can_reload_at <= Time.now
+        end
+      end
+
+      def set_reload_at_time(time_stamp=Time.now + RELOAD_TIMEOUT)
+        self.can_reload_at = time_stamp
       end
     end
   end

@@ -10,7 +10,7 @@ module Cellect
       require 'cellect/server/api/users'
 
       # GET /stats
-      # 
+      #
       # Provides system load information
       get :stats do
         instance = Attention.instance
@@ -32,7 +32,7 @@ module Cellect
       resources :workflows do
 
         # GET /workflows
-        # 
+        #
         # Returns a list of available workflows
         get do
           Cellect::Server.adapter.workflow_list
@@ -44,7 +44,7 @@ module Cellect
           mount Users
 
           # GET /workflows/:workflow_id/status
-          # 
+          #
           # Returns the workflow's status
           get :status do
             return four_oh_four unless workflow
@@ -52,15 +52,15 @@ module Cellect
           end
 
           # POST /workflows/:workflow_id/reload
-          # 
+          #
           # Reloads the workflow from the adapter
           post :reload do
             return four_oh_four unless workflow
-            workflow.async.load_data
+            workflow.async.reload_data
           end
 
           # DELETE /workflows/:workflow_id
-          # 
+          #
           # Not implemented
           delete do
             # delete a workflow (maybe?)

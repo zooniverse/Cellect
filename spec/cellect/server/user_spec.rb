@@ -28,5 +28,24 @@ module Cellect::Server
       user.ttl_expired!
       expect(user.ttl_timer).to be_nil
     end
+
+    describe '#load_data' do
+      it 'should request data from the adapater' do
+        expect(Cellect::Server.adapter)
+          .to receive(:load_user)
+          .with(user.workflow_name, user.id)
+          .and_return([])
+        user.load_data
+      end
+
+      it 'should add data to seens' do
+        expect { user.load_data }.to change { user.seen.size }
+      end
+
+      it 'should not add new subjects when already loaded' do
+        user.load_data
+        expect { user.load_data }.not_to change { user.seen.size }
+      end
+    end
   end
 end
