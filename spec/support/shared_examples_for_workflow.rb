@@ -23,26 +23,32 @@ shared_examples_for 'workflow' do |name|
   end
 
   describe '#load_data' do
-    it 'should request data from the adapater' do
-      expect(Cellect::Server.adapter)
-        .to receive(:load_data_for)
-        .with(obj.name)
-        .and_return([])
+    let(:loader) { Cellect::Server::Loader.new(obj) }
+    let(:celluloid_target) { loader.wrapped_object }
+
+    before do
+      allow(obj.wrapped_object).to receive(:data_loader).and_return(loader)
+    end
+
+    it 'should request data from the loader' do
+      expect(celluloid_target).to receive(:load_data)
       obj.load_data
     end
 
-    it 'should add data to subjects' do
-      expect { obj.load_data }.to change { obj.subjects.size }
-    end
-
-    it 'should not reload subjects when in ready state' do
+    it 'should not attempt to reload subjects when in ready state' do
       obj.state = :ready
-      expect { obj.load_data }.not_to change { obj.subjects.size }
+      expect(celluloid_target).not_to receive(:load_data)
+      obj.load_data
     end
   end
 
   describe '#reload_data' do
-    let(:adapter) { Cellect::Server.adapter }
+    let(:loader) { Cellect::Server::Loader.new(obj) }
+    let(:celluloid_target) { loader.wrapped_object }
+
+    before do
+      allow(obj.wrapped_object).to receive(:data_loader).and_return(loader)
+    end
 
     context "able to reload" do
       before do
@@ -50,46 +56,40 @@ shared_examples_for 'workflow' do |name|
         obj.state = :ready
       end
 
-      it 'should request data from the adapater' do
-        expect(adapter)
-          .to receive(:load_data_for)
-          .with(obj.name)
-          .and_return([])
+      it 'should request data from the loader' do
+        expect(celluloid_target).to receive(:reload_data)
         obj.reload_data
-      end
-
-      it 'should add data to subjects' do
-        expect { obj.reload_data }.to change { obj.subjects }
       end
 
       it 'should not reload subjects when state is in any kind of loading' do
         %i(reloading loading).each do |state|
           obj.state = state
-          expect(adapter).not_to receive(:load_data_for)
+          expect(celluloid_target).not_to receive(:reload_data)
           obj.reload_data
         end
       end
     end
 
     it 'should not allow reloading until after loading' do
-      expect(adapter).not_to receive(:load_data_for)
+      expect(celluloid_target).not_to receive(:reload_data)
       obj.reload_data
     end
 
     context "after initial data load" do
       before do
-        obj.load_data
+        obj.state = :ready
+        obj.set_reload_at_time
       end
 
       it 'should not allow reloading after first load' do
-        expect(adapter).not_to receive(:load_data_for)
+        expect(celluloid_target).not_to receive(:reload_data)
         obj.reload_data
       end
 
       context "when reload time gaurds has past" do
         it 'should allow reloading after timer has reset' do
           obj.can_reload_at = Time.now - 1
-          expect(adapter).to receive(:load_data_for).and_call_original
+          expect(celluloid_target).to receive(:reload_data)
           obj.reload_data
         end
       end

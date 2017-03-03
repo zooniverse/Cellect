@@ -52,14 +52,14 @@ module Cellect
       def load_data
         return if [:loading, :ready ].include? state
         self.state = :loading
-        Loader.new(self).async.load_data
+        data_loader.async.load_data
       end
 
       # Reloads subjects from the adapter
       def reload_data
         if can_reload_data?
           self.state = :reloading
-          Loader.new(self).future.reload_data(set_klass.new)
+          data_loader.async.reload_data(set_klass.new)
         end
       end
 
@@ -184,6 +184,10 @@ module Cellect
 
       def set_reload_at_time(time_stamp=Time.now + RELOAD_TIMEOUT)
         self.can_reload_at = time_stamp
+      end
+
+      def data_loader
+        Loader.new(self)
       end
     end
   end
