@@ -28,7 +28,7 @@ module Cellect
       end
 
       def run_load!(set)
-        Cellect::Server.adapter.load_data_for(workflow.name).each do |hash|
+        Cellect::Server.adapter.load_data_for(workflow.name) do |hash|
           set.add hash['id'], hash['priority']
         end
       end
