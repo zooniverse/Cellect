@@ -22,75 +22,71 @@ shared_examples_for 'workflow' do |name|
     expect(obj.users.keys).to include 1
   end
 
-  describe '#load_data' do
+  context "with a celloid stubbed async loader" do
     let(:loader) { Cellect::Server::Loader.new(obj) }
     let(:celluloid_target) { loader.wrapped_object }
 
     before do
       allow(obj.wrapped_object).to receive(:data_loader).and_return(loader)
+      allow(loader).to receive(:async).and_return(loader)
     end
 
-    it 'should request data from the loader' do
-      expect(celluloid_target).to receive(:load_data)
-      obj.load_data
-    end
-
-    it 'should not attempt to reload subjects when in ready state' do
-      obj.state = :ready
-      expect(celluloid_target).not_to receive(:load_data)
-      obj.load_data
-    end
-  end
-
-  describe '#reload_data' do
-    let(:loader) { Cellect::Server::Loader.new(obj) }
-    let(:celluloid_target) { loader.wrapped_object }
-
-    before do
-      allow(obj.wrapped_object).to receive(:data_loader).and_return(loader)
-    end
-
-    context "able to reload" do
-      before do
-        obj.can_reload_at = Time.now - 1
-        obj.state = :ready
-      end
-
+    describe '#load_data' do
       it 'should request data from the loader' do
-        expect(celluloid_target).to receive(:reload_data)
-        obj.reload_data
+        expect(celluloid_target).to receive(:load_data)
+        obj.load_data
       end
 
-      it 'should not reload subjects when state is in any kind of loading' do
-        %i(reloading loading).each do |state|
-          obj.state = state
-          expect(celluloid_target).not_to receive(:reload_data)
+      it 'should not attempt to reload subjects when in ready state' do
+        obj.state = :ready
+        expect(celluloid_target).not_to receive(:load_data)
+        obj.load_data
+      end
+    end
+
+    describe '#reload_data' do
+      context "able to reload" do
+        before do
+          obj.can_reload_at = Time.now - 1
+          obj.state = :ready
+        end
+
+        it 'should request data from the loader' do
+          expect(celluloid_target).to receive(:reload_data)
           obj.reload_data
         end
-      end
-    end
 
-    it 'should not allow reloading until after loading' do
-      expect(celluloid_target).not_to receive(:reload_data)
-      obj.reload_data
-    end
-
-    context "after initial data load" do
-      before do
-        obj.state = :ready
-        obj.set_reload_at_time
+        it 'should not reload subjects when state is in any kind of loading' do
+          %i(reloading loading).each do |state|
+            obj.state = state
+            expect(celluloid_target).not_to receive(:reload_data)
+            obj.reload_data
+          end
+        end
       end
 
-      it 'should not allow reloading after first load' do
+      it 'should not allow reloading until after loading' do
         expect(celluloid_target).not_to receive(:reload_data)
         obj.reload_data
       end
 
-      context "when reload time gaurds has past" do
-        it 'should allow reloading after timer has reset' do
-          obj.can_reload_at = Time.now - 1
-          expect(celluloid_target).to receive(:reload_data)
+      context "after initial data load" do
+        before do
+          obj.state = :ready
+          obj.set_reload_at_time
+        end
+
+        it 'should not allow reloading after first load' do
+          expect(celluloid_target).not_to receive(:reload_data)
           obj.reload_data
+        end
+
+        context "when reload time gaurds has past" do
+          it 'should allow reloading after timer has reset' do
+            obj.can_reload_at = Time.now - 1
+            expect(celluloid_target).to receive(:reload_data)
+            obj.reload_data
+          end
         end
       end
     end
