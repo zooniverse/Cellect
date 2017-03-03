@@ -14,8 +14,7 @@ module Cellect
         mark_workflow_as_loaded
       end
 
-      def reload_data
-        set = workflow.set_klass.new
+      def reload_data(set)
         run_load!(set)
         workflow.subjects = set
         mark_workflow_as_loaded

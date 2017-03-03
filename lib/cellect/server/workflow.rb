@@ -59,7 +59,7 @@ module Cellect
       def reload_data
         if can_reload_data?
           self.state = :reloading
-          Loader.new(self).future.reload_data
+          Loader.new(self).future.reload_data(set_klass.new)
         end
       end
 
