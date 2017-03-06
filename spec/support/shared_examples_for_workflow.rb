@@ -23,7 +23,13 @@ shared_examples_for 'workflow' do |name|
   end
 
   context "with a celluloid stubbed async loader" do
-    let(:loader) { Cellect::Server::Loader.new(obj) }
+    let(:loader) do
+      if obj.grouped?
+        Cellect::Server::GroupedLoader.new(obj)
+      else
+        Cellect::Server::Loader.new(obj)
+      end
+    end
     let(:celluloid_target) { loader.wrapped_object }
 
     before do
