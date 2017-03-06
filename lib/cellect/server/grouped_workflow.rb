@@ -83,11 +83,8 @@ module Cellect
 
       private
 
-      def load_adapter_data(set)
-        Cellect::Server.adapter.load_data_for(name).each do |hash|
-          set[hash['group_id']] ||= set_klass.new
-          set[hash['group_id']].add hash['id'], hash['priority']
-        end
+      def data_loader
+        GroupedLoader.new(self)
       end
     end
   end
