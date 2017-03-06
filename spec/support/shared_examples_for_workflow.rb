@@ -22,7 +22,7 @@ shared_examples_for 'workflow' do |name|
     expect(obj.users.keys).to include 1
   end
 
-  context "with a celloid stubbed async loader" do
+  context "with a celluloid stubbed async loader" do
     let(:loader) { Cellect::Server::Loader.new(obj) }
     let(:celluloid_target) { loader.wrapped_object }
 
