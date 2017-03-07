@@ -50,22 +50,17 @@ module Cellect
 
       # Loads subjects from the adapter
       def load_data
-        return if self.state == :ready
+        return if [:loading, :ready ].include? state
         self.state = :loading
-        load_adapter_data(self.subjects)
-        set_reload_at_time
-        self.state = :ready
+        data_loader.async.load_data
       end
 
       # Reloads subjects from the adapter
       def reload_data
         if can_reload_data?
           self.state = :reloading
-          new_data = self.subjects.class.new
-          load_adapter_data(new_data)
-          self.subjects = new_data
-          set_reload_at_time
-          self.state = :ready
+          reload_set = subjects.class.new
+          data_loader.async.reload_data(reload_set)
         end
       end
 
@@ -178,14 +173,6 @@ module Cellect
         }
       end
 
-      private
-
-      def load_adapter_data(set)
-        Cellect::Server.adapter.load_data_for(name).each do |hash|
-          set.add hash['id'], hash['priority']
-        end
-      end
-
       def can_reload_data?
         if SKIP_RELOAD_STATES.include?(self.state)
           false
@@ -198,6 +185,10 @@ module Cellect
 
       def set_reload_at_time(time_stamp=Time.now + RELOAD_TIMEOUT)
         self.can_reload_at = time_stamp
+      end
+
+      def data_loader
+        Loader.new(self)
       end
     end
   end

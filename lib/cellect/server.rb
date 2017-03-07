@@ -10,6 +10,8 @@ module Cellect
     require 'cellect/server/workflow'
     require 'cellect/server/grouped_workflow'
     require 'cellect/server/user'
+    require 'cellect/server/loader'
+    require 'cellect/server/grouped_loader'
     require 'cellect/server/api'
 
     class << self

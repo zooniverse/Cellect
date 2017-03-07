@@ -10,7 +10,12 @@ class SpecAdapter < Cellect::Server::Adapters::Default
   end
 
   def load_data_for(workflow_name)
-    fixtures.fetch(workflow_name, { }).fetch 'entries', []
+    entries = fixtures.fetch(workflow_name, { }).fetch 'entries', []
+    if block_given?
+      entries.each { |entry| yield entry }
+    else
+      entries
+    end
   end
 
   def fixtures
