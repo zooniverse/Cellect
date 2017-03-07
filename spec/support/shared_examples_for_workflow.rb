@@ -58,7 +58,9 @@ shared_examples_for 'workflow' do |name|
         end
 
         it 'should request data from the loader' do
-          expect(celluloid_target).to receive(:reload_data)
+          expect(celluloid_target)
+            .to receive(:reload_data)
+            .with(instance_of(obj.subjects.class))
           obj.reload_data
         end
 

@@ -59,7 +59,8 @@ module Cellect
       def reload_data
         if can_reload_data?
           self.state = :reloading
-          data_loader.async.reload_data(set_klass.new)
+          reload_set = subjects.class.new
+          data_loader.async.reload_data(reload_set)
         end
       end
 
