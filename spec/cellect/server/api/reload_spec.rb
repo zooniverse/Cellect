@@ -12,9 +12,7 @@ module Cellect::Server
           before(:each){ pass_until_state_of workflow, is: :ready }
 
           it 'should call reload_data' do
-            async_workflow = double
-            expect(workflow).to receive(:async).and_return async_workflow
-            expect(async_workflow).to receive(:reload_data)
+            expect(workflow).to receive(:reload_data)
             post "/workflows/#{ workflow_type }/reload"
             expect(last_response.status).to eq 201
             expect(json).to be_nil
