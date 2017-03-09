@@ -12,9 +12,9 @@ module Cellect
         subjects
       end
 
-      # Returns a group by id or samples one randomly
+      # Returns a group by id or samples one randomly with a fall back to a new group
       def group(group_id = nil)
-        subjects[group_id] || subjects.values.sample
+        subjects[group_id] || subjects.values.sample || fetch_or_setup_group(group_id)
       end
 
       # Get unseen subjects from a group for a user
@@ -34,7 +34,7 @@ module Cellect
         if opts[:user_id]
           unseen_for opts[:user_id], group_id: opts[:group_id], limit: opts[:limit]
         else
-           group(opts[:group_id]).sample opts[:limit]
+          group(opts[:group_id]).sample opts[:limit]
         end
       end
 
@@ -47,10 +47,12 @@ module Cellect
       #   priority: 0.5  # (if the workflow is prioritized)
       # }
       def add(opts = { })
+        add_group = fetch_or_setup_group(opts[:group_id])
+
         if prioritized?
-          subjects[opts[:group_id]].add opts[:subject_id], opts[:priority]
+          add_group.add opts[:subject_id], opts[:priority]
         else
-          subjects[opts[:group_id]].add opts[:subject_id]
+          add_group.add opts[:subject_id]
         end
       end
 
@@ -62,7 +64,9 @@ module Cellect
       #   subject_id: 2
       # }
       def remove(opts = { })
-        subjects[opts[:group_id]].remove opts[:subject_id]
+        if group = subjects[opts[:group_id]]
+          group.remove opts[:subject_id]
+        end
       end
 
       # General information about this workflow
@@ -85,6 +89,10 @@ module Cellect
 
       def data_loader
         GroupedLoader.new(self)
+      end
+
+      def fetch_or_setup_group(group_id)
+        subjects[group_id] ||= set_klass.new
       end
     end
   end
