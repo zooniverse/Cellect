@@ -17,7 +17,9 @@ module Cellect
       # Look up and/or load a workflow
       def self.[](name)
         Cellect::Server.adapter.load_workflows(name) unless Actor[name]
-        Actor[name].actors.first
+        if registered_workflow = Actor[name]
+          registered_workflow.actors.first
+        end
       end
 
       # Load a workflow
