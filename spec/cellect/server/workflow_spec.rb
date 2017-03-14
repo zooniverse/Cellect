@@ -7,6 +7,11 @@ module Cellect::Server
       Workflow['random']
     end
 
+    it "should not raise error if no workflow exists to register" do
+      expect(Cellect::Server.adapter).to receive(:workflow_list).and_return([])
+      expect { Workflow['missing'] }.not_to raise_error
+    end
+
     SET_TYPES.each do |workflow_type|
       context workflow_type do
         let(:workflow) { Workflow.new(workflow_type) }
