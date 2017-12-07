@@ -13,10 +13,9 @@ module Cellect
       end
 
       # Returns a group by id
-      # if the group_id is supplied it will select this group
-      # and load data if no group is know, however when
-      # no group_id supplies, it selects a group at random
-      # with an overall fall back to a new group if no groups exist
+      # if the group_id is supplied it will select or setup this group
+      # when no group_id is supplied, it attempts to select a random group
+      # finally if no loaded groupes it falls back to creating a new empty group
       def group(group_id = nil)
         group = if group_id
                   fetch_or_setup_group(group_id)
