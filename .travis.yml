@@ -2,9 +2,8 @@ language: ruby
 cache: bundler
 
 before_install:
-  - sudo add-apt-repository ppa:boost-latest/ppa -y
   - sudo apt-get update -q
-  - sudo apt-get install -y autoconf automake boost1.55 libffi-dev
+  - sudo apt-get install -y autoconf automake libboost1.55-dev libffi-dev
   - gem update bundler
 
 rvm:
