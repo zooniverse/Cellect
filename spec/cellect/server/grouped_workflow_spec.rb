@@ -94,6 +94,12 @@ module Cellect::Server
             expect(workflow.group(1)).to receive(:subtract).with user.seen, 3
             workflow.sample user_id: 123, group_id: 1, limit: 3
           end
+
+          it 'should should select from an empty set if the group is not loaded' do
+            workflow.groups[0] = set_klass.new
+            expect(workflow.group(0)).not_to receive(:sample)
+            workflow.sample group_id: 1, limit: 3
+          end
         end
 
         describe "#add" do

@@ -12,9 +12,18 @@ module Cellect
         subjects
       end
 
-      # Returns a group by id or samples one randomly with a fall back to a new group
+      # Returns a group by id
+      # if the group_id is supplied it will select this group
+      # and load data if no group is know, however when
+      # no group_id supplies, it selects a group at random
+      # with an overall fall back to a new group if no groups exist
       def group(group_id = nil)
-        subjects[group_id] || subjects.values.sample || fetch_or_setup_group(group_id)
+        group = if group_id
+                  fetch_or_setup_group(group_id)
+                else
+                  subjects.values.sample
+                end
+        group || fetch_or_setup_group(group_id)
       end
 
       # Get unseen subjects from a group for a user
