@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'guard'
   spec.add_development_dependency 'guard-rspec'
   spec.add_development_dependency 'puma', '~> 2.8'
-  spec.add_development_dependency 'pg', '~> 0.17'
+  spec.add_development_dependency 'pg', '~> 1.1'
   spec.add_development_dependency 'connection_pool', '~> 2.0'
 
   spec.add_runtime_dependency 'diff_set', '~> 0.0.4'
