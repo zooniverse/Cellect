@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = []
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler', '~> 1.5'
+  spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'oj'
   spec.add_development_dependency 'rspec'
