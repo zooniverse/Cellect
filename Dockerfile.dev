@@ -4,8 +4,6 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
-ARG ENVIRONMENT=production
-ENV ENVIRONMENT=$ENVIRONMENT
 
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/postgresql.list && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
@@ -22,8 +20,6 @@ WORKDIR /cellect
 
 ADD ./Gemfile /cellect/
 ADD ./cellect.gemspec /cellect/
-ADD ./cellect-client.gemspec /cellect/
-ADD ./cellect-server.gemspec /cellect/
 ADD ./lib/cellect/version.rb /cellect/lib/cellect/
 
 RUN bundle install
