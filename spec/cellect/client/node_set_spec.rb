@@ -7,7 +7,8 @@ module Cellect::Client
     # Allow listener to subscribe to Redis
     def wait_for_listener
       pass_until(timeout: 3) do
-        _, listeners = Redis.new.pubsub 'numsub', 'cellect:instance'
+        connection = Redis.new(url: Attention.options[:redis_url])
+        _, listeners = connection.pubsub 'numsub', 'cellect:instance'
         listeners > 0
       end
     end

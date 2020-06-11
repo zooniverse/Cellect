@@ -56,6 +56,11 @@ Run the specs with `rake`
 
 `rackup # uses config.ru file`
 
+#### Using Docker & Docker compose
+Get a bash shell in the cellect container
+`docker-compose run --rm --service-ports cellect bash`
+from withing the shell run `rake`
+
 ## Versions
 
 See .travis.yml for supported ruby versions

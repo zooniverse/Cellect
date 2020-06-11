@@ -1,0 +1,38 @@
+FROM zooniverse/ruby:2.3
+
+ENV DEBIAN_FRONTEND noninteractive
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+ARG ENVIRONMENT=production
+ENV ENVIRONMENT=$ENVIRONMENT
+
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/postgresql.list && \
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+
+# Apt-get install dependencies
+RUN apt-get update && \
+    apt-get -y upgrade && \
+    apt-get install -y  autoconf automake libboost-all-dev libffi-dev \
+    supervisor git-core libpq-dev postgresql-client-9.5 && \
+    apt-get clean
+
+# Install Cellect
+WORKDIR /cellect
+
+ADD ./Gemfile /cellect/
+ADD ./cellect.gemspec /cellect/
+ADD ./cellect-client.gemspec /cellect/
+ADD ./cellect-server.gemspec /cellect/
+ADD ./lib/cellect/version.rb /cellect/lib/cellect/
+
+RUN bundle install
+
+ADD . /cellect
+
+EXPOSE 80
+
+ADD script/start_puma /opt/start_puma
+ADD config/supervisor.conf /etc/supervisor/conf.d/cellect.conf
+
+CMD ["/usr/bin/supervisord"]

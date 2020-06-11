@@ -22,6 +22,7 @@ Dir["./spec/support/**/*.rb"].sort.each{ |f| require f }
 
 Cellect::Server.adapter = SpecAdapter.new
 SET_TYPES = %w(random priority pairwise_random pairwise_priority)
+REDIS_CONN = Redis.new(url: Attention.options[:redis_url])
 
 RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
@@ -30,7 +31,7 @@ RSpec.configure do |config|
   config.include CellectHelper
 
   config.around(:each) do |example|
-    Redis.new.flushdb
+    REDIS_CONN.flushdb
     Celluloid.boot
     Attention.deactivate
     example.run
