@@ -23,4 +23,4 @@ EXPOSE 80
 ADD script/start_puma /opt/start_puma
 ADD config/supervisor.conf /etc/supervisor/conf.d/cellect.conf
 
-ENTRYPOINT /usr/bin/supervisord
+CMD ["/usr/bin/supervisord"]
